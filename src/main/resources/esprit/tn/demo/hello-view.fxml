@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.demo.tests.HelloController"
+            prefHeight="400" prefWidth="600">
+
+    <VBox spacing="10" layoutX="50" layoutY="20">
+        <TextField fx:id="nomField" promptText="Nom"/>
+        <TextField fx:id="typeField" promptText="Type"/>
+        <TextField fx:id="ageField" promptText="Âge"/>
+        <TextField fx:id="poidsField" promptText="Poids"/>
+        <TextField fx:id="raceField" promptText="Race"/>
+
+        <HBox spacing="10">
+            <Button text="Ajouter" onAction="#ajouterAnimal"/>
+            <Button text="Modifier" onAction="#modifierAnimal"/>
+            <Button text="Supprimer" onAction="#supprimerAnimal"/>
+        </HBox>
+
+        <TableView fx:id="animalTable" prefHeight="200" prefWidth="500">
+            <columns>
+                <TableColumn text="Nom" fx:id="nomColumn"/>
+                <TableColumn text="Type" fx:id="typeColumn"/>
+                <TableColumn text="Âge" fx:id="ageColumn"/>
+                <TableColumn text="Poids" fx:id="poidsColumn"/>
+                <TableColumn text="Race" fx:id="raceColumn"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

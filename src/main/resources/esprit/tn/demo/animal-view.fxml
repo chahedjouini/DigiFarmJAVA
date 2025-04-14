@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableCell?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalController">
+    <TableView fx:id="animalTable" layoutX="14" layoutY="14" prefHeight="200" prefWidth="400">
+        <columns>
+            <TableColumn fx:id="colNom" text="Nom" />
+            <TableColumn fx:id="colType" text="Type" />
+            <TableColumn fx:id="colRace" text="Race" />
+            <TableColumn fx:id="colAge" text="Age" />
+            <TableColumn fx:id="colPoids" text="Poids" />
+        </columns>
+    </TableView>
+
+    <TextField fx:id="nomField" layoutX="14" layoutY="220" promptText="Nom"/>
+    <TextField fx:id="typeField" layoutX="140" layoutY="220" promptText="Type"/>
+    <TextField fx:id="raceField" layoutX="14" layoutY="260" promptText="Race"/>
+    <TextField fx:id="ageField" layoutX="140" layoutY="260" promptText="Age"/>
+    <TextField fx:id="poidsField" layoutX="14" layoutY="300" promptText="Poids"/>
+
+    <Button fx:id="addButton" layoutX="14" layoutY="340" text="Add" onAction="#addAnimal"/>
+    <Button fx:id="updateButton" layoutX="94" layoutY="340" text="Update" onAction="#updateAnimal"/>
+    <Button fx:id="deleteButton" layoutX="174" layoutY="340" text="Delete" onAction="#deleteAnimal"/>
+</AnchorPane>
