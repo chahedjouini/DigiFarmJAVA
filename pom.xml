@@ -74,7 +74,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>esprit.tn.demo.tests.HelloApplication</mainClass> <!-- Change to your real main class -->
+                            <mainClass>esprit.tn.demo.tests.testMain</mainClass> <!-- Change to your real main class -->
                         </configuration>
                         <goals>
                             <goal>run</goal>

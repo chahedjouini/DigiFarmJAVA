@@ -6,4 +6,6 @@ module esprit.tn.demo {
     opens esprit.tn.demo to javafx.fxml;
     exports esprit.tn.demo.tests;
     opens esprit.tn.demo.tests to javafx.fxml;
+    opens esprit.tn.demo.controllers.GestionMachine to javafx.fxml;
+    exports esprit.tn.demo.controllers.GestionMachine;
 }

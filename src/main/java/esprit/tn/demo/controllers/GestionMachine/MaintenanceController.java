@@ -1,5 +1,4 @@
 package esprit.tn.demo.controllers.GestionMachine;
 
-
-public class MachineController {
+public class MaintenanceController {
 }

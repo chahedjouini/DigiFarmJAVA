@@ -21,7 +21,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ModifyMachine">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.AjoutMachine">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="614.0" prefWidth="1100.0">
             <children>
@@ -52,7 +52,6 @@
                                         </Label>
                                         <Accordion layoutX="-1.0" layoutY="189.0" prefHeight="250.0" prefWidth="200.0">
                                             <panes>
-                                                <!-- Home TitledPane -->
                                                 <TitledPane animated="false" prefHeight="242.0" prefWidth="177.0" text="Home" textFill="WHITE">
                                                     <font>
                                                         <Font name="Montserrat ExtraBold" size="12.0" />
@@ -60,13 +59,12 @@
                                                     <content>
                                                         <VBox alignment="CENTER" spacing="0">
                                                             <children>
-                                                <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="162.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Technicien" textAlignment="CENTER">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font>
-                                                </Button>
-
-                                                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="33.0" prefWidth="143.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Maintenance">
+                                                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="160.0" styleClass="accordion-button" text="Overview">
+                                                                    <font>
+                                                                        <Font name="Montserrat Medium" size="12.0" />
+                                                                    </font>
+                                                                </Button>
+                                                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" styleClass="accordion-button" text="Statistics">
                                                                     <font>
                                                                         <Font name="Montserrat Medium" size="12.0" />
                                                                     </font>
@@ -75,20 +73,11 @@
                                                         </VBox>
                                                     </content>
                                                 </TitledPane>
-
-                                                <!-- Responsable Logistique TitledPane -->
-                                                <TitledPane animated="false" prefHeight="242.0" prefWidth="177.0" text="Equipment managment" textFill="WHITE">
-                                                    <font>
-                                                        <Font name="Montserrat ExtraBold" size="12.0" />
-                                                    </font>
-                                                    <content>
-                                                        <VBox alignment="CENTER" spacing="0" />
-                                                    </content>
-                                                </TitledPane>
                                             </panes>
                                         </Accordion>
-                                        <AnchorPane layoutX="6.0" layoutY="33.0" prefHeight="155.0" prefWidth="200.0">
+                                        <AnchorPane layoutX="-1.0" layoutY="14.0" prefHeight="155.0" prefWidth="200.0">
                                             <children>
+
                                                 <Label alignment="CENTER" layoutY="69.0" prefHeight="38.0" prefWidth="200.0" text="Welcome," textAlignment="CENTER" textFill="WHITE">
                                                     <font>
                                                         <Font name="Comic Sans MS" size="29.0" />
@@ -99,16 +88,16 @@
                                                         <Font name="Comic Sans MS Bold" size="35.0" />
                                                     </font>
                                                 </Label>
-                                    <ImageView fitHeight="37.0" fitWidth="50.0" layoutX="80.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="120.0" fitWidth="59.0" layoutX="127.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../../../../../../../../DigiFarm-Project-integrationAhmed-Yacine-Chahed-Oumayma/DigiFarm-Project-integrationAhmed-Yacine-Chahed-Oumayma/assets/images/favicons/apple-touch-icon.png" />
+                                          <Image url="@images/apple-touch-icon.png" />
                                        </image>
                                     </ImageView>
                                             </children>
                                         </AnchorPane>
-                              <ImageView fitHeight="134.0" fitWidth="185.0" layoutX="14.0" layoutY="364.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="206.0" fitWidth="211.0" layoutX="14.0" layoutY="290.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../../../../../../DigiFarm-Project-integrationAhmed-Yacine-Chahed-Oumayma/DigiFarm-Project-integrationAhmed-Yacine-Chahed-Oumayma/assets/images/update-14-09-2021/background/cta-boxed-bg.jpg" />
+                                    <Image url="@images/about-v1-img1.jpg" />
                                  </image>
                               </ImageView>
                                     </children>
@@ -133,6 +122,11 @@
                                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="660.5999603271484" minWidth="10.0" prefWidth="630.1999969482422" />
                                                     </columnConstraints>
                                                     <rowConstraints>
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -166,18 +160,20 @@
                                                                 <Font name="Montserrat Medium" size="15.0" />
                                                             </font>
                                                         </Text>
-
                                                         <TextField fx:id="nomField" promptText="Entrer le nom de la machine" GridPane.columnIndex="1" />
                                                         <TextField fx:id="typeField" promptText="Entrer le type de machine" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                         <DatePicker fx:id="dateAchatPicker" promptText="Sélectionner la date d'achat" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                         <TextField fx:id="etatPredField" promptText="Entrer l'état précédent" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                         <ComboBox fx:id="etatComboBox" promptText="Sélectionner l'état actuel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-
-                                                        <AnchorPane prefHeight="50.0" prefWidth="630.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                                        <AnchorPane prefHeight="50.0" prefWidth="630.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
+                                                            <children>
+                                                                <Button id="btn-secondary" fx:id="annulerButton" layoutY="7.0" mnemonicParsing="false" onAction="#handleAnnulerButton" prefHeight="35.0" prefWidth="164.0" text="Précedent" />
+                                                                <Button fx:id="ajouterButton" layoutX="467.0" layoutY="7.0" mnemonicParsing="false" onAction="#ajouter" prefHeight="35.0" prefWidth="156.0" styleClass="btn-primary" text="Ajouter" />
+                                                            </children>
                                                         </AnchorPane>
                                                     </children>
                                                 </GridPane>
-                                                <Text layoutX="164.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modification de Machine" textAlignment="CENTER" wrappingWidth="534.9367065429688">
+                                                <Text layoutX="164.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ajout d'une Nouvelle Machine" textAlignment="CENTER" wrappingWidth="534.9367065429688">
                                                     <font>
                                                         <Font name="Montserrat SemiBold" size="36.0" />
                                                     </font>
