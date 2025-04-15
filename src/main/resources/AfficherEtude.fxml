@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AfficherEtude">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="15" right="10" bottom="15" left="10"/>
+            </padding>
+            <Label text="Liste des Études" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TableView fx:id="etudeTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="idCol" text="ID"/>
+                    <TableColumn fx:id="dateCol" text="Date"/>
+                    <TableColumn fx:id="cultureCol" text="Culture"/>
+                    <TableColumn fx:id="expertCol" text="Expert"/>
+                    <TableColumn fx:id="climatCol" text="Climat"/>
+                    <TableColumn fx:id="solCol" text="Type Sol"/>
+                    <TableColumn fx:id="irrigationCol" text="Irrigation"/>
+                    <TableColumn fx:id="fertilisationCol" text="Fertilisation"/>
+                    <TableColumn fx:id="prixCol" text="Prix"/>
+                    <TableColumn fx:id="rendementCol" text="Rendement"/>
+                    <TableColumn fx:id="precipitationCol" text="Précipitations"/>
+                    <TableColumn fx:id="mainOeuvreCol" text="Main d'œuvre"/>
+                </columns>
+            </TableView>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Ajouter" onAction="#onAjouter"/>
+                <Button text="Modifier" onAction="#onModifier"/>
+                <Button text="Supprimer" onAction="#onSupprimer"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

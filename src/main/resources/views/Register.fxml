@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="20.0" 
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="controllers.RegisterController"
+      stylesheets="@../style.css">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+    
+    <Label text="Inscription" styleClass="title-label">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Label>
+    
+    <VBox spacing="10.0">
+        <Label text="Nom"/>
+        <TextField fx:id="nomField" promptText="Entrez votre nom"/>
+        
+        <Label text="Prénom"/>
+        <TextField fx:id="prenomField" promptText="Entrez votre prénom"/>
+        
+        <Label text="Email"/>
+        <TextField fx:id="emailField" promptText="Entrez votre email"/>
+        
+        <Label text="Mot de passe"/>
+        <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe"/>
+        
+        <Label text="Confirmer le mot de passe"/>
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirmez votre mot de passe"/>
+        
+        <Label text="Rôle"/>
+        <ComboBox fx:id="roleComboBox" promptText="Sélectionnez votre rôle"/>
+        
+        <HBox spacing="10.0" alignment="CENTER">
+            <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister" styleClass="primary-button"/>
+            <Button fx:id="backButton" text="Retour" onAction="#handleBack" styleClass="secondary-button"/>
+        </HBox>
+        
+        <Label fx:id="errorLabel" styleClass="error-label" visible="false"/>
+    </VBox>
+</VBox> 

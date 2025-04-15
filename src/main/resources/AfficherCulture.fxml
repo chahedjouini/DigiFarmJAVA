@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AfficherCulture">
+
+    <!-- En-tête -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="15" right="10" bottom="15" left="10"/>
+            </padding>
+            <Label text="Liste des Cultures" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+        </HBox>
+    </top>
+
+    <!-- Centre : TableView -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <TableView fx:id="cultureTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="idCol" text="ID"/>
+                    <TableColumn fx:id="nomCol" text="Nom"/>
+                    <TableColumn fx:id="surfaceCol" text="Surface"/>
+                    <TableColumn fx:id="plantationCol" text="Date Plantation"/>
+                    <TableColumn fx:id="recolteCol" text="Date Récolte"/>
+                    <TableColumn fx:id="regionCol" text="Région"/>
+                    <TableColumn fx:id="typeCol" text="Type"/>
+                    <TableColumn fx:id="densiteCol" text="Densité"/>
+                    <TableColumn fx:id="eauCol" text="Eau"/>
+                    <TableColumn fx:id="engraisCol" text="Engrais"/>
+                    <TableColumn fx:id="rendementCol" text="Rendement"/>
+                    <TableColumn fx:id="coutCol" text="Coût"/>
+                    <TableColumn fx:id="userCol" text="ID Utilisateur"/>
+                </columns>
+            </TableView>
+
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Ajouter" onAction="#onAjouter"/>
+                <Button text="Modifier" onAction="#onModifier"/>
+                <Button text="Supprimer" onAction="#onSupprimer"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

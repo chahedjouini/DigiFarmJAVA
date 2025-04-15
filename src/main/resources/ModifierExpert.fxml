@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            fx:controller="controllers.ModifierExpert"
+            prefWidth="400" prefHeight="420"
+            stylesheets="@style.css">
+
+    <children>
+        <VBox spacing="12" layoutX="50" layoutY="30" prefWidth="300">
+            <Label text="Modifier Expert" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+            <TextField fx:id="nomField" promptText="Nom" />
+            <TextField fx:id="prenomField" promptText="Prénom" />
+            <TextField fx:id="telField" promptText="Téléphone" />
+            <TextField fx:id="emailField" promptText="Email" />
+            <TextField fx:id="zoneField" promptText="Zone géographique" />
+            <ComboBox fx:id="dispoCombo" promptText="Disponibilité" />
+            <Button text="Enregistrer" onAction="#onModifier" />
+            <Label fx:id="messageLabel" textFill="green" />
+        </VBox>
+    </children>
+</AnchorPane>
