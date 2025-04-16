@@ -57,30 +57,29 @@ public class ViewMachineController implements Initializable {
                 new SimpleStringProperty(cellData.getValue().getNom()));
         typeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getType()));
-
-        // Format date column
         dateAchatCol.setCellValueFactory(cellData -> {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             return new SimpleStringProperty(
                     dateFormat.format(cellData.getValue().getDate_achat())
             );
         });
-
         etatCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEtat()));
         etatPredCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEtat_pred()));
         ownerCol.setCellValueFactory(cellData ->
                 new SimpleIntegerProperty(cellData.getValue().getOwner_id()).asObject());
-
-        setupActionButtons();
     }
 
     private void loadMachines() {
-        machineList.clear();
-        machineList.addAll(machineService.getAll());
-        filteredMachineList = new FilteredList<>(machineList, p -> true);
-        machineTableView.setItems(filteredMachineList);
+        try {
+            machineList.clear();
+            machineList.addAll(machineService.getAll());
+            filteredMachineList = new FilteredList<>(machineList, p -> true);
+            machineTableView.setItems(filteredMachineList);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les machines : " + e.getMessage());
+        }
     }
 
     private void setupSearchFilter() {
@@ -89,17 +88,14 @@ public class ViewMachineController implements Initializable {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-
                 String lowerCaseFilter = newValue.toLowerCase();
-
-                if (machine.getNom().toLowerCase().contains(lowerCaseFilter)) {
+                if (machine.getNom() != null && machine.getNom().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (machine.getType().toLowerCase().contains(lowerCaseFilter)) {
+                } else if (machine.getType() != null && machine.getType().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (machine.getEtat().toLowerCase().contains(lowerCaseFilter)) {
+                } else if (machine.getEtat() != null && machine.getEtat().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
-                } else if (machine.getEtat_pred() != null &&
-                        machine.getEtat_pred().toLowerCase().contains(lowerCaseFilter)) {
+                } else if (machine.getEtat_pred() != null && machine.getEtat_pred().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 } else if (String.valueOf(machine.getOwner_id()).contains(lowerCaseFilter)) {
                     return true;
@@ -133,11 +129,7 @@ public class ViewMachineController implements Initializable {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(buttons);
-                }
+                setGraphic(empty ? null : buttons);
             }
         });
     }
@@ -145,48 +137,40 @@ public class ViewMachineController implements Initializable {
     private void setupButtonActions() {
         addButton.setOnAction(event -> handleAddMachine());
         refreshButton.setOnAction(event -> refreshMachineList());
-        logout.setOnAction(event -> handleLogout());
+        if (logout != null) {
+            logout.setOnAction(event -> handleLogout());
+        } else {
+            System.err.println("Warning: logout button is null. Check viewMachine.fxml for fx:id='logout'.");
+        }
     }
 
     private void handleAddMachine() {
         try {
-            // Load the AjoutMachine.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/AjoutMachine.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage
             Stage stage = (Stage) addButton.getScene().getWindow();
-
-            // Create new scene and set it on the stage
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
-
         } catch (Exception e) {
-            showAlert("Erreur", "Impossible d'ouvrir la vue d'ajout: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la vue d'ajout : " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void editMachine(Machine machine) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/machine-update.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/modify-machine.fxml"));
             Parent root = loader.load();
-
-            // Get the controller and pass the machine data
             ModifyMachine controller = loader.getController();
             controller.setMachineData(machine);
-
             Stage stage = new Stage();
             stage.setTitle("Modifier la machine");
             stage.setScene(new Scene(root));
             stage.show();
-
-            // Refresh the table after modification (optional)
             stage.setOnHidden(e -> refreshMachineList());
-
         } catch (IOException e) {
-            showAlert("Erreur", "Impossible d'ouvrir la vue de modification: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la vue de modification : " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -195,13 +179,16 @@ public class ViewMachineController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation de suppression");
         alert.setHeaderText("Supprimer cette machine ?");
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer la machine: " + machine.getNom() + "?");
-
+        alert.setContentText("Êtes-vous sûr de vouloir supprimer la machine : " + machine.getNom() + "?");
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                machineService.delete(machine);
-                refreshMachineList();
-                showAlert("Succès", "Machine supprimée avec succès");
+                try {
+                    machineService.delete(machine);
+                    refreshMachineList();
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Machine supprimée avec succès");
+                } catch (Exception e) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de supprimer la machine : " + e.getMessage());
+                }
             }
         });
     }
@@ -211,19 +198,19 @@ public class ViewMachineController implements Initializable {
         searchField.clear();
     }
 
-    private void handleLogout() {
+    @FXML
+    public void handleLogout() {
         try {
-            // Implementation for logout
-            Stage stage = (Stage) logout.getScene().getWindow();
+            Stage stage = (Stage) machineTableView.getScene().getWindow();
             stage.close();
-            showAlert("Information", "Déconnexion réussie");
+            showAlert(Alert.AlertType.INFORMATION, "Information", "Déconnexion réussie");
         } catch (Exception e) {
-            showAlert("Erreur", "Erreur lors de la déconnexion: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la déconnexion : " + e.getMessage());
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

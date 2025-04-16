@@ -18,10 +18,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ViewMachineController">
+<StackPane xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ViewMachineController">
     <AnchorPane fx:id="main_form" prefHeight="600.0" prefWidth="1100.0">
         <BorderPane layoutX="79.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-
             <!-- Left Navigation Pane -->
             <left>
                 <AnchorPane prefHeight="555.0" prefWidth="211.0" BorderPane.alignment="CENTER">
@@ -33,33 +32,32 @@
                                         <Image url="@images/apple-touch-icon.png" />
                                     </image>
                                 </ImageView>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="8.0" layoutY="439.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text fill="#328652" fontSmoothingType="LCD" layoutX="14.0" layoutY="192.0" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="0.0" styleClass="label-info" text="WELCOME TO  DIGIFARM" textAlignment="CENTER" wrappingWidth="189.47005462646484">
-                           <font>
-                              <Font name="Microsoft New Tai Lue Bold" size="31.0" />
-                           </font>
-                        </Text>
-                        <ImageView fitHeight="211.0" fitWidth="203.0" layoutX="15.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/about-v1-img1.jpg" />
-                           </image>
-                        </ImageView>
-                                   <Label layoutX="102.0" layoutY="621.0" prefHeight="47.0" prefWidth="67.0" styleClass="add-btn" stylesheets="@Css/machine-theme.css" text="LOGOUT" textFill="#248659">
-                                       <font>
-                                           <Font name="Montserrat ExtraBold" size="20.0" />
-                                       </font>
-                                   </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="51.0" layoutY="626.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/logout_w.png" />
-                           </image>
-                        </ImageView>
+                                <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="8.0" layoutY="439.0" pickOnBounds="true" preserveRatio="true" />
+                                <Text fill="#328652" fontSmoothingType="LCD" layoutX="14.0" layoutY="192.0" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="0.0" styleClass="label-info" text="WELCOME TO DIGIFARM" textAlignment="CENTER" wrappingWidth="189.47005462646484">
+                                    <font>
+                                        <Font name="Microsoft New Tai Lue Bold" size="31.0" />
+                                    </font>
+                                </Text>
+                                <ImageView fitHeight="211.0" fitWidth="203.0" layoutX="15.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@images/about-v1-img1.jpg" />
+                                    </image>
+                                </ImageView>
+                                <Button fx:id="logout" layoutX="102.0" layoutY="500.0" prefHeight="47.0" prefWidth="67.0" styleClass="add-btn" stylesheets="@Css/machine-theme.css" text="LOGOUT" textFill="#248659" onAction="#handleLogout">
+                                    <font>
+                                        <Font name="Montserrat ExtraBold" size="20.0" />
+                                    </font>
+                                </Button>
+                                <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="51.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@images/logout_w.png" />
+                                    </image>
+                                </ImageView>
                             </children>
                         </AnchorPane>
                     </children>
                 </AnchorPane>
             </left>
-
             <!-- Center Content -->
             <center>
                 <AnchorPane prefHeight="718.0" prefWidth="1401.0" stylesheets="@Css/machine-theme.css" BorderPane.alignment="CENTER">
@@ -92,14 +90,12 @@
                                             </LinearGradient>
                                         </fill>
                                     </Text>
-      
                                     <!-- Search and Action Buttons -->
                                     <HBox layoutX="16.0" layoutY="86.0" prefHeight="37.0" prefWidth="798.0" spacing="10.0">
                                         <TextField fx:id="searchField" prefWidth="300.0" promptText="Rechercher..." />
                                         <Button fx:id="addButton" prefHeight="39.0" prefWidth="96.0" styleClass="btn-primary" text="Ajouter" />
                                         <Button fx:id="refreshButton" prefHeight="37.0" prefWidth="139.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Rafraîchir" />
                                     </HBox>
-      
                                     <!-- Machine Table -->
                                     <TableView fx:id="machineTableView" layoutX="8.0" layoutY="123.0" prefHeight="437.0" prefWidth="1318.0">
                                         <columns>
