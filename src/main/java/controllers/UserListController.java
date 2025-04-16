@@ -128,7 +128,7 @@ public class UserListController {
     private void handleLogout() {
         userService.logout();
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
             
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
@@ -141,7 +141,7 @@ public class UserListController {
     
     private void showUserDialog(User user) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AddEditUser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddEditUser.fxml"));
             Parent root = loader.load();
             
             AddEditUserController controller = loader.getController();

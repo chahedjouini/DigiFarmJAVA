@@ -101,7 +101,7 @@ public class RegisterController implements Initializable {
         if (createdUser != null) {
             try {
                 // Redirection vers le dashboard
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
                 Parent root = loader.load();
                 
                 // Passer l'utilisateur connecté au contrôleur du dashboard
@@ -124,7 +124,7 @@ public class RegisterController implements Initializable {
     private void handleBack() {
         try {
             // Retour à l'écran de connexion
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
             
             Stage stage = (Stage) emailField.getScene().getWindow();
