@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ViewMachineController">
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ViewMaintenanceController">
     <AnchorPane fx:id="main_form" prefHeight="600.0" prefWidth="1100.0">
         <BorderPane layoutX="79.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
@@ -26,34 +26,33 @@
             <left>
                 <AnchorPane prefHeight="555.0" prefWidth="211.0" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="697.0" prefWidth="214.0" styleClass="nav-form" stylesheets="@../../../dashboardDesign.css">
+                        <AnchorPane nodeOrientation="LEFT_TO_RIGHT" prefHeight="697.0" prefWidth="132.0" styleClass="nav-form" stylesheets="@../../../dashboardDesign.css">
                             <children>
                                 <ImageView fitHeight="57.0" fitWidth="94.0" layoutX="79.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@images/apple-touch-icon.png" />
                                     </image>
                                 </ImageView>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="8.0" layoutY="439.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text fill="#328652" fontSmoothingType="LCD" layoutX="14.0" layoutY="192.0" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="0.0" styleClass="label-info" text="WELCOME TO  DIGIFARM" textAlignment="CENTER" wrappingWidth="189.47005462646484">
-                           <font>
-                              <Font name="Microsoft New Tai Lue Bold" size="31.0" />
-                           </font>
-                        </Text>
-                        <ImageView fitHeight="211.0" fitWidth="203.0" layoutX="15.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/about-v1-img1.jpg" />
-                           </image>
-                        </ImageView>
-                                   <Label layoutX="102.0" layoutY="621.0" prefHeight="47.0" prefWidth="67.0" styleClass="add-btn" stylesheets="@Css/machine-theme.css" text="LOGOUT" textFill="#248659">
-                                       <font>
-                                           <Font name="Montserrat ExtraBold" size="20.0" />
-                                       </font>
-                                   </Label>
-                        <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="51.0" layoutY="626.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/logout_w.png" />
-                           </image>
-                        </ImageView>
+                                <Text fill="#328652" fontSmoothingType="LCD" layoutX="14.0" layoutY="192.0" strokeLineCap="BUTT" strokeType="INSIDE" strokeWidth="0.0" styleClass="label-info" text="WELCOME TO DIGIFARM" textAlignment="CENTER" wrappingWidth="189.47005462646484">
+                                    <font>
+                                        <Font name="Microsoft New Tai Lue Bold" size="31.0" />
+                                    </font>
+                                </Text>
+                                <ImageView fitHeight="211.0" fitWidth="203.0" layoutX="15.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@images/about-v1-img1.jpg" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="logoutLabel" layoutX="102.0" layoutY="621.0" prefHeight="47.0" prefWidth="67.0" styleClass="add-btn" stylesheets="@Css/machine-theme.css" text="LOGOUT" textFill="#248659">
+                                    <font>
+                                        <Font name="Montserrat ExtraBold" size="20.0" />
+                                    </font>
+                                </Label>
+                                <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="51.0" layoutY="626.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@images/logout_w.png" />
+                                    </image>
+                                </ImageView>
                             </children>
                         </AnchorPane>
                     </children>
@@ -62,12 +61,12 @@
 
             <!-- Center Content -->
             <center>
-                <AnchorPane prefHeight="718.0" prefWidth="1401.0" stylesheets="@Css/machine-theme.css" BorderPane.alignment="CENTER">
+                <AnchorPane prefHeight="697.0" prefWidth="1021.0" stylesheets="@Css/machine-theme.css" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane fx:id="home_form" layoutX="36.0" layoutY="41.0" prefHeight="655.0" prefWidth="1321.0">
+                        <AnchorPane fx:id="home_form" layoutX="14.0" layoutY="44.0" opacity="0.83" prefHeight="521.0" prefWidth="1093.0">
                             <children>
                                 <AnchorPane layoutX="-32.0" layoutY="40.0" prefHeight="569.0" prefWidth="870.0" stylesheets="@../../../dashboardDesign.css">
-                                    <Text blendMode="COLOR_BURN" layoutX="164.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liste des Machines" textAlignment="CENTER" wrappingWidth="534.9367065429688">
+                                    <Text blendMode="COLOR_BURN" layoutX="164.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liste des Maintenances" textAlignment="CENTER" wrappingWidth="534.9367065429688">
                                         <font>
                                             <Font name="Montserrat SemiBold" size="36.0" />
                                         </font>
@@ -92,24 +91,27 @@
                                             </LinearGradient>
                                         </fill>
                                     </Text>
-      
+
                                     <!-- Search and Action Buttons -->
                                     <HBox layoutX="16.0" layoutY="86.0" prefHeight="37.0" prefWidth="798.0" spacing="10.0">
                                         <TextField fx:id="searchField" prefWidth="300.0" promptText="Rechercher..." />
                                         <Button fx:id="addButton" prefHeight="39.0" prefWidth="96.0" styleClass="btn-primary" text="Ajouter" />
                                         <Button fx:id="refreshButton" prefHeight="37.0" prefWidth="139.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Rafraîchir" />
                                     </HBox>
-      
-                                    <!-- Machine Table -->
-                                    <TableView fx:id="machineTableView" layoutX="8.0" layoutY="123.0" prefHeight="437.0" prefWidth="1318.0">
+
+                                    <!-- Maintenance Table -->
+                                    <TableView fx:id="maintenanceTableView" layoutX="8.0" layoutY="123.0" prefHeight="437.0" prefWidth="1201.0">
                                         <columns>
-                                            <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
-                                            <TableColumn fx:id="nomCol" prefWidth="150.0" text="Nom" />
-                                            <TableColumn fx:id="typeCol" prefWidth="150.0" text="Type" />
-                                            <TableColumn fx:id="dateAchatCol" prefWidth="120.0" text="Date Achat" />
-                                            <TableColumn fx:id="etatCol" prefWidth="100.0" text="État" />
+                                            <TableColumn fx:id="machineIdCol" prefWidth="100.0" text="Machine ID" />
+                                            <TableColumn fx:id="technicienIdCol" prefWidth="100.0" text="Technicien ID" />
+                                            <TableColumn fx:id="dateEntretienCol" prefWidth="120.0" text="Date Entretien" />
+                                            <TableColumn fx:id="coutCol" prefWidth="80.0" text="Coût" />
+                                            <TableColumn fx:id="temperatureCol" prefWidth="100.0" text="Température" />
+                                            <TableColumn fx:id="humiditeCol" prefWidth="100.0" text="Humidité" />
+                                            <TableColumn fx:id="consoCarburantCol" prefWidth="120.0" text="Conso Carburant" />
+                                            <TableColumn fx:id="consoEnergieCol" prefWidth="120.0" text="Conso Énergie" />
+                                            <TableColumn fx:id="statusCol" prefWidth="100.0" text="Status" />
                                             <TableColumn fx:id="etatPredCol" prefWidth="120.0" text="État Précédent" />
-                                            <TableColumn fx:id="ownerCol" prefWidth="100.0" text="Propriétaire" />
                                             <TableColumn fx:id="actionsCol" prefWidth="140.0" text="Actions" />
                                         </columns>
                                     </TableView>

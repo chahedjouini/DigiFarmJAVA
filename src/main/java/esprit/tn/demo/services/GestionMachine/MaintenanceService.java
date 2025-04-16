@@ -1,11 +1,10 @@
-
 package esprit.tn.demo.services.GestionMachine;
 
 import esprit.tn.demo.entities.GestionMachine.Maintenance;
 import esprit.tn.demo.services.IService;
 import esprit.tn.demo.tools.MyDataBase;
 import java.sql.*;
-        import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MaintenanceService implements IService<Maintenance> {
@@ -17,14 +16,20 @@ public class MaintenanceService implements IService<Maintenance> {
 
     @Override
     public void add(Maintenance maintenance) {
-        String sql = "INSERT INTO maintenance (description, date_maintenance, type, etat, id_machine, id_technicien) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO maintenance (id_machine_id, id_technicien_id, date_entretien, cout, " +
+                "temperature, humidite, conso_carburant, conso_energie, status, etat_pred) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pst = cnx.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setString(1, maintenance.getDescription());
-            pst.setDate(2, new java.sql.Date(maintenance.getDate_maintenance().getTime()));
-            pst.setString(3, maintenance.getType());
-            pst.setString(4, maintenance.getEtat());
-            pst.setInt(5, maintenance.getId_machine());
-            pst.setInt(6, maintenance.getId_technicien());
+            pst.setInt(1, maintenance.getId_machine_id());
+            pst.setObject(2, maintenance.getId_technicien_id(), Types.INTEGER);
+            pst.setDate(3, new java.sql.Date(maintenance.getDate_entretien().getTime()));
+            pst.setDouble(4, maintenance.getCout());
+            pst.setObject(5, maintenance.getTemperature(), Types.INTEGER);
+            pst.setObject(6, maintenance.getHumidite(), Types.INTEGER);
+            pst.setObject(7, maintenance.getConso_carburant(), Types.DOUBLE);
+            pst.setObject(8, maintenance.getConso_energie(), Types.DOUBLE);
+            pst.setString(9, maintenance.getStatus());
+            pst.setString(10, maintenance.getEtat_pred());
 
             pst.executeUpdate();
 
@@ -35,24 +40,32 @@ public class MaintenanceService implements IService<Maintenance> {
             }
         } catch (SQLException e) {
             System.err.println("Error adding maintenance: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public void update(Maintenance maintenance) {
-        String sql = "UPDATE maintenance SET description = ?, date_maintenance = ?, type = ?, etat = ?, id_machine = ?, id_technicien = ? WHERE id = ?";
+        String sql = "UPDATE maintenance SET id_machine_id = ?, id_technicien_id = ?, date_entretien = ?, " +
+                "cout = ?, temperature = ?, humidite = ?, conso_carburant = ?, conso_energie = ?, " +
+                "status = ?, etat_pred = ? WHERE id = ?";
         try (PreparedStatement pst = cnx.prepareStatement(sql)) {
-            pst.setString(1, maintenance.getDescription());
-            pst.setDate(2, new java.sql.Date(maintenance.getDate_maintenance().getTime()));
-            pst.setString(3, maintenance.getType());
-            pst.setString(4, maintenance.getEtat());
-            pst.setInt(5, maintenance.getId_machine());
-            pst.setInt(6, maintenance.getId_technicien());
-            pst.setInt(7, maintenance.getId());
+            pst.setInt(1, maintenance.getId_machine_id());
+            pst.setObject(2, maintenance.getId_technicien_id(), Types.INTEGER);
+            pst.setDate(3, new java.sql.Date(maintenance.getDate_entretien().getTime()));
+            pst.setDouble(4, maintenance.getCout());
+            pst.setObject(5, maintenance.getTemperature(), Types.INTEGER);
+            pst.setObject(6, maintenance.getHumidite(), Types.INTEGER);
+            pst.setObject(7, maintenance.getConso_carburant(), Types.DOUBLE);
+            pst.setObject(8, maintenance.getConso_energie(), Types.DOUBLE);
+            pst.setString(9, maintenance.getStatus());
+            pst.setString(10, maintenance.getEtat_pred());
+            pst.setInt(11, maintenance.getId());
 
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error updating maintenance: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -64,8 +77,10 @@ public class MaintenanceService implements IService<Maintenance> {
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error deleting maintenance: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     public List<Maintenance> getAll() {
         List<Maintenance> maintenances = new ArrayList<>();
@@ -75,23 +90,16 @@ public class MaintenanceService implements IService<Maintenance> {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                Maintenance maintenance = new Maintenance(
-                        rs.getInt("id"),
-                        rs.getString("description"),
-                        rs.getDate("date_maintenance"),
-                        rs.getString("type"),
-                        rs.getString("etat"),
-                        rs.getInt("id_machine"),
-                        rs.getInt("id_technicien")
-                );
-                maintenances.add(maintenance);
+                maintenances.add(mapResultSetToMaintenance(rs));
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving maintenances: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return maintenances;
     }
+
 
     public Maintenance getById(int id) {
         String sql = "SELECT * FROM maintenance WHERE id = ?";
@@ -100,77 +108,59 @@ public class MaintenanceService implements IService<Maintenance> {
 
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    return new Maintenance(
-                            rs.getInt("id"),
-                            rs.getString("description"),
-                            rs.getDate("date_maintenance"),
-                            rs.getString("type"),
-                            rs.getString("etat"),
-                            rs.getInt("id_machine"),
-                            rs.getInt("id_technicien")
-                    );
+                    return mapResultSetToMaintenance(rs);
                 }
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving maintenance: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
     }
 
     // Additional specialized methods
     public List<Maintenance> getByMachineId(int machineId) {
-        List<Maintenance> maintenances = new ArrayList<>();
-        String sql = "SELECT * FROM maintenance WHERE id_machine = ?";
-
-        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
-            pst.setInt(1, machineId);
-
-            try (ResultSet rs = pst.executeQuery()) {
-                while (rs.next()) {
-                    Maintenance maintenance = new Maintenance(
-                            rs.getInt("id"),
-                            rs.getString("description"),
-                            rs.getDate("date_maintenance"),
-                            rs.getString("type"),
-                            rs.getString("etat"),
-                            rs.getInt("id_machine"),
-                            rs.getInt("id_technicien")
-                    );
-                    maintenances.add(maintenance);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error retrieving maintenances by machine ID: " + e.getMessage());
-        }
-
-        return maintenances;
+        return getMaintenancesByField("id_machine_id", machineId);
     }
 
     public List<Maintenance> getByTechnicienId(int technicienId) {
+        return getMaintenancesByField("id_technicien_id", technicienId);
+    }
+
+    private List<Maintenance> getMaintenancesByField(String fieldName, int value) {
         List<Maintenance> maintenances = new ArrayList<>();
-        String sql = "SELECT * FROM maintenance WHERE id_technicien = ?";
+        String sql = "SELECT * FROM maintenance WHERE " + fieldName + " = ?";
 
         try (PreparedStatement pst = cnx.prepareStatement(sql)) {
-            pst.setInt(1, technicienId);
+            pst.setInt(1, value);
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    Maintenance maintenance = new Maintenance(
-                            rs.getInt("id"),
-                            rs.getString("description"),
-                            rs.getDate("date_maintenance"),
-                            rs.getString("type"),
-                            rs.getString("etat"),
-                            rs.getInt("id_machine"),
-                            rs.getInt("id_technicien")
-                    );
-                    maintenances.add(maintenance);
+                    maintenances.add(mapResultSetToMaintenance(rs));
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error retrieving maintenances by technicien ID: " + e.getMessage());
+            System.err.println("Error retrieving maintenances by " + fieldName + ": " + e.getMessage());
+            e.printStackTrace();
         }
 
         return maintenances;
     }
+
+    private Maintenance mapResultSetToMaintenance(ResultSet rs) throws SQLException {
+        Maintenance maintenance = new Maintenance();
+        maintenance.setId(rs.getInt("id"));
+        maintenance.setId_machine_id(rs.getInt("id_machine_id"));
+        maintenance.setId_technicien_id(rs.getObject("id_technicien_id") != null ? rs.getInt("id_technicien_id") : null);
+        maintenance.setDate_entretien(rs.getDate("date_entretien"));
+        maintenance.setCout(rs.getDouble("cout"));
+        maintenance.setTemperature(rs.getObject("temperature") != null ? rs.getInt("temperature") : null);
+        maintenance.setHumidite(rs.getObject("humidite") != null ? rs.getInt("humidite") : null);
+        maintenance.setConso_carburant(rs.getObject("conso_carburant") != null ? rs.getDouble("conso_carburant") : null);
+        maintenance.setConso_energie(rs.getObject("conso_energie") != null ? rs.getDouble("conso_energie") : null);
+        maintenance.setStatus(rs.getString("status"));
+        maintenance.setEtat_pred(rs.getString("etat_pred"));
+        return maintenance;
+    }
+
 }

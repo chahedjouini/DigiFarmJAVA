@@ -6,28 +6,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class testMain extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/esprit/tn/demo/technicien-view.fxml")));
+        primaryStage.setTitle("Gestion d'Animal");
+        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.show();
+    }
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/esprit/tn/demo/ViewMachine.fxml"));
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("Machine Management");
-            primaryStage.show();
-        } catch (Exception e) {
-            System.err.println("Error loading FXML:");
-            e.printStackTrace();
-            // More specific error handling
-            if (e.toString().contains("IllegalAccessException")) {
-                System.err.println("\nFIX REQUIRED: Add this to module-info.java:");
-                System.err.println("exports esprit.tn.demo.controllers.GestionMachine to javafx.fxml;");
-            }
-        }
     }
 }
