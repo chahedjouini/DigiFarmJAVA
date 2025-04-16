@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="esprit.tn.demo.controllers.GestionAnimal.VeterinaireReadController"
+      spacing="10" padding="20">
+
+    <Label text="Liste des Vétérinaires" style="-fx-font-size: 18px;" />
+
+    <TableView fx:id="veterinaireTable">
+        <columns>
+            <TableColumn fx:id="idCol" text="ID" />
+            <TableColumn fx:id="nomCol" text="Nom" />
+            <TableColumn fx:id="numTelCol" text="Numéro de Téléphone" />
+            <TableColumn fx:id="emailCol" text="Email" />
+            <TableColumn fx:id="adresseCabineCol" text="Adresse du Cabinet" />
+        </columns>
+    </TableView>
+
+</VBox>

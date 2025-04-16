@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalReadController">
+
+    <TableView fx:id="tableView">
+        <columns>
+            <TableColumn fx:id="idCol" text="ID"/>
+            <TableColumn fx:id="nomCol" text="Nom"/>
+            <TableColumn fx:id="typeCol" text="Type"/>
+            <TableColumn fx:id="raceCol" text="Race"/>
+            <TableColumn fx:id="ageCol" text="Âge"/>
+            <TableColumn fx:id="poidsCol" text="Poids"/>
+        </columns>
+    </TableView>
+    <Button text="Charger les animaux" onAction="#loadAnimals"/>
+</VBox>

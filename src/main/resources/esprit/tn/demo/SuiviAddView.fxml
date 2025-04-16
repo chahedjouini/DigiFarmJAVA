@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviAddController" spacing="10" alignment="CENTER">
+    <!-- Correct padding usage with Insets -->
+
+
+    <Label text="Ajouter un Suivi" style="-fx-font-size: 18px;"/>
+
+    <ComboBox fx:id="animalComboBox" promptText="Sélectionner un animal"/>
+    <TextField fx:id="temperatureField" promptText="Température"/>
+    <TextField fx:id="rythmeCardiaqueField" promptText="Rythme cardiaque"/>
+    <TextField fx:id="etatField" promptText="État"/>
+    <TextField fx:id="idClientField" promptText="ID Client"/>
+    <TextField fx:id="analysisField" promptText="Analyse"/>
+
+    <Button text="Ajouter" onAction="#handleAdd"/>
+</VBox>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviDeleteController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 30;">
+
+    <Label text="Supprimer un Suivi" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <TextField fx:id="idField" promptText="Entrez l'ID du Suivi à supprimer" maxWidth="300"/>
+
+    <Button text="Supprimer" onAction="#handleDelete" maxWidth="150" />
+</VBox>
