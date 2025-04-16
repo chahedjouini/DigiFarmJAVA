@@ -68,7 +68,7 @@ public class DashboardController {
         try {
             // Vérifier que la scène est disponible avant de rediriger
             if (entityList.getScene() != null && entityList.getScene().getWindow() != null) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Login.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
                 Parent root = loader.load();
                 
                 Stage stage = (Stage) entityList.getScene().getWindow();
@@ -133,7 +133,7 @@ public class DashboardController {
             btn.setPrefWidth(180);
 
             btn.setOnAction(e -> {
-                String fxmlFile = "/views/Afficher" + entityName + ".fxml";
+                String fxmlFile = "/Afficher" + entityName + ".fxml";
                 loadAnimatedFXML(fxmlFile);
             });
             entityList.getChildren().add(btn);

@@ -68,8 +68,10 @@ public class UserController implements Initializable {
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
         
-        // Initialiser la ComboBox des rôles
-        roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
+        // Initialiser la ComboBox des rôles avec tous les rôles disponibles
+        roleComboBox.getItems().clear();
+        roleComboBox.getItems().addAll(Role.values());
+        roleComboBox.setValue(Role.CLIENT); // Valeur par défaut
         
         // Gérer la sélection d'un utilisateur dans la table
         userTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -251,7 +253,11 @@ public class UserController implements Initializable {
         prenomField.clear();
         emailField.clear();
         passwordField.clear();
-        roleComboBox.setValue(Role.AGRICULTEUR); // Valeur par défaut
+        // S'assurer que la ComboBox a toujours une valeur par défaut
+        if (roleComboBox.getItems().isEmpty()) {
+            roleComboBox.getItems().addAll(Role.values());
+        }
+        roleComboBox.setValue(Role.CLIENT);
     }
     
     private void showError(String message) {

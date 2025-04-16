@@ -186,7 +186,7 @@ public class LoginController {
         if (user != null) {
             try {
                 // Charger le dashboard
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Dashboard.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
                 Parent root = loader.load();
                 
                 // Passer l'utilisateur connecté au contrôleur du dashboard
