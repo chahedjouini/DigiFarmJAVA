@@ -15,7 +15,7 @@ public class VeterinaireReadController {
     @FXML private TableColumn<Veterinaire, String> nomCol;
     @FXML private TableColumn<Veterinaire, Number> numTelCol;
     @FXML private TableColumn<Veterinaire, String> emailCol;
-    @FXML private TableColumn<Veterinaire, String> adresseCabineCol;
+    @FXML private TableColumn<Veterinaire, String> adresse_cabineCol;
 
     private final VeterinaireServiceImpl veterinaireService = new VeterinaireServiceImpl();
 
@@ -23,9 +23,9 @@ public class VeterinaireReadController {
     public void initialize() {
         idCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()));
         nomCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNom()));
-        numTelCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getNumTel()));
+        numTelCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getnum_tel()));
         emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-        adresseCabineCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getAdresseCabine()));
+        adresse_cabineCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getadresse_cabine()));
 
         ObservableList<Veterinaire> list = FXCollections.observableArrayList(veterinaireService.getAllVeterinaires());
         veterinaireTable.setItems(list);

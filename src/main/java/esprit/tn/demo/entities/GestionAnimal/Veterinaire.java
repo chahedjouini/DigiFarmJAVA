@@ -9,24 +9,24 @@ public class Veterinaire {
 
     private IntegerProperty id;
     private StringProperty nom;
-    private IntegerProperty numTel;
+    private IntegerProperty num_tel;
     private StringProperty email;
-    private StringProperty adresseCabine;
+    private StringProperty adresse_cabine;
 
     public Veterinaire() {
         this.id = new SimpleIntegerProperty();
         this.nom = new SimpleStringProperty();
-        this.numTel = new SimpleIntegerProperty();
+        this.num_tel = new SimpleIntegerProperty();
         this.email = new SimpleStringProperty();
-        this.adresseCabine = new SimpleStringProperty();
+        this.adresse_cabine = new SimpleStringProperty();
     }
 
-    public Veterinaire(int id, String nom, int numTel, String email, String adresseCabine) {
+    public Veterinaire(int id, String nom, int num_tel, String email, String adresse_cabine) {
         this.id = new SimpleIntegerProperty(id);
         this.nom = new SimpleStringProperty(nom);
-        this.numTel = new SimpleIntegerProperty(numTel);
+        this.num_tel = new SimpleIntegerProperty(num_tel);
         this.email = new SimpleStringProperty(email);
-        this.adresseCabine = new SimpleStringProperty(adresseCabine);
+        this.adresse_cabine = new SimpleStringProperty(adresse_cabine);
     }
 
     // Getters and setters with Property methods
@@ -54,16 +54,16 @@ public class Veterinaire {
         this.nom.set(nom);
     }
 
-    public IntegerProperty numTelProperty() {
-        return numTel;
+    public IntegerProperty num_telProperty() {
+        return num_tel;
     }
 
-    public int getNumTel() {
-        return numTel.get();
+    public int getnum_tel() {
+        return num_tel.get();
     }
 
-    public void setNumTel(int numTel) {
-        this.numTel.set(numTel);
+    public void setnum_tel(int num_tel) {
+        this.num_tel.set(num_tel);
     }
 
     public StringProperty emailProperty() {
@@ -78,16 +78,16 @@ public class Veterinaire {
         this.email.set(email);
     }
 
-    public StringProperty adresseCabineProperty() {
-        return adresseCabine;
+    public StringProperty adresse_cabineProperty() {
+        return adresse_cabine;
     }
 
-    public String getAdresseCabine() {
-        return adresseCabine.get();
+    public String getadresse_cabine() {
+        return adresse_cabine.get();
     }
 
-    public void setAdresseCabine(String adresseCabine) {
-        this.adresseCabine.set(adresseCabine);
+    public void setadresse_cabine(String adresse_cabine) {
+        this.adresse_cabine.set(adresse_cabine);
     }
 
     @Override

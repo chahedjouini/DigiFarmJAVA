@@ -10,7 +10,7 @@ public class VeterinaireAddController {
     @FXML private TextField nomField;
     @FXML private TextField numTelField;
     @FXML private TextField emailField;
-    @FXML private TextField adresseCabineField;
+    @FXML private TextField adresse_cabineField;
 
     private final VeterinaireServiceImpl service = new VeterinaireServiceImpl();
 
@@ -20,7 +20,7 @@ public class VeterinaireAddController {
             String nom = nomField.getText();
             int numTel = Integer.parseInt(numTelField.getText());
             String email = emailField.getText();
-            String adresse = adresseCabineField.getText();
+            String adresse = adresse_cabineField.getText();
 
             Veterinaire v = new Veterinaire(0, nom, numTel, email, adresse);
             service.addVeterinaire(v);

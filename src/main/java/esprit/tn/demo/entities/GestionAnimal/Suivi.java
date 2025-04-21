@@ -10,6 +10,7 @@ public class Suivi {
     private final StringProperty etat;
     private final IntegerProperty idClient;
     private final StringProperty analysis;
+    private final ObjectProperty<Veterinaire> veterinaire;
 
     public Suivi() {
         this.id = new SimpleIntegerProperty();
@@ -19,9 +20,10 @@ public class Suivi {
         this.etat = new SimpleStringProperty();
         this.idClient = new SimpleIntegerProperty();
         this.analysis = new SimpleStringProperty();
+        this.veterinaire = new SimpleObjectProperty<>();
     }
 
-    public Suivi(int id, Animal animal, float temperature, float rythmeCardiaque, String etat, int idClient, String analysis) {
+    public Suivi(int id, Animal animal, float temperature, float rythmeCardiaque, String etat, int idClient, String analysis, Veterinaire veterinaire) {
         this.id = new SimpleIntegerProperty(id);
         this.animal = new SimpleObjectProperty<>(animal);
         this.temperature = new SimpleFloatProperty(temperature);
@@ -29,6 +31,7 @@ public class Suivi {
         this.etat = new SimpleStringProperty(etat);
         this.idClient = new SimpleIntegerProperty(idClient);
         this.analysis = new SimpleStringProperty(analysis);
+        this.veterinaire = new SimpleObjectProperty<>(veterinaire);
     }
 
     // Property methods for TableView binding
@@ -39,6 +42,7 @@ public class Suivi {
     public StringProperty etatProperty() { return etat; }
     public IntegerProperty idClientProperty() { return idClient; }
     public StringProperty analysisProperty() { return analysis; }
+    public ObjectProperty<Veterinaire> veterinaireProperty() { return veterinaire; }
 
     // Getters
     public int getId() { return id.get(); }
@@ -48,6 +52,7 @@ public class Suivi {
     public String getEtat() { return etat.get(); }
     public int getIdClient() { return idClient.get(); }
     public String getAnalysis() { return analysis.get(); }
+    public Veterinaire getVeterinaire() { return veterinaire.get(); }
 
     // Setters
     public void setId(int id) { this.id.set(id); }
@@ -57,4 +62,5 @@ public class Suivi {
     public void setEtat(String etat) { this.etat.set(etat); }
     public void setIdClient(int idClient) { this.idClient.set(idClient); }
     public void setAnalysis(String analysis) { this.analysis.set(analysis); }
+    public void setVeterinaire(Veterinaire veterinaire) { this.veterinaire.set(veterinaire); }
 }
