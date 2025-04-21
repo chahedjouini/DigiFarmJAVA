@@ -22,15 +22,20 @@ public class AjoutMachine {
     private static final Pattern ALPHA_PATTERN = Pattern.compile("^[A-Z][a-zA-Z]*(\\s[A-Z][a-zA-Z]*)*$");
     private static final int MAX_NAME_LENGTH = 50;
     private static final int MAX_TYPE_LENGTH = 30;
-    private static final int MAX_ETAT_PRED_LENGTH = 100;
 
     @FXML private TextField nomField;
+    @FXML private Label nomErrorLabel;
     @FXML private TextField typeField;
+    @FXML private Label typeErrorLabel;
     @FXML private DatePicker dateAchatPicker;
-    @FXML private TextField etatPredField;
+    @FXML private Label dateErrorLabel;
     @FXML private ComboBox<String> etatComboBox;
+    @FXML private Label etatErrorLabel;
+    @FXML private ComboBox<String> etatPredComboBox; // Changed to ComboBox
+    @FXML private Label etatPredErrorLabel;
     @FXML private Button annulerButton;
     @FXML private Button btnAjout;
+    @FXML private Button logout;
 
     private final MachineService machineService = new MachineService();
 
@@ -41,14 +46,23 @@ public class AjoutMachine {
                 "en_maintenance",
                 "actif",
                 "inactif"
-
         );
         etatComboBox.setValue("en_maintenance");
+
+        // Initialize the previous state ComboBox
+        etatPredComboBox.getItems().addAll(
+                "en_maintenance",
+                "actif",
+                "inactif"
+        );
+        // No default value, as it's optional
 
         // Configure text field validations
         configureTextField(nomField, MAX_NAME_LENGTH);
         configureTextField(typeField, MAX_TYPE_LENGTH);
-        configureTextField(etatPredField, MAX_ETAT_PRED_LENGTH);
+
+        // Clear all error labels initially
+        clearErrorLabels();
     }
 
     private void configureTextField(TextField textField, int maxLength) {
@@ -73,6 +87,11 @@ public class AjoutMachine {
             // Validate alphabetic pattern
             return ALPHA_PATTERN.matcher(newText).matches() ? change : null;
         }));
+
+        // Add listener to clear error when user starts typing
+        textField.textProperty().addListener((obs, oldValue, newValue) -> {
+            getErrorLabelForField(textField).setText("");
+        });
     }
 
     @FXML
@@ -85,59 +104,58 @@ public class AjoutMachine {
             Machine newMachine = createMachineFromInput();
             machineService.add(newMachine);
 
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Machine ajoutée avec succès !");
+            showSuccessMessage("Machine ajoutée avec succès !");
             clearFields();
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur technique: " + e.getMessage());
+            showErrorMessage("Erreur technique: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private boolean validateInputs() {
+        clearErrorLabels();
+        boolean isValid = true;
+
         // Name validation
-        if (!validateAlphaField(nomField, "Nom", MAX_NAME_LENGTH, true)) {
-            return false;
+        if (!validateAlphaField(nomField, "Nom", MAX_NAME_LENGTH, true, nomErrorLabel)) {
+            isValid = false;
         }
 
         // Type validation
-        if (!validateAlphaField(typeField, "Type", MAX_TYPE_LENGTH, true)) {
-            return false;
+        if (!validateAlphaField(typeField, "Type", MAX_TYPE_LENGTH, true, typeErrorLabel)) {
+            isValid = false;
         }
 
         // Date validation
         if (dateAchatPicker.getValue() == null) {
-            showAlert("Erreur", "La date d'achat est obligatoire !");
+            dateErrorLabel.setText("La date d'achat est obligatoire !");
             dateAchatPicker.requestFocus();
-            return false;
-        }
-        if (dateAchatPicker.getValue().isAfter(LocalDate.now())) {
-            showAlert("Erreur", "La date d'achat ne peut pas être dans le futur !");
+            isValid = false;
+        } else if (dateAchatPicker.getValue().isAfter(LocalDate.now())) {
+            dateErrorLabel.setText("La date d'achat ne peut pas être dans le futur !");
             dateAchatPicker.requestFocus();
-            return false;
+            isValid = false;
         }
 
         // State validation
         if (etatComboBox.getValue() == null) {
-            showAlert("Erreur", "Veuillez sélectionner un état !");
+            etatErrorLabel.setText("Veuillez sélectionner un état !");
             etatComboBox.requestFocus();
-            return false;
+            isValid = false;
         }
 
-        // Optional previous state validation
-        if (!etatPredField.getText().isEmpty() &&
-                !validateAlphaField(etatPredField, "État précédent", MAX_ETAT_PRED_LENGTH, false)) {
-            return false;
-        }
+        // Previous state validation (optional, no strict validation needed)
+        // ComboBox ensures valid options, so only check if needed in future
 
-        return true;
+        return isValid;
     }
 
-    private boolean validateAlphaField(TextField field, String fieldName, int maxLength, boolean required) {
+    private boolean validateAlphaField(TextField field, String fieldName, int maxLength, boolean required, Label errorLabel) {
         String value = field.getText().trim();
 
         if (value.isEmpty()) {
             if (required) {
-                showAlert("Erreur", fieldName + " est obligatoire !");
+                errorLabel.setText(fieldName + " est obligatoire !");
                 field.requestFocus();
                 return false;
             }
@@ -145,13 +163,13 @@ public class AjoutMachine {
         }
 
         if (!ALPHA_PATTERN.matcher(value).matches()) {
-            showAlert("Erreur", fieldName + " doit:\n- Commencer par une majuscule\n- Contenir uniquement des lettres");
+            errorLabel.setText(fieldName + " doit commencer par une majuscule et contenir uniquement des lettres");
             field.requestFocus();
             return false;
         }
 
         if (value.length() > maxLength) {
-            showAlert("Erreur", fieldName + " ne doit pas dépasser " + maxLength + " caractères");
+            errorLabel.setText(fieldName + " ne doit pas dépasser " + maxLength + " caractères");
             field.requestFocus();
             return false;
         }
@@ -169,8 +187,8 @@ public class AjoutMachine {
                         .toInstant()
         ));
 
-        if (!etatPredField.getText().trim().isEmpty()) {
-            machine.setEtat_pred(etatPredField.getText().trim());
+        if (etatPredComboBox.getValue() != null) {
+            machine.setEtat_pred(etatPredComboBox.getValue());
         }
 
         machine.setEtat(etatComboBox.getValue());
@@ -178,42 +196,71 @@ public class AjoutMachine {
 
         return machine;
     }
-
-
     @FXML
-    private void handleAnnulerButton(ActionEvent event) {
+    private void handleLogout(ActionEvent event) {
         try {
-            // Load using the correct path (relative to resources folder)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/machine-update.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/login.fxml"));
             Parent root = loader.load();
 
-            Stage stage = (Stage) annulerButton.getScene().getWindow();
+            Stage stage = (Stage) logout.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur",
-                    "Échec du chargement: " + e.getMessage());
+            showErrorMessage("Échec du chargement de la page de connexion: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
+    @FXML
+private void handleAnnulerButton(ActionEvent event) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/machine-update.fxml"));
+        Parent root = loader.load();
+        Stage stage = (Stage) annulerButton.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    } catch (IOException e) {
+        showErrorMessage("Échec du chargement: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+    private void showSuccessMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Succès");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-    private void showAlert(String title, String message) {
-        showAlert(Alert.AlertType.ERROR, title, message);
+    private void showErrorMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void clearErrorLabels() {
+        nomErrorLabel.setText("");
+        typeErrorLabel.setText("");
+        dateErrorLabel.setText("");
+        etatPredErrorLabel.setText("");
+        etatErrorLabel.setText("");
     }
 
     private void clearFields() {
         nomField.clear();
         typeField.clear();
         dateAchatPicker.setValue(null);
-        etatPredField.clear();
+        etatPredComboBox.getSelectionModel().clearSelection(); // Clear ComboBox selection
         etatComboBox.setValue("en_maintenance");
+        clearErrorLabels();
+    }
+
+    private Label getErrorLabelForField(TextField field) {
+        if (field == nomField) return nomErrorLabel;
+        if (field == typeField) return typeErrorLabel;
+        return new Label();
     }
 }
