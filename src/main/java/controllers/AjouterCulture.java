@@ -6,8 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import services.CultureService;
 
-import java.time.LocalDate;
-
 public class AjouterCulture {
 
     @FXML private TextField nomField;
@@ -34,29 +32,62 @@ public class AjouterCulture {
     @FXML
     private void onAjout() {
         try {
+            String nom = nomField.getText().trim();
+            String surfaceText = surfaceField.getText().trim();
+            String densiteText = densiteField.getText().trim();
+            String eauText = eauField.getText().trim();
+            String rendementText = rendementField.getText().trim();
+            String coutText = coutField.getText().trim();
+            String userIdText = userIdField.getText().trim();
+
+            if (nom.isEmpty() || nom.length() > 255
+                    || regionField.getText().trim().isEmpty()
+                    || typeCultureField.getText().trim().isEmpty()
+                    || surfaceText.isEmpty() || densiteText.isEmpty() || eauText.isEmpty()
+                    || rendementText.isEmpty() || coutText.isEmpty()
+                    || datePlantationPicker.getValue() == null
+                    || dateRecoltePicker.getValue() == null
+                    || engraisCombo.getValue() == null
+                    || userIdText.isEmpty()) {
+                showError("Tous les champs sont obligatoires et doivent être valides.");
+                return;
+            }
+
+            float surface = Float.parseFloat(surfaceText);
+            float densite = Float.parseFloat(densiteText);
+            float eau = Float.parseFloat(eauText);
+            float rendement = Float.parseFloat(rendementText);
+            float cout = Float.parseFloat(coutText);
+            int userId = Integer.parseInt(userIdText);
+
+            if (surface <= 0 || densite <= 0 || eau <= 0 || rendement <= 0 || cout <= 0) {
+                showError("Les valeurs numériques doivent être positives.");
+                return;
+            }
+
             Culture culture = new Culture(
-                    nomField.getText().trim(),
-                    Float.parseFloat(surfaceField.getText().trim()),
+                    nom,
+                    surface,
                     datePlantationPicker.getValue(),
                     dateRecoltePicker.getValue(),
                     regionField.getText().trim(),
                     typeCultureField.getText().trim(),
-                    Float.parseFloat(densiteField.getText().trim()),
-                    Float.parseFloat(eauField.getText().trim()),
+                    densite,
+                    eau,
                     engraisCombo.getValue(),
-                    Float.parseFloat(rendementField.getText().trim()),
-                    Float.parseFloat(coutField.getText().trim()),
-                    Integer.parseInt(userIdField.getText().trim())
+                    rendement,
+                    cout,
+                    userId
             );
 
             cultureService.add(culture);
-            messageLabel.setText("Culture ajoutée avec succès !");
-            messageLabel.setStyle("-fx-text-fill: green");
+            showSuccess("Culture ajoutée avec succès !");
             clearFields();
 
+        } catch (NumberFormatException e) {
+            showError("Format numérique invalide. Vérifiez les champs numériques.");
         } catch (Exception e) {
-            messageLabel.setText("Erreur : " + e.getMessage());
-            messageLabel.setStyle("-fx-text-fill: red");
+            showError("Erreur : " + e.getMessage());
         }
     }
 
@@ -73,5 +104,15 @@ public class AjouterCulture {
         rendementField.clear();
         coutField.clear();
         userIdField.clear();
+    }
+
+    private void showError(String msg) {
+        messageLabel.setText(msg);
+        messageLabel.setStyle("-fx-text-fill: red");
+    }
+
+    private void showSuccess(String msg) {
+        messageLabel.setText(msg);
+        messageLabel.setStyle("-fx-text-fill: green");
     }
 }

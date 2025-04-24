@@ -6,11 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.layout.StackPane;
 import services.ExpertService;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,18 +26,20 @@ public class AfficherExpert {
     @FXML private TableColumn<Expert, String> zoneCol;
     @FXML private TableColumn<Expert, Dispo> dispoCol;
 
+    @FXML private StackPane contentPane; // optionnel si pas défini dans FXML mais accessible via lookup
+
     private final ExpertService expertService = new ExpertService();
     private ObservableList<Expert> expertList;
 
     @FXML
     public void initialize() {
-        idCol.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getId()).asObject());
-        nomCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getNom()));
-        prenomCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getPrenom()));
-        telCol.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(data.getValue().getTel()).asObject());
-        emailCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getEmail()));
-        zoneCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getZone()));
-        dispoCol.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getDispo()));
+        idCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getId()).asObject());
+        nomCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getNom()));
+        prenomCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getPrenom()));
+        telCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleIntegerProperty(cellData.getValue().getTel()).asObject());
+        emailCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getEmail()));
+        zoneCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getZone()));
+        dispoCol.setCellValueFactory(cellData -> new javafx.beans.property.SimpleObjectProperty<>(cellData.getValue().getDispo()));
 
         loadExperts();
     }
@@ -47,7 +50,7 @@ public class AfficherExpert {
             expertList = FXCollections.observableArrayList(list);
             expertTable.setItems(expertList);
         } catch (SQLException e) {
-            showAlert("Erreur", "Impossible de charger les experts : " + e.getMessage());
+            showAlert("Erreur", "Chargement échoué : " + e.getMessage());
         }
     }
 
@@ -55,18 +58,10 @@ public class AfficherExpert {
     private void onAjouter() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AjouterExpert.fxml"));
-            Scene scene = new Scene(loader.load());
-
-            Stage stage = new Stage();
-            stage.setTitle("Ajouter Expert");
-            stage.setScene(scene);
-            stage.showAndWait();
-
-            loadExperts(); // Refresh après ajout
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir la fenêtre d'ajout.");
+            Node node = loader.load();
+            setContent(node);
+        } catch (IOException e) {
+            showAlert("Erreur", "Impossible de charger l'ajout.");
         }
     }
 
@@ -74,27 +69,21 @@ public class AfficherExpert {
     private void onModifier() {
         Expert selected = expertTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Sélection requise", "Veuillez sélectionner un expert.");
+            showAlert("Sélection requise", "Veuillez sélectionner un expert à modifier.");
             return;
         }
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ModifierExpert.fxml"));
-            Scene scene = new Scene(loader.load());
+            Node node = loader.load();
 
             ModifierExpert controller = loader.getController();
             controller.setExpert(selected);
 
-            Stage stage = new Stage();
-            stage.setTitle("Modifier Expert");
-            stage.setScene(scene);
-            stage.showAndWait();
-
-            loadExperts(); // Refresh après modification
-
-        } catch (Exception e) {
+            setContent(node);
+        } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir la fenêtre de modification.");
+            showAlert("Erreur", "Impossible de charger la modification.");
         }
     }
 
@@ -102,7 +91,7 @@ public class AfficherExpert {
     private void onSupprimer() {
         Expert selected = expertTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Sélection requise", "Veuillez sélectionner un expert.");
+            showAlert("Erreur", "Veuillez sélectionner un expert à supprimer.");
             return;
         }
 
@@ -114,9 +103,15 @@ public class AfficherExpert {
         }
     }
 
+    private void setContent(Node node) {
+        StackPane parentPane = (StackPane) expertTable.getScene().lookup("#entityContentPane");
+        parentPane.getChildren().setAll(node);
+    }
+
     private void showAlert(String titre, String contenu) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titre);
+        alert.setHeaderText(null);
         alert.setContentText(contenu);
         alert.showAndWait();
     }

@@ -22,36 +22,57 @@ public class AjouterExpert {
     public void initialize() {
         dispoCombo.getItems().addAll(Dispo.values());
     }
-
     @FXML
     private void onAjout() {
         try {
             String nom = nomField.getText().trim();
             String prenom = prenomField.getText().trim();
-            int tel = Integer.parseInt(telField.getText().trim());
+            String telText = telField.getText().trim();
             String email = emailField.getText().trim();
             String zone = zoneField.getText().trim();
             Dispo dispo = dispoCombo.getValue();
 
-            if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || zone.isEmpty() || dispo == null) {
-                messageLabel.setText("Tous les champs doivent être remplis.");
-                messageLabel.setTextFill(javafx.scene.paint.Color.RED);
+            // Vérification des champs vides
+            if (nom.isEmpty() || prenom.isEmpty() || telText.isEmpty() || email.isEmpty() || zone.isEmpty() || dispo == null) {
+                showMessage("Tous les champs doivent être remplis.", false);
                 return;
             }
 
+            // Vérification de la longueur des noms (max 255)
+            if (nom.length() > 255 || prenom.length() > 255) {
+                showMessage("Nom et prénom ne doivent pas dépasser 255 caractères.", false);
+                return;
+            }
+
+            // Vérification de l'email
+            if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                showMessage("Email invalide.", false);
+                return;
+            }
+
+            // Vérification du numéro (8 chiffres)
+            if (!telText.matches("\\d{8}")) {
+                showMessage("Le numéro de téléphone doit contenir exactement 8 chiffres.", false);
+                return;
+            }
+
+            int tel = Integer.parseInt(telText);
+
+            // Création de l'objet Expert
             Expert expert = new Expert(nom, prenom, tel, email, zone, dispo);
             expertService.add(expert);
-            messageLabel.setText("Expert ajouté avec succès !");
-            messageLabel.setTextFill(javafx.scene.paint.Color.GREEN);
+
+            showMessage("Expert ajouté avec succès !", true);
             clearFields();
 
-        } catch (NumberFormatException e) {
-            messageLabel.setText("Téléphone invalide.");
-            messageLabel.setTextFill(javafx.scene.paint.Color.RED);
         } catch (Exception e) {
-            messageLabel.setText("Erreur : " + e.getMessage());
-            messageLabel.setTextFill(javafx.scene.paint.Color.RED);
+            showMessage("Erreur : " + e.getMessage(), false);
         }
+    }
+
+    private void showMessage(String message, boolean success) {
+        messageLabel.setText(message);
+        messageLabel.setTextFill(success ? javafx.scene.paint.Color.GREEN : javafx.scene.paint.Color.RED);
     }
 
     private void clearFields() {

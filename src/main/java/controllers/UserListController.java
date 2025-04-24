@@ -12,8 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import services.IUserService;
-import services.impl.UserService;
+import services.UserService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -43,7 +42,7 @@ public class UserListController {
     @FXML
     private TableColumn<User, Void> actionsColumn;
     
-    private final IUserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
     private User currentUser;
     private ObservableList<User> userList;
     

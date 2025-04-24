@@ -8,8 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import services.IUserService;
-import services.impl.UserService;
+import services.UserService;
 import utils.PasswordUtils;
 
 import java.net.URL;
@@ -56,7 +55,7 @@ public class UserController implements Initializable {
     @FXML
     private Label messageLabel;
     
-    private final IUserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
     private User selectedUser;
     
     @Override

@@ -12,7 +12,6 @@ import services.CultureService;
 import services.EtudeService;
 import services.ExpertService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class ModifierEtude {
@@ -43,13 +42,10 @@ public class ModifierEtude {
 
     private void fillFields() {
         try {
-            List<Culture> cultures = cultureService.select();
-            List<Expert> experts = expertService.select();
-
-            cultureCombo.getItems().addAll(cultures);
-            expertCombo.getItems().addAll(experts);
-            climatCombo.getItems().addAll(Climat.values());
-            typeSolCombo.getItems().addAll(TypeSol.values());
+            cultureCombo.getItems().setAll(cultureService.select());
+            expertCombo.getItems().setAll(expertService.select());
+            climatCombo.getItems().setAll(Climat.values());
+            typeSolCombo.getItems().setAll(TypeSol.values());
 
             datePicker.setValue(etude.getDateR());
             cultureCombo.setValue(etude.getCulture());
@@ -63,13 +59,37 @@ public class ModifierEtude {
             precipitationsField.setText(String.valueOf(etude.getPrecipitations()));
             mainOeuvreField.setText(String.valueOf(etude.getMainOeuvre()));
         } catch (Exception e) {
-            messageLabel.setText("Erreur de chargement : " + e.getMessage());
+            showError("Erreur de chargement : " + e.getMessage());
         }
     }
 
     @FXML
     private void onModifier() {
         try {
+            if (datePicker.getValue() == null ||
+                    cultureCombo.getValue() == null ||
+                    expertCombo.getValue() == null ||
+                    climatCombo.getValue() == null ||
+                    typeSolCombo.getValue() == null ||
+                    prixField.getText().isBlank() ||
+                    rendementField.getText().isBlank() ||
+                    precipitationsField.getText().isBlank() ||
+                    mainOeuvreField.getText().isBlank()) {
+                showError("Tous les champs doivent être remplis.");
+                return;
+            }
+
+            float prix = Float.parseFloat(prixField.getText());
+            float rendement = Float.parseFloat(rendementField.getText());
+            float precipitations = Float.parseFloat(precipitationsField.getText());
+            float mainOeuvre = Float.parseFloat(mainOeuvreField.getText());
+
+            if (prix <= 0 || rendement <= 0 || precipitations <= 0 || mainOeuvre <= 0) {
+                showError("Tous les champs numériques doivent être des valeurs positives.");
+                return;
+            }
+
+            // Mise à jour de l’étude
             etude.setDateR(datePicker.getValue());
             etude.setCulture(cultureCombo.getValue());
             etude.setExpert(expertCombo.getValue());
@@ -77,16 +97,30 @@ public class ModifierEtude {
             etude.setTypeSol(typeSolCombo.getValue());
             etude.setIrrigation(irrigationCheck.isSelected());
             etude.setFertilisation(fertilisationCheck.isSelected());
-            etude.setPrix(Float.parseFloat(prixField.getText()));
-            etude.setRendement(Float.parseFloat(rendementField.getText()));
-            etude.setPrecipitations(Float.parseFloat(precipitationsField.getText()));
-            etude.setMainOeuvre(Float.parseFloat(mainOeuvreField.getText()));
+            etude.setPrix(prix);
+            etude.setRendement(rendement);
+            etude.setPrecipitations(precipitations);
+            etude.setMainOeuvre(mainOeuvre);
 
             etudeService.update(etude);
+            showSuccess("Étude modifiée avec succès !");
             closeWindow();
+
+        } catch (NumberFormatException e) {
+            showError("Veuillez saisir des nombres valides dans les champs numériques.");
         } catch (Exception e) {
-            messageLabel.setText("Erreur : " + e.getMessage());
+            showError("Erreur : " + e.getMessage());
         }
+    }
+
+    private void showError(String message) {
+        messageLabel.setText(message);
+        messageLabel.setStyle("-fx-text-fill: red;");
+    }
+
+    private void showSuccess(String message) {
+        messageLabel.setText(message);
+        messageLabel.setStyle("-fx-text-fill: green;");
     }
 
     private void closeWindow() {

@@ -13,8 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import services.IUserService;
-import services.impl.UserService;
+import services.UserService;
 import utils.PasswordUtils;
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class RegisterController implements Initializable {
     @FXML
     private Label errorLabel;
     
-    private final IUserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
     
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

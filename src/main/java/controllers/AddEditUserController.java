@@ -7,8 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import services.IUserService;
-import services.impl.UserService;
+import services.UserService;
 
 import java.util.regex.Pattern;
 
@@ -34,7 +33,7 @@ public class AddEditUserController {
     @FXML
     private Label errorLabel;
     
-    private final IUserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
     private User user;
     
     @FXML

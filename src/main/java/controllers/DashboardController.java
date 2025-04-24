@@ -15,8 +15,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import services.IUserService;
-import services.impl.UserService;
+import services.UserService;
+import utils.RememberMeStore;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -32,7 +32,7 @@ public class DashboardController {
     @FXML
     private Button logoutButton;
 
-    private final IUserService userService = new UserService();
+    private final UserService userService = UserService.getInstance();
     private User currentUser;
 
     private final Map<String, String[]> gestionEntities = new HashMap<>() {{
@@ -44,46 +44,69 @@ public class DashboardController {
         put("Gestion Stock", new String[]{"Produit", "Quantité"});
     }};
 
+    // Utilisation de initialize uniquement pour le cas où l'utilisateur est déjà configuré
     @FXML
     public void initialize() {
-        // Ne pas tenter de rediriger avant que la scène soit configurée
-        if (currentUser == null) {
-            // On ne fait rien ici, car le setCurrentUser sera appelé après l'initialisation du contrôleur
-        } else {
+        if (currentUser != null) {
             welcomeLabel.setText("Bienvenue, " + currentUser.getNom() + " " + currentUser.getPrenom());
             updateEntityList("Gestion Admin");
         }
     }
 
+    // Appelée par le contrôleur parent
     public void setCurrentUser(User user) {
         this.currentUser = user;
         if (welcomeLabel != null) {
             welcomeLabel.setText("Bienvenue, " + user.getNom() + " " + user.getPrenom());
-            // Une fois l'utilisateur défini, on peut mettre à jour la liste des entités
             updateEntityList("Gestion Admin");
         }
     }
 
     private void redirectToLogin() {
         try {
-            // Vérifier que la scène est disponible avant de rediriger
-            if (entityList.getScene() != null && entityList.getScene().getWindow() != null) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-                Parent root = loader.load();
-                
-                Stage stage = (Stage) entityList.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Connexion");
-            }
-        } catch (IOException e) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) logoutButton.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Connexion");
+            stage.show();
+
+            System.out.println("Navigation vers login effectuée");
+        } catch (Exception e) {
             e.printStackTrace();
+            showError("Erreur lors de la redirection: " + e.getMessage());
         }
     }
 
     @FXML
     private void handleLogout() {
-        userService.logout();
-        redirectToLogin();
+        try {
+            // 1. Détruire la session utilisateur
+            userService.logout();
+            currentUser = null;
+            
+            // 2. Effacer les données "Se souvenir de moi"
+            RememberMeStore.clear();
+            
+            // 3. Obtenir la fenêtre actuelle
+            Stage currentStage = (Stage) logoutButton.getScene().getWindow();
+            
+            // 4. Charger l'interface de login
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
+            Parent root = loader.load();
+            
+            // 5. Remplacer le contenu de la fenêtre par l'interface de login
+            Scene loginScene = new Scene(root);
+            currentStage.setScene(loginScene);
+            currentStage.setTitle("Connexion");
+            
+            System.out.println("Session détruite et interface login affichée");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Erreur lors de la déconnexion: " + e.getMessage());
+        }
     }
 
     @FXML

@@ -11,9 +11,12 @@
 
     <!-- En-tête avec le message de bienvenue et le bouton de déconnexion -->
     <top>
-        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #2E7D32; -fx-padding: 10;">
+        <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-background-color: #2E7D32; -fx-padding: 10;">
+            <Region HBox.hgrow="ALWAYS" />
             <Label fx:id="welcomeLabel" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-            <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
+            <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" 
+                    style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15;"/>
+            <padding><Insets right="20"/></padding>
         </HBox>
     </top>
 

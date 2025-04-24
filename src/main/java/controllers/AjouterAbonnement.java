@@ -24,11 +24,27 @@ public class AjouterAbonnement {
 
     @FXML
     private void onAjouter() {
+        // Vérification que tous les champs sont remplis
+        if (idcField.getText().isEmpty() || nomField.getText().isEmpty() || prenomField.getText().isEmpty()
+                || numeroField.getText().isEmpty() || typeCombo.getValue() == null || dureeField.getText().isEmpty()) {
+            messageLabel.setText("Veuillez remplir tous les champs.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        // Vérification que le numéro est composé exactement de 8 chiffres
+        String numeroText = numeroField.getText();
+        if (!numeroText.matches("\\d{8}")) {
+            messageLabel.setText("Le numéro de téléphone doit contenir exactement 8 chiffres.");
+            messageLabel.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
         try {
             int idc = Integer.parseInt(idcField.getText());
             String nom = nomField.getText();
             String prenom = prenomField.getText();
-            int numero = Integer.parseInt(numeroField.getText());
+            int numero = Integer.parseInt(numeroText);
             String type = typeCombo.getValue();
             int duree = Integer.parseInt(dureeField.getText());
 
@@ -46,6 +62,8 @@ public class AjouterAbonnement {
             messageLabel.setStyle("-fx-text-fill: green;");
         } catch (Exception e) {
             messageLabel.setText("Erreur lors de l'ajout.");
+            messageLabel.setStyle("-fx-text-fill: red;");
         }
     }
+
 }

@@ -35,23 +35,60 @@ public class ModifierExpert {
     @FXML
     private void onModifier() {
         try {
-            expert.setNom(nomField.getText());
-            expert.setPrenom(prenomField.getText());
-            expert.setTel(Integer.parseInt(telField.getText()));
-            expert.setEmail(emailField.getText());
-            expert.setZone(zoneField.getText());
-            expert.setDispo(dispoCombo.getValue());
+            String nom = nomField.getText().trim();
+            String prenom = prenomField.getText().trim();
+            String telText = telField.getText().trim();
+            String email = emailField.getText().trim();
+            String zone = zoneField.getText().trim();
+            Dispo dispo = dispoCombo.getValue();
+
+            if (nom.isEmpty() || prenom.isEmpty() || telText.isEmpty() || email.isEmpty() || zone.isEmpty() || dispo == null) {
+                showMessage("Tous les champs doivent être remplis.", false);
+                return;
+            }
+
+            if (nom.length() > 255 || prenom.length() > 255) {
+                showMessage("Nom et prénom ne doivent pas dépasser 255 caractères.", false);
+                return;
+            }
+
+            if (!email.matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                showMessage("Email invalide.", false);
+                return;
+            }
+
+            if (!telText.matches("\\d{8}")) {
+                showMessage("Le numéro de téléphone doit contenir exactement 8 chiffres.", false);
+                return;
+            }
+
+            int tel = Integer.parseInt(telText);
+
+            // Mise à jour des champs
+            expert.setNom(nom);
+            expert.setPrenom(prenom);
+            expert.setTel(tel);
+            expert.setEmail(email);
+            expert.setZone(zone);
+            expert.setDispo(dispo);
 
             expertService.update(expert);
-            messageLabel.setText("Modifié avec succès");
+            showMessage("Modifié avec succès", true);
             closeWindow();
 
         } catch (Exception e) {
-            messageLabel.setText("Erreur : " + e.getMessage());
+            showMessage("Erreur : " + e.getMessage(), false);
         }
+    }
+
+    private void showMessage(String message, boolean success) {
+        messageLabel.setText(message);
+        messageLabel.setTextFill(success ? javafx.scene.paint.Color.GREEN : javafx.scene.paint.Color.RED);
     }
 
     private void closeWindow() {
         ((Stage) nomField.getScene().getWindow()).close();
     }
+
+
 }

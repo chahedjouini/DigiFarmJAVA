@@ -14,9 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import services.IUserService;
-import services.impl.UserService;
+import services.UserService;
 import utils.PasswordUtils;
+import utils.RememberMeStore;
+import javafx.scene.control.CheckBox;
 
 import java.io.IOException;
 
@@ -31,10 +32,10 @@ public class LoginController {
     private Label errorLabel;
     
     @FXML
-    private Button signUpButton;
+    private Button loginButton;
     
     @FXML
-    private Button loginButton;
+    private Button signUpButton;
     
     @FXML
     private VBox loginForm;
@@ -68,8 +69,11 @@ public class LoginController {
     
     @FXML
     private Button backToLoginButton;
-    
-    private final IUserService userService = new UserService();
+
+    @FXML private CheckBox rememberMeCheckBox;
+
+
+    private final UserService userService = UserService.getInstance();
     
     @FXML
     public void initialize() {
@@ -179,29 +183,41 @@ public class LoginController {
             return;
         }
         
-        // Tentative de connexion avec le mot de passe non haché
-        // Le service s'occupera de récupérer le sel et de hasher le mot de passe
+        // Tentative de connexion
         User user = userService.login(email, password);
-        
+
         if (user != null) {
-            try {
-                // Charger le dashboard
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-                Parent root = loader.load();
-                
-                // Passer l'utilisateur connecté au contrôleur du dashboard
-                DashboardController dashboardController = loader.getController();
-                dashboardController.setCurrentUser(user);
-                
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Dashboard - Digifarm");
-            } catch (IOException e) {
-                e.printStackTrace();
-                showError("Erreur lors du chargement de l'interface");
+            if (rememberMeCheckBox.isSelected()) {
+                RememberMeStore.save(
+                        new RememberMeStore.RememberedUser(
+                                user.getId(), user.getNom(), user.getPrenom(), user.getRole().name()
+                        )
+                );
+            } else {
+                RememberMeStore.clear();
             }
+            navigateToDashboard(user);
         } else {
             showError("Email ou mot de passe incorrect");
+        }
+    }
+    
+    private void navigateToDashboard(User user) {
+        try {
+            // Charger le dashboard
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+            Parent root = loader.load();
+            
+            // Passer l'utilisateur connecté au contrôleur du dashboard
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setCurrentUser(user);
+            
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Dashboard - Digifarm");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Erreur lors du chargement de l'interface");
         }
     }
     
