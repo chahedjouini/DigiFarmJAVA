@@ -10,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -23,6 +24,14 @@ public class SuiviAddController {
     @FXML private TextField idClientField;
     @FXML private TextField analysisField;
     @FXML private ComboBox<Veterinaire> veterinaireComboBox;
+
+    @FXML private Label animalErrorLabel;
+    @FXML private Label temperatureErrorLabel;
+    @FXML private Label rythmeCardiaqueErrorLabel;
+    @FXML private Label etatErrorLabel;
+    @FXML private Label idClientErrorLabel;
+    @FXML private Label analysisErrorLabel;
+    @FXML private Label veterinaireErrorLabel;
 
     private final SuiviServiceImpl suiviService = new SuiviServiceImpl();
     private final AnimalServiceImpl animalService = new AnimalServiceImpl();
@@ -75,26 +84,82 @@ public class SuiviAddController {
 
     @FXML
     private void handleAddSuivi() {
-        if (!validateInputs()) {
-            return;
+        // Réinitialiser les messages d'erreur
+        animalErrorLabel.setText("");
+        temperatureErrorLabel.setText("");
+        rythmeCardiaqueErrorLabel.setText("");
+        etatErrorLabel.setText("");
+        idClientErrorLabel.setText("");
+        analysisErrorLabel.setText("");
+        veterinaireErrorLabel.setText("");
+
+        boolean isValid = true;
+
+        if (animalComboBox.getValue() == null) {
+            animalErrorLabel.setText("L'animal est obligatoire.");
+            isValid = false;
         }
 
-        Suivi suivi = new Suivi();
-        suivi.setAnimal(animalComboBox.getValue());
-        suivi.setTemperature(Float.parseFloat(temperatureField.getText()));
-        suivi.setRythmeCardiaque(Float.parseFloat(rythmeCardiaqueField.getText()));
-        suivi.setEtat(etatField.getText());
-        suivi.setIdClient(Integer.parseInt(idClientField.getText()));
-        suivi.setAnalysis(analysisField.getText());
-        suivi.setVeterinaire(veterinaireComboBox.getValue());
+        if (temperatureField.getText().isEmpty()) {
+            temperatureErrorLabel.setText("La température est obligatoire.");
+            isValid = false;
+        } else if (!isValidFloat(temperatureField.getText())) {
+            temperatureErrorLabel.setText("La température doit être un nombre valide.");
+            isValid = false;
+        }
 
-        try {
-            suiviService.addSuivi(suivi);
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Suivi added successfully!");
-            Stage stage = (Stage) animalComboBox.getScene().getWindow();
-            stage.close();
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to add Suivi: " + e.getMessage());
+        if (rythmeCardiaqueField.getText().isEmpty()) {
+            rythmeCardiaqueErrorLabel.setText("Le rythme cardiaque est obligatoire.");
+            isValid = false;
+        } else if (!isValidFloat(rythmeCardiaqueField.getText())) {
+            rythmeCardiaqueErrorLabel.setText("Le rythme cardiaque doit être un nombre valide.");
+            isValid = false;
+        }
+
+        if (etatField.getText().isEmpty()) {
+            etatErrorLabel.setText("L'état est obligatoire.");
+            isValid = false;
+        }
+
+        if (idClientField.getText().isEmpty()) {
+            idClientErrorLabel.setText("L'ID Client est obligatoire.");
+            isValid = false;
+        } else if (!isValidInteger(idClientField.getText())) {
+            idClientErrorLabel.setText("L'ID Client doit être un nombre entier valide.");
+            isValid = false;
+        } else if (Integer.parseInt(idClientField.getText()) <= 0) {
+            idClientErrorLabel.setText("L'ID Client doit être un nombre positif.");
+            isValid = false;
+        }
+
+        if (analysisField.getText().isEmpty()) {
+            analysisErrorLabel.setText("L'analyse est obligatoire.");
+            isValid = false;
+        }
+
+        if (veterinaireComboBox.getValue() == null) {
+            veterinaireErrorLabel.setText("Le vétérinaire est obligatoire.");
+            isValid = false;
+        }
+
+        if (isValid) {
+            Suivi suivi = new Suivi();
+            suivi.setAnimal(animalComboBox.getValue());
+            suivi.setTemperature(Float.parseFloat(temperatureField.getText()));
+            suivi.setRythmeCardiaque(Float.parseFloat(rythmeCardiaqueField.getText()));
+            suivi.setEtat(etatField.getText());
+            suivi.setIdClient(Integer.parseInt(idClientField.getText()));
+            suivi.setAnalysis(analysisField.getText());
+            suivi.setVeterinaire(veterinaireComboBox.getValue());
+
+            try {
+                suiviService.addSuivi(suivi);
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Suivi ajouté avec succès !");
+                Stage stage = (Stage) animalComboBox.getScene().getWindow();
+                stage.close();
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ajouter le suivi : " + e.getMessage());
+            }
         }
     }
 
@@ -102,38 +167,6 @@ public class SuiviAddController {
     private void handleCancel() {
         Stage stage = (Stage) animalComboBox.getScene().getWindow();
         stage.close();
-    }
-
-    private boolean validateInputs() {
-        if (animalComboBox.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please select an animal.");
-            return false;
-        }
-        if (temperatureField.getText().isEmpty() || !isValidFloat(temperatureField.getText())) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a valid temperature.");
-            return false;
-        }
-        if (rythmeCardiaqueField.getText().isEmpty() || !isValidFloat(rythmeCardiaqueField.getText())) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a valid heart rate.");
-            return false;
-        }
-        if (etatField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter the state.");
-            return false;
-        }
-        if (idClientField.getText().isEmpty() || !isValidInteger(idClientField.getText())) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a valid client ID.");
-            return false;
-        }
-        if (analysisField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter the analysis.");
-            return false;
-        }
-        if (veterinaireComboBox.getValue() == null) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please select a veterinaire.");
-            return false;
-        }
-        return true;
     }
 
     private boolean isValidFloat(String value) {

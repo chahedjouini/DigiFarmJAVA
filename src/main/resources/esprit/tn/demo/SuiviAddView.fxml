@@ -9,35 +9,41 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviAddController" alignment="CENTER" hgap="10" vgap="10" style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
+<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviAddController" alignment="CENTER" hgap="10" vgap="5" style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0" />
     </padding>
-    <Text text="Add Suivi" style="-fx-font-size: 18; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+    <Text text="Ajouter un Suivi" style="-fx-font-size: 18.0; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" textAlignment="CENTER"/>
+    <Label fx:id="animalErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2"/>
+    <Label text="Animal:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <ComboBox fx:id="animalComboBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
-    <Label text="Animal:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-    <ComboBox fx:id="animalComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <Label fx:id="temperatureErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+    <Label text="Température:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <TextField fx:id="temperatureField" promptText="Entrer la température" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-    <Label text="Temperature (°C):" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-    <TextField fx:id="temperatureField" promptText="e.g., 38.5" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+    <Label fx:id="rythmeCardiaqueErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+    <Label text="Rythme Cardiaque:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+    <TextField fx:id="rythmeCardiaqueField" promptText="Entrer le rythme cardiaque" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-    <Label text="Heart Rate (bpm):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-    <TextField fx:id="rythmeCardiaqueField" promptText="e.g., 80" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <Label fx:id="etatErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="7" GridPane.columnSpan="2"/>
+    <Label text="État:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+    <TextField fx:id="etatField" promptText="Entrer l'état" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-    <Label text="State:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-    <TextField fx:id="etatField" promptText="e.g., Stable" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+    <Label fx:id="idClientErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2"/>
+    <Label text="ID Client:" GridPane.columnIndex="0" GridPane.rowIndex="10" />
+    <TextField fx:id="idClientField" promptText="Entrer l'ID du client" GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
-    <Label text="Client ID:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
-    <TextField fx:id="idClientField" promptText="e.g., 1" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+    <Label fx:id="analysisErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="11" GridPane.columnSpan="2"/>
+    <Label text="Analyse:" GridPane.columnIndex="0" GridPane.rowIndex="12" />
+    <TextField fx:id="analysisField" promptText="Entrer l'analyse" GridPane.columnIndex="1" GridPane.rowIndex="12" />
 
-    <Label text="Analysis:" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
-    <TextField fx:id="analysisField" promptText="Enter analysis" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <Label fx:id="veterinaireErrorLabel" style="-fx-text-fill: red;" GridPane.columnIndex="0" GridPane.rowIndex="13" GridPane.columnSpan="2"/>
+    <Label text="Vétérinaire:" GridPane.columnIndex="0" GridPane.rowIndex="14" />
+    <ComboBox fx:id="veterinaireComboBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
 
-    <Label text="Veterinaire:" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
-    <ComboBox fx:id="veterinaireComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
-
-    <HBox spacing="10" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="8">
-        <Button text="Add Suivi" onAction="#handleAddSuivi" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-        <Button text="Cancel" onAction="#handleCancel" style="-fx-background-color: #f44336; -fx-text-fill: white;"/>
+    <HBox spacing="10.0" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="15">
+        <Button text="Ajouter" onAction="#handleAddSuivi" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+        <Button text="Annuler" onAction="#handleCancel" style="-fx-background-color: #f44336; -fx-text-fill: white;" />
     </HBox>
 </GridPane>

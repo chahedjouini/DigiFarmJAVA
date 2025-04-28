@@ -11,22 +11,36 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 
 import java.io.IOException;
 import java.net.URL;
 
+
+
+
 public class SuiviReadController {
 
-    @FXML private TableView<Suivi> suiviTableView;
-    @FXML private TableColumn<Suivi, Integer> idColumn;
-    @FXML private TableColumn<Suivi, String> animalColumn;
-    @FXML private TableColumn<Suivi, Float> temperatureColumn;
-    @FXML private TableColumn<Suivi, Float> rythmeCardiaqueColumn;
-    @FXML private TableColumn<Suivi, String> etatColumn;
-    @FXML private TableColumn<Suivi, Integer> idClientColumn;
-    @FXML private TableColumn<Suivi, String> analysisColumn;
-    @FXML private TableColumn<Suivi, String> veterinaireNomColumn;
-    @FXML private TableColumn<Suivi, Void> actionsColumn;
+    @FXML
+    private TableView<Suivi> suiviTableView;
+    @FXML
+    private TableColumn<Suivi, Integer> idColumn;
+    @FXML
+    private TableColumn<Suivi, String> animalColumn;
+    @FXML
+    private TableColumn<Suivi, Float> temperatureColumn;
+    @FXML
+    private TableColumn<Suivi, Float> rythmeCardiaqueColumn;
+    @FXML
+    private TableColumn<Suivi, String> etatColumn;
+    @FXML
+    private TableColumn<Suivi, Integer> idClientColumn;
+    @FXML
+    private TableColumn<Suivi, String> analysisColumn;
+    @FXML
+    private TableColumn<Suivi, String> veterinaireNomColumn;
+    @FXML
+    private TableColumn<Suivi, Void> actionsColumn;
 
     private final SuiviServiceImpl suiviService = new SuiviServiceImpl();
 
@@ -183,5 +197,23 @@ public class SuiviReadController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleOpenStatistiques() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/StatistiqueView.fxml");
+            if (location == null) {
+                throw new IOException("Impossible de trouver StatistiqueView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Statistiques des Suivis");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la fenêtre des statistiques : " + e.getMessage());
+        }
     }
 }

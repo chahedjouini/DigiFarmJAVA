@@ -3,7 +3,7 @@ package esprit.tn.demo.controllers.GestionAnimal;
 import esprit.tn.demo.entities.GestionAnimal.Animal;
 import esprit.tn.demo.services.GestionAnimal.AnimalServiceImpl;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -15,6 +15,12 @@ public class AnimalAddController {
     @FXML private TextField ageField;
     @FXML private TextField poidsField;
 
+    @FXML private Label nomErrorLabel;
+    @FXML private Label typeErrorLabel;
+    @FXML private Label raceErrorLabel;
+    @FXML private Label ageErrorLabel;
+    @FXML private Label poidsErrorLabel;
+
     private final AnimalServiceImpl animalService = new AnimalServiceImpl();
 
     @FXML
@@ -24,24 +30,78 @@ public class AnimalAddController {
 
     @FXML
     private void handleAddAnimal() {
-        if (!validateInputs()) {
-            return;
+        // Réinitialiser les messages d'erreur
+        nomErrorLabel.setText("");
+        typeErrorLabel.setText("");
+        raceErrorLabel.setText("");
+        ageErrorLabel.setText("");
+        poidsErrorLabel.setText("");
+
+        String nom = nomField.getText();
+        String type = typeField.getText();
+        String race = raceField.getText();
+        String ageText = ageField.getText();
+        String poidsText = poidsField.getText();
+
+        boolean isValid = true;
+
+        if (nom.isEmpty()) {
+            nomErrorLabel.setText("Le nom est obligatoire.");
+            isValid = false;
         }
 
-        Animal animal = new Animal(0,
-                nomField.getText(),
-                typeField.getText(),
-                Integer.parseInt(ageField.getText()),
-                Float.parseFloat(poidsField.getText()),
-                raceField.getText());
+        if (type.isEmpty()) {
+            typeErrorLabel.setText("Le type est obligatoire.");
+            isValid = false;
+        }
 
-        try {
-            animalService.addAnimal(animal);
-            showAlert(Alert.AlertType.INFORMATION, "Success", "Animal added successfully!");
-            Stage stage = (Stage) nomField.getScene().getWindow();
-            stage.close();
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Failed to add Animal: " + e.getMessage());
+        if (race.isEmpty()) {
+            raceErrorLabel.setText("La race est obligatoire.");
+            isValid = false;
+        }
+
+        if (ageText.isEmpty()) {
+            ageErrorLabel.setText("L'âge est obligatoire.");
+            isValid = false;
+        } else {
+            if (!isValidInteger(ageText)) {
+                ageErrorLabel.setText("L'âge doit être un nombre entier valide.");
+                isValid = false;
+            } else if (Integer.parseInt(ageText) <= 0) {
+                ageErrorLabel.setText("L'âge doit être un nombre positif.");
+                isValid = false;
+            }
+        }
+
+        if (poidsText.isEmpty()) {
+            poidsErrorLabel.setText("Le poids est obligatoire.");
+            isValid = false;
+        } else {
+            if (!isValidFloat(poidsText)) {
+                poidsErrorLabel.setText("Le poids doit être un nombre valide.");
+                isValid = false;
+            } else if (Float.parseFloat(poidsText) <= 0) {
+                poidsErrorLabel.setText("Le poids doit être un nombre positif.");
+                isValid = false;
+            }
+        }
+
+        if (isValid) {
+            Animal animal = new Animal(0, // L'ID sera généré par la base de données
+                    nom,
+                    type,
+                    Integer.parseInt(ageText),
+                    Float.parseFloat(poidsText),
+                    race);
+
+            try {
+                animalService.addAnimal(animal);
+                showAlert("Success", "Animal added successfully!");
+                Stage stage = (Stage) nomField.getScene().getWindow();
+                stage.close();
+            } catch (Exception e) {
+                showAlert("Error", "Failed to add Animal: " + e.getMessage());
+            }
         }
     }
 
@@ -49,30 +109,6 @@ public class AnimalAddController {
     private void handleCancel() {
         Stage stage = (Stage) nomField.getScene().getWindow();
         stage.close();
-    }
-
-    private boolean validateInputs() {
-        if (nomField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter the animal's name.");
-            return false;
-        }
-        if (typeField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter the animal's type.");
-            return false;
-        }
-        if (raceField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter the animal's breed.");
-            return false;
-        }
-        if (ageField.getText().isEmpty() || !isValidInteger(ageField.getText())) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a valid age.");
-            return false;
-        }
-        if (poidsField.getText().isEmpty() || !isValidFloat(poidsField.getText())) {
-            showAlert(Alert.AlertType.WARNING, "Validation Error", "Please enter a valid weight.");
-            return false;
-        }
-        return true;
     }
 
     private boolean isValidFloat(String value) {
@@ -93,8 +129,8 @@ public class AnimalAddController {
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String title, String content) {
-        Alert alert = new Alert(alertType);
+    private void showAlert(String title, String content) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);

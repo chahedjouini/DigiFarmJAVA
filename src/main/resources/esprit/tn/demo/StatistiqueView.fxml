@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.StatistiqueController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label text="Statistiques des Suivis Animaliers">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <padding>
+                <Insets bottom="10.0" />
+            </padding>
+        </Label>
+        <Label fx:id="totalSuivisLabel" text="Nombre total de suivis : " />
+        <PieChart fx:id="etatPieChart" title="Répartition des suivis par état" />
+    </children>
+</VBox>
