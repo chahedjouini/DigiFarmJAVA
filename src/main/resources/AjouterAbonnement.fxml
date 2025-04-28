@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            fx:controller="controllers.AjouterAbonnement"
+            prefWidth="600" prefHeight="500">
+
+    <VBox spacing="10" alignment="CENTER" layoutX="50" layoutY="20" prefWidth="500">
+        <Label text="Ajouter un Abonnement" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+                <ColumnConstraints minWidth="250"/>
+            </columnConstraints>
+
+            <Label text="ID Utilisateur :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="idcField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Nom :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Prénom :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="prenomField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Numéro :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="numeroField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Type Abonnement :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="typeCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Durée (mois) :" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <TextField fx:id="dureeField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
+
+        <Button text="Ajouter" onAction="#onAjouter"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    </VBox>
+</AnchorPane>

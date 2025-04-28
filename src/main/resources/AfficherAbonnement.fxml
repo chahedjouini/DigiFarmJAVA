@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.AfficherAbonnement">
+
+    <!-- En-tête -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <padding><Insets top="15" right="10" bottom="15" left="10"/></padding>
+            <Label text="Liste des Abonnements"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+        </HBox>
+    </top>
+
+    <!-- Centre : Table des abonnements -->
+    <center>
+        <VBox spacing="10">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+            <TableView fx:id="abonnementTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="idCol" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="idcCol" text="ID Utilisateur" prefWidth="100"/>
+                    <TableColumn fx:id="nomCol" text="Nom" prefWidth="100"/>
+                    <TableColumn fx:id="prenomCol" text="Prénom" prefWidth="100"/>
+                    <TableColumn fx:id="numeroCol" text="Numéro" prefWidth="100"/>
+                    <TableColumn fx:id="typeCol" text="Type" prefWidth="100"/>
+                    <TableColumn fx:id="dureeCol" text="Durée" prefWidth="80"/>
+                    <TableColumn fx:id="prixCol" text="Prix" prefWidth="80"/>
+                </columns>
+            </TableView>
+
+            <!-- Boutons -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Ajouter" onAction="#onAjouter"/>
+                <Button text="Modifier" onAction="#onModifier"/>
+                <Button text="Supprimer" onAction="#onSupprimer"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

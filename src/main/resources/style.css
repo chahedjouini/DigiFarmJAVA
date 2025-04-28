@@ -1,0 +1,194 @@
+/* style.css */
+
+/* Styles pour la page de connexion */
+.title-label {
+    -fx-text-fill: #2F3E46;
+    -fx-font-weight: bold;
+}
+
+.primary-button {
+    -fx-background-color: #0078D7;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 6 16;
+}
+
+.primary-button:hover {
+    -fx-background-color: #0066B5;
+    -fx-cursor: hand;
+}
+
+.secondary-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #0078D7;
+    -fx-text-fill: #0078D7;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-weight: bold;
+    -fx-padding: 6 16;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #F0F8FF;
+    -fx-cursor: hand;
+}
+
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 11px;
+}
+
+/* Styles pour les champs de texte */
+.text-field, .password-field, .combo-box {
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #D9D9D9;
+    -fx-padding: 8;
+}
+
+.text-field:focused, .password-field:focused, .combo-box:focused {
+    -fx-border-color: #0078D7;
+}
+
+/* Styles pour le reste de l'application */
+.menu-button {
+    -fx-background-color: white;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #A5D6A7;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.menu-button:hover {
+    -fx-background-color: #C8E6C9;
+}
+
+.card-box {
+    -fx-background-color: white;
+    -fx-border-color: #C5E1A5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 4);
+    -fx-spacing: 6;
+}
+
+.card-box Label {
+    -fx-font-size: 13px;
+}
+
+.card-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-text-fill: #33691E;
+}
+
+.entity-button {
+    -fx-background-color: #E8F5E9;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 14px;
+    -fx-padding: 6 14;
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: #A5D6A7;
+}
+
+.entity-button:hover {
+    -fx-background-color: #C8E6C9;
+    -fx-cursor: hand;
+}
+
+.header-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: #2E7D32;
+    -fx-font-weight: bold;
+}
+
+.header {
+    -fx-background-color: #4CAF50;
+}
+
+.header-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.card-container {
+    -fx-background-color: #f0f4f0;
+}
+/* Shared card styling for Expert and Culture */
+.expert-card, .culture-card {
+    -fx-background-color: white;
+    -fx-border-color: #ddd;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-transition: 0.3s;
+}
+
+.expert-card:hover, .culture-card:hover {
+    -fx-background-color: #f1f1f1;
+    -fx-border-color: #4CAF50;
+}
+
+.expert-card.selected-card, .culture-card.selected-card {
+    -fx-background-color: #A5D6A7;
+    -fx-border-color: #388E3C;
+}
+
+/* Styles for other elements */
+.header-label {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.header {
+    -fx-background-color: #4CAF50;
+}
+.engrais-label {
+    -fx-text-fill: #6A1B9A;
+    -fx-font-style: italic;
+}
+
+
+/* --- Availability Status --- */
+.status-available {
+    -fx-text-fill: #2E7D32;
+    -fx-font-weight: bold;
+}
+
+.status-unavailable {
+    -fx-text-fill: #C62828;
+    -fx-font-weight: bold;
+}
+/* Rest of your existing CSS styles... */
+.etude-card {
+    -fx-background-color: white;
+    -fx-border-color: #B3E5FC;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 3);
+    -fx-cursor: hand;
+    -fx-spacing: 8;
+    -fx-transition: 0.3s;
+}
+
+.etude-card:hover {
+    -fx-background-color: #E1F5FE;
+    -fx-border-color: #0288D1;
+}
+
+.etude-card.selected-card {
+    -fx-background-color: #B3E5FC;
+    -fx-border-color: #0277BD;
+}

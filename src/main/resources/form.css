@@ -1,0 +1,119 @@
+/* General Form Styling */
+.root {
+    -fx-background-color: #f9f9f9;
+    -fx-font-family: "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-padding: 20px;
+}
+
+.vbox {
+    -fx-spacing: 15px;
+    -fx-alignment: CENTER;
+    -fx-background-color: #fff;
+    -fx-border-radius: 8px;
+    -fx-padding: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 5);
+}
+
+.label {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #333;
+}
+
+.text-field, .combo-box, .date-picker {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-padding: 8px;
+    -fx-pref-width: 300px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused, .combo-box:focused, .date-picker:focused {
+    -fx-border-color: #4CAF50;
+}
+
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-pref-width: 150px;
+    -fx-padding: 10px;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #45a049;
+}
+
+.button:pressed {
+    -fx-background-color: #3e8e41;
+}
+
+.button.red {
+    -fx-background-color: #f44336;
+}
+
+.button.red:hover {
+    -fx-background-color: #e53935;
+}
+
+.button.red:pressed {
+    -fx-background-color: #d32f2f;
+}
+
+.message-label {
+    -fx-text-fill: red;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.combo-box {
+    -fx-padding: 8px;
+    -fx-pref-width: 300px;
+}
+
+.date-picker {
+    -fx-pref-width: 300px;
+}
+
+.separator {
+    -fx-background-color: #ddd;
+    -fx-height: 1;
+    -fx-padding: 10px 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .vbox {
+        -fx-padding: 10px;
+        -fx-spacing: 12px;
+    }
+
+    .text-field, .combo-box, .date-picker {
+        -fx-pref-width: 250px;
+    }
+
+    .button {
+        -fx-pref-width: 130px;
+    }
+}
+
+@media (max-width: 480px) {
+    .vbox {
+        -fx-padding: 5px;
+        -fx-spacing: 10px;
+    }
+
+    .text-field, .combo-box, .date-picker {
+        -fx-pref-width: 220px;
+    }
+
+    .button {
+        -fx-pref-width: 120px;
+    }
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.9"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AfficherEtude"
+            stylesheets="@style.css">
+
+    <!-- Top section with search bar -->
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets top="15" right="10" bottom="15" left="10"/>
+            </padding>
+            <Label text="Liste des Études" styleClass="header-label" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-box"/>
+        </HBox>
+    </top>
+
+    <!-- Center section: Using a VBox to stack content (etudes grid and chart) -->
+    <center>
+        <VBox>
+            <!-- ScrollPane containing the GridPane for etudes list -->
+            <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+                <GridPane fx:id="etudeGrid" styleClass="card-grid" hgap="15" vgap="15">
+                    <padding>
+                        <Insets top="20" right="20" bottom="20" left="20"/>
+                    </padding>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                    </columnConstraints>
+                </GridPane>
+            </ScrollPane>
+
+            <!-- VBox for the chart -->
+            <VBox fx:id="chartContainer" alignment="CENTER" styleClass="chart-container">
+                <!-- The chart will be dynamically added here -->
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- Bottom section with action buttons -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Ajouter" onAction="#onAjouter" styleClass="action-button"/>
+            <Button text="Modifier" onAction="#onModifier" styleClass="secondary-button"/>
+            <Button text="Supprimer" onAction="#onSupprimer" styleClass="secondary-button"/>
+            <!-- Button for statistics -->
+            <Button text="Statistiques" onAction="#onStatistics" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+</BorderPane>

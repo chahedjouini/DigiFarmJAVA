@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjouterCulture"
+            prefWidth="600" prefHeight="700">
+
+    <VBox spacing="10" alignment="CENTER" layoutX="50" layoutY="20" prefWidth="500">
+        <Label text="Ajouter une Culture" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="10" vgap="10">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+                <ColumnConstraints minWidth="250"/>
+            </columnConstraints>
+
+            <rowConstraints>
+                <RowConstraints minHeight="30" />
+            </rowConstraints>
+
+            <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Surface :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="surfaceField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Date Plantation :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="datePlantationPicker" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Date Récolte :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dateRecoltePicker" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Région :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="regionField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Type Culture :" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <TextField fx:id="typeCultureField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <Label text="Densité Plantation :" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <TextField fx:id="densiteField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+            <Label text="Besoins Eau :" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+            <TextField fx:id="eauField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+            <Label text="Engrais :" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="engraisCombo" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+            <Label text="Rendement Moyen :" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+            <TextField fx:id="rendementField" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+            <Label text="Coût Moyen :" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+            <TextField fx:id="coutField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+            <Label text="ID Utilisateur :" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+            <TextField fx:id="userIdField" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Label fx:id="messageLabel" style="-fx-text-fill: red;"/>
+
+        <Button text="Ajouter" onAction="#onAjout" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+    </VBox>
+</AnchorPane>

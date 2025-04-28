@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.9"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.DashboardController"
+            stylesheets="@style.css"
+            prefWidth="1200" prefHeight="700">
+
+    <top>
+        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #2E7D32; -fx-padding: 10;">
+            <Label fx:id="welcomeLabel" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+            <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" styleClass="secondary-button"/>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox spacing="10" alignment="TOP_CENTER" style="-fx-background-color: #2E7D32;" prefWidth="220">
+            <padding><Insets top="20" bottom="20" left="10" right="10"/></padding>
+            <Label text="COMPOSE" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
+            <Button text="Gestion Admin" onAction="#showGestionAdmin" styleClass="menu-button" />
+            <Button text="Gestion Étude" onAction="#showGestionEtude" styleClass="menu-button" />
+            <Button text="Gestion Animaux" onAction="#showGestionAnimaux" styleClass="menu-button" />
+            <Button text="Gestion Abonnement" onAction="#showGestionAbonnement" styleClass="menu-button" />
+            <Button text="Gestion Machine" onAction="#showGestionMachine" styleClass="menu-button" />
+            <Button text="Gestion Stock" onAction="#showGestionStock" styleClass="menu-button" />
+        </VBox>
+    </left>
+
+    <center>
+        <VBox fx:id="entityList" spacing="15" style="-fx-background-color: #F1F8E9;">
+            <padding><Insets top="30" bottom="20" left="20" right="20"/></padding>
+        </VBox>
+    </center>
+
+    <right>
+        <StackPane fx:id="entityContentPane" prefWidth="800" style="-fx-background-color: white;">
+            <!-- Dynamic content will be loaded here -->
+        </StackPane>
+    </right>
+</BorderPane>

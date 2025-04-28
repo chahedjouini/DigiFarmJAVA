@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjouterEtude"
+            prefWidth="600" prefHeight="700">
+
+    <VBox alignment="CENTER" spacing="10" layoutX="50" layoutY="20">
+        <Label text="Ajouter une Étude" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="10" vgap="10">
+            <padding><Insets top="10" left="10" right="10" bottom="10"/></padding>
+
+            <Label text="Date Réalisation :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dateField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Culture :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="cultureCombo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Expert :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="expertCombo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Climat :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="climatCombo" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Type de Sol :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="typeSolCombo" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Irrigation :" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <CheckBox fx:id="irrigationCheck" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <Label text="Fertilisation :" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <CheckBox fx:id="fertilisationCheck" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+            <Label text="Prix :" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+            <TextField fx:id="prixField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+            <Label text="Rendement :" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+            <TextField fx:id="rendementField" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+            <Label text="Précipitations :" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+            <TextField fx:id="precipitationField" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+            <Label text="Main d’œuvre :" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+            <TextField fx:id="mainField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <Label fx:id="messageLabel" style="-fx-text-fill: red;" />
+        <Button text="Ajouter" onAction="#onAjout" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" />
+    </VBox>
+</AnchorPane>

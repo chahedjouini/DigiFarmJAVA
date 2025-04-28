@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.9"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AfficherExpert"
+            stylesheets="@style.css">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="header">
+            <padding>
+                <Insets top="15" right="10" bottom="15" left="10"/>
+            </padding>
+            <Label text="Liste des Experts" styleClass="header-label" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-box" />
+            <ComboBox fx:id="sortComboBox" promptText="Trier par..." styleClass="sort-box" />
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <GridPane fx:id="expertGrid" styleClass="card-grid" hgap="15" vgap="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                </columnConstraints>
+            </GridPane>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Ajouter" onAction="#onAjouter" styleClass="action-button"/>
+            <Button text="Modifier" onAction="#onModifier" styleClass="secondary-button"/>
+            <Button text="Supprimer" onAction="#onSupprimer" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+</BorderPane>
