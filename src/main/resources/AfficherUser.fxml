@@ -30,9 +30,11 @@
     
     <!-- Bouton Ajouter sous le tableau -->
     <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button fx:id="addButton" text="Ajouter un utilisateur" onAction="#handleAdd" 
+        <Button fx:id="addButton" text="Ajouter un utilisateur" onAction="#handleAdd"
                 style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
         <Button fx:id="refreshButton" text="Actualiser" onAction="#handleRefresh"/>
+        <Button fx:id="exportPdfButton" text="Exporter en PDF" onAction="#handleExportPdf"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
     </HBox>
     
     <!-- Message d'erreur ou de succès -->
