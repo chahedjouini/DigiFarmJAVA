@@ -10,6 +10,6 @@
     <TextField fx:id="nomField" promptText="Nom"/>
     <TextField fx:id="numTelField" promptText="Numéro de téléphone"/>
     <TextField fx:id="emailField" promptText="Email"/>
-    <TextField fx:id="adresseCabineField" promptText="Adresse du cabinet"/>
+    <TextField fx:id="adresse_cabineField" promptText="Adresse du cabinet"/>
     <Button text="Ajouter" onAction="#handleAddVeterinaire"/>
 </VBox>

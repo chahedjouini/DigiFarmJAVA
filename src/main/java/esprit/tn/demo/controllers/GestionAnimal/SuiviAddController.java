@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class SuiviAddController {
 
@@ -29,8 +30,47 @@ public class SuiviAddController {
 
     @FXML
     public void initialize() {
+        // Populate ComboBoxes
         animalComboBox.setItems(FXCollections.observableArrayList(animalService.getAllAnimals()));
         veterinaireComboBox.setItems(FXCollections.observableArrayList(veterinaireService.getAllVeterinaires()));
+
+        // Configure ComboBox to display names for Animal
+        animalComboBox.setConverter(new StringConverter<Animal>() {
+            @Override
+            public String toString(Animal animal) {
+                return animal != null ? animal.getNom() : "";
+            }
+
+            @Override
+            public Animal fromString(String string) {
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                return animalComboBox.getItems().stream()
+                        .filter(animal -> animal.getNom().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        // Configure ComboBox to display names for Veterinaire
+        veterinaireComboBox.setConverter(new StringConverter<Veterinaire>() {
+            @Override
+            public String toString(Veterinaire veterinaire) {
+                return veterinaire != null ? veterinaire.getNom() : "";
+            }
+
+            @Override
+            public Veterinaire fromString(String string) {
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                return veterinaireComboBox.getItems().stream()
+                        .filter(veterinaire -> veterinaire.getNom().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     }
 
     @FXML
@@ -51,7 +91,8 @@ public class SuiviAddController {
         try {
             suiviService.addSuivi(suivi);
             showAlert(Alert.AlertType.INFORMATION, "Success", "Suivi added successfully!");
-            clearFields();
+            Stage stage = (Stage) animalComboBox.getScene().getWindow();
+            stage.close();
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to add Suivi: " + e.getMessage());
         }
@@ -119,15 +160,5 @@ public class SuiviAddController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
-    }
-
-    private void clearFields() {
-        animalComboBox.setValue(null);
-        temperatureField.clear();
-        rythmeCardiaqueField.clear();
-        etatField.clear();
-        idClientField.clear();
-        analysisField.clear();
-        veterinaireComboBox.setValue(null);
     }
 }

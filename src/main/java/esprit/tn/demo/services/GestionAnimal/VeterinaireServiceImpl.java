@@ -99,9 +99,9 @@ public class VeterinaireServiceImpl implements VeterinaireService {
                     String nom = rs.getString("nom");
                     int num_tel = rs.getInt("num_tel");
                     String email = rs.getString("email");
-                    String getadresse_cabine = rs.getString("getadresse_cabine");
+                    String adresse_cabine = rs.getString("adresse_cabine"); // Correction ici
 
-                    return new Veterinaire(id, nom, num_tel, email, getadresse_cabine);
+                    return new Veterinaire(id, nom, num_tel, email, adresse_cabine);
                 }
             }
         } catch (SQLException e) {

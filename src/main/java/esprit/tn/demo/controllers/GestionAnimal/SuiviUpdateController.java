@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class SuiviUpdateController {
 
@@ -30,13 +31,56 @@ public class SuiviUpdateController {
 
     public void setSuivi(Suivi suivi) {
         this.suivi = suivi;
-        populateFields();
+        if (suivi != null) {
+            populateFields();
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Error", "No Suivi data provided for update.");
+        }
     }
 
     @FXML
     public void initialize() {
+        // Populate ComboBoxes
         animalComboBox.setItems(FXCollections.observableArrayList(animalService.getAllAnimals()));
         veterinaireComboBox.setItems(FXCollections.observableArrayList(veterinaireService.getAllVeterinaires()));
+
+        // Configure ComboBox to display names for Animal
+        animalComboBox.setConverter(new StringConverter<Animal>() {
+            @Override
+            public String toString(Animal animal) {
+                return animal != null ? animal.getNom() : "";
+            }
+
+            @Override
+            public Animal fromString(String string) {
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                return animalComboBox.getItems().stream()
+                        .filter(animal -> animal.getNom().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        // Configure ComboBox to display names for Veterinaire
+        veterinaireComboBox.setConverter(new StringConverter<Veterinaire>() {
+            @Override
+            public String toString(Veterinaire veterinaire) {
+                return veterinaire != null ? veterinaire.getNom() : "";
+            }
+
+            @Override
+            public Veterinaire fromString(String string) {
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                return veterinaireComboBox.getItems().stream()
+                        .filter(veterinaire -> veterinaire.getNom().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
     }
 
     private void populateFields() {
@@ -51,6 +95,11 @@ public class SuiviUpdateController {
 
     @FXML
     private void handleUpdateSuivi() {
+        if (suivi == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "No Suivi data to update. Please ensure a Suivi is selected.");
+            return;
+        }
+
         if (!validateInputs()) {
             return;
         }

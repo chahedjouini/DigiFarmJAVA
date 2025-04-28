@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviReadController"
-      spacing="15" alignment="CENTER" style="-fx-padding: 30;">
-
-    <Label text="Liste des Suivis" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
-
-    <TableView fx:id="suiviTable" prefWidth="700" prefHeight="400">
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviReadController" alignment="TOP_CENTER" spacing="10" style="-fx-padding: 20; -fx-background-color: #f4f4f4;">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Text text="Suivi List" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+    <TableView fx:id="suiviTableView" prefHeight="400">
         <columns>
-            <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="animalCol" text="Animal" prefWidth="100"/>
-            <TableColumn fx:id="tempCol" text="Température" prefWidth="100"/>
-            <TableColumn fx:id="rythmeCol" text="Rythme Cardiaque" prefWidth="120"/>
-            <TableColumn fx:id="etatCol" text="État" prefWidth="100"/>
-            <TableColumn fx:id="idClientCol" text="ID Client" prefWidth="100"/>
-            <TableColumn fx:id="analysisCol" text="Analyse" prefWidth="130"/>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="animalColumn" text="Animal Name" prefWidth="100"/>
+            <TableColumn fx:id="temperatureColumn" text="Temperature" prefWidth="100"/>
+            <TableColumn fx:id="rythmeCardiaqueColumn" text="Heart Rate" prefWidth="100"/>
+            <TableColumn fx:id="etatColumn" text="State" prefWidth="100"/>
+            <TableColumn fx:id="idClientColumn" text="Client ID" prefWidth="80"/>
+            <TableColumn fx:id="analysisColumn" text="Analysis" prefWidth="150"/>
+            <TableColumn fx:id="veterinaireNomColumn" text="Veterinaire Nom" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
         </columns>
     </TableView>
+    <Button text="Add New Suivi" onAction="#handleAddSuivi" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
 </VBox>

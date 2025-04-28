@@ -13,7 +13,7 @@
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
-    <Text text="Add New Suivi" style="-fx-font-size: 18; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+    <Text text="Add Suivi" style="-fx-font-size: 18; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
 
     <Label text="Animal:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
     <ComboBox fx:id="animalComboBox" prefWidth="200" GridPane.columnIndex="1" GridPane.rowIndex="1"/>

@@ -14,7 +14,7 @@
             <TableColumn fx:id="nomCol" text="Nom" />
             <TableColumn fx:id="numTelCol" text="Numéro de Téléphone" />
             <TableColumn fx:id="emailCol" text="Email" />
-            <TableColumn fx:id="adresseCabineCol" text="Adresse du Cabinet" />
+            <TableColumn fx:id="adresse_cabineCol" text="Adresse du Cabinet" />
         </columns>
     </TableView>
 

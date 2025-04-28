@@ -10,6 +10,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class VeterinaireReadController {
 
+
+
     @FXML private TableView<Veterinaire> veterinaireTable;
     @FXML private TableColumn<Veterinaire, Number> idCol;
     @FXML private TableColumn<Veterinaire, String> nomCol;

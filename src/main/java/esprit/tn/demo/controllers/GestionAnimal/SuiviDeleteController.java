@@ -1,44 +1,49 @@
 package esprit.tn.demo.controllers.GestionAnimal;
 
+import esprit.tn.demo.entities.GestionAnimal.Suivi;
 import esprit.tn.demo.services.GestionAnimal.SuiviServiceImpl;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
 
 public class SuiviDeleteController {
 
-    @FXML
-    private TextField idField;
+    @FXML private Label confirmationLabel;
+    @FXML private Label animalLabel;
+    @FXML private Label veterinaireLabel;
 
     private final SuiviServiceImpl suiviService = new SuiviServiceImpl();
+    private Suivi suivi;
+
+    public void setSuivi(Suivi suivi) {
+        this.suivi = suivi;
+        confirmationLabel.setText("Are you sure you want to delete Suivi for " +
+                (suivi.getAnimal() != null ? suivi.getAnimal().getNom() : "N/A") + "?");
+        animalLabel.setText("Animal: " + (suivi.getAnimal() != null ? suivi.getAnimal().getNom() : "N/A"));
+        veterinaireLabel.setText("Veterinaire: " + (suivi.getVeterinaire() != null ? suivi.getVeterinaire().getNom() : "N/A"));
+    }
 
     @FXML
-    private void handleDelete() {
+    private void handleDeleteSuivi() {
         try {
-            String idText = idField.getText().trim();
-            if (idText.isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez entrer un ID.");
-                return;
-            }
-
-            int id = Integer.parseInt(idText);
-
-            // Vérifier si le suivi existe
-            if (suiviService.getSuiviById(id) != null) {
-                suiviService.deleteSuivi(id);
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Le suivi a été supprimé avec succès.");
-                idField.clear(); // Reset field after success
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Aucun suivi trouvé avec l'ID " + id);
-            }
-
-        } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "L'ID doit être un nombre entier valide.");
+            suiviService.deleteSuivi(suivi.getId());
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Suivi deleted successfully!");
+            Stage stage = (Stage) confirmationLabel.getScene().getWindow();
+            stage.close();
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete Suivi: " + e.getMessage());
         }
     }
 
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
+    @FXML
+    private void handleCancel() {
+        Stage stage = (Stage) confirmationLabel.getScene().getWindow();
+        stage.close();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);

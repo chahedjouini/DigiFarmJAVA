@@ -92,6 +92,6 @@ public class Veterinaire {
 
     @Override
     public String toString() {
-        return getNom();
+        return nom + " (" + email + ")";
     }
 }
