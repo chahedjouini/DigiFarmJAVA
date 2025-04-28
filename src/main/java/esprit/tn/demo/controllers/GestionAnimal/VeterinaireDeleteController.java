@@ -7,7 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
+
 
 public class VeterinaireDeleteController {
 

@@ -2,34 +2,161 @@ package esprit.tn.demo.controllers.GestionAnimal;
 
 import esprit.tn.demo.entities.GestionAnimal.Animal;
 import esprit.tn.demo.services.GestionAnimal.AnimalServiceImpl;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class AnimalReadController {
 
-    @FXML private TableView<Animal> tableView;
-    @FXML private TableColumn<Animal, Integer> idCol;
+    @FXML private TableView<Animal> animalTable;
+    @FXML private TableColumn<Animal, Number> idCol;
     @FXML private TableColumn<Animal, String> nomCol;
     @FXML private TableColumn<Animal, String> typeCol;
     @FXML private TableColumn<Animal, String> raceCol;
-    @FXML private TableColumn<Animal, Integer> ageCol;
-    @FXML private TableColumn<Animal, Float> poidsCol;
+    @FXML private TableColumn<Animal, Number> ageCol;
+    @FXML private TableColumn<Animal, Number> poidsCol;
+    @FXML private TableColumn<Animal, Void> actionsCol;
 
-    private final AnimalServiceImpl service = new AnimalServiceImpl();
+    private final AnimalServiceImpl animalService = new AnimalServiceImpl();
 
     @FXML
     public void initialize() {
-        idCol.setCellValueFactory(cell -> cell.getValue().idProperty().asObject());
-        nomCol.setCellValueFactory(cell -> cell.getValue().nomProperty());
-        typeCol.setCellValueFactory(cell -> cell.getValue().typeProperty());
-        raceCol.setCellValueFactory(cell -> cell.getValue().raceProperty());
-        ageCol.setCellValueFactory(cell -> cell.getValue().ageProperty().asObject());
-        poidsCol.setCellValueFactory(cell -> cell.getValue().poidsProperty().asObject());
+        // Set up columns
+        idCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()));
+        nomCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getNom()));
+        typeCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getType()));
+        raceCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRace()));
+        ageCol.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getAge()));
+        poidsCol.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getPoids()));
+
+        // Define actions column with update and delete buttons
+        actionsCol.setCellFactory(col -> new TableCell<>() {
+            private final Button updateButton = new Button("Update");
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                updateButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
+                deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+                updateButton.setOnAction(event -> {
+                    Animal animal = getTableView().getItems().get(getIndex());
+                    if (animal != null) {
+                        openUpdateAnimalForm(animal);
+                    } else {
+                        showAlert(Alert.AlertType.WARNING, "Selection Error", "No Animal selected for update.");
+                    }
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Animal animal = getTableView().getItems().get(getIndex());
+                    if (animal != null) {
+                        openDeleteAnimalForm(animal);
+                    } else {
+                        showAlert(Alert.AlertType.WARNING, "Selection Error", "No Animal selected for deletion.");
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(new HBox(5, updateButton, deleteButton));
+                }
+            }
+        });
+
+        // Load animal data into the table
+        loadAnimalData();
     }
 
+    // Load the animal data into the table
+    private void loadAnimalData() {
+        animalTable.setItems(FXCollections.observableArrayList(animalService.getAllAnimals()));
+    }
+
+    // Handle adding a new animal
     @FXML
-    public void loadAnimals() {
-        tableView.setItems(FXCollections.observableArrayList(service.getAllAnimals()));
+    private void handleAddAnimal() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/AnimalAddView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find AnimalAddView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Add Animal");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            loadAnimalData();  // Refresh the table after adding an animal
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Add Animal form: " + e.getMessage());
+        }
+    }
+
+    // Open the form for updating an animal
+    private void openUpdateAnimalForm(Animal animal) {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/AnimalUpdateView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find AnimalUpdateView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Update Animal");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            AnimalUpdateController controller = loader.getController();
+            controller.setAnimal(animal);
+            stage.showAndWait();
+            loadAnimalData();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Update Animal form: " + e.getMessage());
+        }
+    }
+
+    // Open the form for deleting an animal
+    private void openDeleteAnimalForm(Animal animal) {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/AnimalDeleteView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find AnimalDeleteView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Delete Animal");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            AnimalDeleteController controller = loader.getController();
+            controller.setAnimal(animal);
+            stage.showAndWait();
+            loadAnimalData();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Delete Animal form: " + e.getMessage());
+        }
+    }
+
+    // Show an alert box with a given message
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
