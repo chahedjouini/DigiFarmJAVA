@@ -3,47 +3,108 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
-            xmlns="http://javafx.com/javafx/17"
-            fx:controller="controllers.DashboardController"
-            stylesheets="@style.css"
-            prefWidth="1200" prefHeight="700">
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 
-    <!-- En-tête avec le message de bienvenue et le bouton de déconnexion -->
-    <top>
-        <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-background-color: #2E7D32; -fx-padding: 10;">
-            <Region HBox.hgrow="ALWAYS" />
-            <Label fx:id="welcomeLabel" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-            <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" 
-                    style="-fx-background-color: #D32F2F; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15;"/>
-            <padding><Insets right="20"/></padding>
-        </HBox>
-    </top>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/17"
+           fx:controller="controllers.DashboardController"
+           stylesheets="@style.css"
+           prefWidth="1200" prefHeight="700">
 
-    <!-- Colonne gauche : Menu des gestions -->
-    <left>
-        <VBox spacing="10" alignment="TOP_CENTER" style="-fx-background-color: #2E7D32;" prefWidth="220">
-            <padding><Insets top="20" bottom="20" left="10" right="10"/></padding>
-            <Label text="COMPOSE" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;" />
-            <Button text="Gestion Admin" onAction="#showGestionAdmin" styleClass="menu-button" />
-            <Button text="Gestion Étude" onAction="#showGestionEtude" styleClass="menu-button" />
-            <Button text="Gestion Animaux" onAction="#showGestionAnimaux" styleClass="menu-button" />
-            <Button text="Gestion Abonnement" onAction="#showGestionAbonnement" styleClass="menu-button" />
-            <Button text="Gestion Machine" onAction="#showGestionMachine" styleClass="menu-button" />
-            <Button text="Gestion Stock" onAction="#showGestionStock" styleClass="menu-button" />
-        </VBox>
-    </left>
+    <!-- Image de fond -->
+    <ImageView fitWidth="1200" fitHeight="700" preserveRatio="false">
+        <Image url="@/images/BackgroundBack.png"/>
+    </ImageView>
 
-    <!-- Colonne centrale : Affiche les entités de chaque gestion -->
-    <center>
-        <VBox fx:id="entityList" spacing="15" style="-fx-background-color: #F1F8E9;">
-            <padding><Insets top="30" bottom="20" left="20" right="20"/></padding>
-        </VBox>
-    </center>
+    <!-- Contenu principal -->
+    <BorderPane>
+        <!-- En-tête avec titre et bouton déconnexion -->
+        <top>
+            <HBox spacing="15" alignment="CENTER_LEFT" style="-fx-padding: 10 15; -fx-background-color: rgba(46, 125, 50, 0.8);">
+                <Label text="DigiFarm" style="-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 3, 0, 0, 1);"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="welcomeLabel" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 2, 0, 0, 1);"/>
+                <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout"
+                        styleClass="logout-button"/>
+            </HBox>
+        </top>
 
-    <!-- Colonne droite : Contenu dynamique de l'entité -->
-    <right>
-        <StackPane fx:id="entityContentPane" prefWidth="800" style="-fx-background-color: white;">
-        </StackPane>
-    </right>
-</BorderPane> 
+        <!-- Conteneur principal avec menu latéral et zone de contenu -->
+        <center>
+            <HBox>
+                <!-- Menu latéral avec accordéon -->
+                <VBox styleClass="sidebar" prefWidth="250">
+                    <ScrollPane fitToWidth="true" styleClass="sidebar-scroll">
+                        <VBox fx:id="sidebarContent" spacing="5">
+                            <!-- Gestion des Utilisateurs (affichage direct) -->
+                            <Button text="Gestion Utilisateurs" onAction="#showGestionAdmin" styleClass="sidebar-button"/>
+
+                            <!-- Gestion Étude (avec sous-menu) -->
+                            <VBox styleClass="sidebar-section">
+                                <Button text="Gestion Étude" styleClass="sidebar-button" onAction="#toggleEtudeSubMenu"/>
+                                <VBox fx:id="etudeSubMenu" styleClass="sub-menu" visible="false" managed="false">
+                                    <Button text="Projets" onAction="#showGestionEtude" styleClass="submenu-button"/>
+                                    <Button text="Rapports" onAction="#showGestionEtude" styleClass="submenu-button"/>
+                                    <Button text="Données" onAction="#showGestionEtude" styleClass="submenu-button"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Gestion Animaux (avec sous-menu) -->
+                            <VBox styleClass="sidebar-section">
+                                <Button text="Gestion Animaux" styleClass="sidebar-button" onAction="#toggleAnimauxSubMenu"/>
+                                <VBox fx:id="animauxSubMenu" styleClass="sub-menu" visible="false" managed="false">
+                                    <Button text="Troupeau" onAction="#showGestionAnimaux" styleClass="submenu-button"/>
+                                    <Button text="Santé" onAction="#showGestionAnimaux" styleClass="submenu-button"/>
+                                    <Button text="Reproduction" onAction="#showGestionAnimaux" styleClass="submenu-button"/>
+                                    <Button text="Alimentation" onAction="#showGestionAnimaux" styleClass="submenu-button"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Gestion Abonnement (avec sous-menu) -->
+                            <VBox styleClass="sidebar-section">
+                                <Button text="Gestion Abonnement" styleClass="sidebar-button" onAction="#toggleAbonnementSubMenu"/>
+                                <VBox fx:id="abonnementSubMenu" styleClass="sub-menu" visible="false" managed="false">
+                                    <Button text="Plans" onAction="#showGestionAbonnement" styleClass="submenu-button"/>
+                                    <Button text="Clients" onAction="#showGestionAbonnement" styleClass="submenu-button"/>
+                                    <Button text="Facturation" onAction="#showGestionAbonnement" styleClass="submenu-button"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Gestion Machine (avec sous-menu) -->
+                            <VBox styleClass="sidebar-section">
+                                <Button text="Gestion Machine" styleClass="sidebar-button" onAction="#toggleMachineSubMenu"/>
+                                <VBox fx:id="machineSubMenu" styleClass="sub-menu" visible="false" managed="false">
+                                    <Button text="Inventaire" onAction="#showGestionMachine" styleClass="submenu-button"/>
+                                    <Button text="Maintenance" onAction="#showGestionMachine" styleClass="submenu-button"/>
+                                    <Button text="Utilisation" onAction="#showGestionMachine" styleClass="submenu-button"/>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Gestion Stock (avec sous-menu) -->
+                            <VBox styleClass="sidebar-section">
+                                <Button text="Gestion Stock" styleClass="sidebar-button" onAction="#toggleStockSubMenu"/>
+                                <VBox fx:id="stockSubMenu" styleClass="sub-menu" visible="false" managed="false">
+                                    <Button text="Produits" onAction="#showGestionStock" styleClass="submenu-button"/>
+                                    <Button text="Fournisseurs" onAction="#showGestionStock" styleClass="submenu-button"/>
+                                    <Button text="Commandes" onAction="#showGestionStock" styleClass="submenu-button"/>
+                                    <Button text="Inventaire" onAction="#showGestionStock" styleClass="submenu-button"/>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Zone de contenu principal -->
+                <VBox HBox.hgrow="ALWAYS" style="-fx-padding: 15;">
+                    <!-- VBox invisible pour compatibilité avec le contrôleur existant -->
+                    <VBox fx:id="entityList" managed="false" visible="false" opacity="0" maxHeight="0"/>
+
+                    <!-- Zone de contenu principale visible -->
+                    <StackPane fx:id="entityContentPane" VBox.vgrow="ALWAYS" style="-fx-background-color: rgba(255, 255, 255, 0.6); -fx-background-radius: 10; -fx-padding: 15;">
+                    </StackPane>
+                </VBox>
+            </HBox>
+        </center>
+    </BorderPane>
+</StackPane>

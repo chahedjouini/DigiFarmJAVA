@@ -131,3 +131,589 @@
     -fx-padding: 15;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
 }
+
+
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Labels */
+.title-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: #2D3748;
+}
+
+.form-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4A5568;
+}
+
+.error-label {
+    -fx-text-fill: #E53E3E;
+    -fx-font-size: 12px;
+}
+
+.text-muted {
+    -fx-text-fill: #718096;
+    -fx-font-size: 13px;
+}
+
+/* Input fields */
+.form-input {
+    -fx-background-color: #F7FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 10 15;
+    -fx-font-size: 14px;
+}
+
+.form-input:focused {
+    -fx-border-color: #43A047;
+    -fx-background-color: white;
+}
+
+/* Buttons */
+.primary-button {
+    -fx-background-color: #2E7D32;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.primary-button:hover {
+    -fx-background-color: #1B5E20;
+}
+
+.secondary-button {
+    -fx-background-color: #EDF2F7;
+    -fx-text-fill: #4A5568;
+    -fx-padding: 12 20;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #E2E8F0;
+}
+
+/* Links */
+.link {
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 13px;
+    -fx-underline: false;
+}
+
+.link:hover {
+    -fx-text-fill: #1B5E20;
+    -fx-underline: true;
+}
+
+/* Checkbox */
+.check-box {
+    -fx-text-fill: #4A5568;
+    -fx-font-size: 13px;
+}
+
+.check-box .box {
+    -fx-background-color: #F7FAFC;
+    -fx-border-color: #CBD5E0;
+    -fx-border-radius: 3;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #2E7D32;
+    -fx-border-color: #2E7D32;
+}
+
+/* ComboBox */
+.combo-box {
+    -fx-background-color: #F7FAFC;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.combo-box:focused {
+    -fx-border-color: #4299E1;
+}
+
+/* ScrollPane */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #CBD5E0;
+    -fx-background-radius: 5;
+}
+
+/* Custom container styles */
+.input-container {
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+/* Ajoutez ces styles à votre fichier style.css existant */
+
+/* Styles de la barre latérale */
+.sidebar {
+    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-background-radius: 15 0 0 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 0);
+}
+
+.sidebar-header {
+    -fx-padding: 10 5 20 5;
+}
+
+.sidebar-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E7D32;
+}
+
+.sidebar-footer {
+    -fx-padding: 15 0 0 0;
+}
+
+/* Accordéon et TitledPane personnalisés */
+.accordion {
+    -fx-background-color: transparent;
+}
+
+.menu-titled-pane {
+    -fx-text-fill: #2E7D32;
+}
+
+.menu-titled-pane > .title {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent #E0E0E0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-font-weight: bold;
+}
+
+.menu-titled-pane:expanded > .title {
+    -fx-background-color: rgba(46, 125, 50, 0.1);
+    -fx-border-color: transparent;
+}
+
+.menu-titled-pane > .content {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 5 0;
+}
+
+.menu-item-container {
+    -fx-padding: 5 0;
+}
+
+/* Boutons du menu */
+.menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: #4A5568;
+    -fx-font-size: 13px;
+    -fx-alignment: center-left;
+    -fx-padding: 8 10 8 20;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+}
+
+.menu-item:hover {
+    -fx-background-color: rgba(46, 125, 50, 0.15);
+    -fx-text-fill: #2E7D32;
+}
+
+/* Bouton de déconnexion */
+.logout-button {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: #B71C1C;
+}
+
+/* Boutons de paramètres et d'aide */
+.settings-button, .help-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2E7D32;
+    -fx-border-color: #2E7D32;
+    -fx-border-radius: 5;
+    -fx-padding: 8 10;
+    -fx-cursor: hand;
+}
+
+.settings-button:hover, .help-button:hover {
+    -fx-background-color: rgba(46, 125, 50, 0.1);
+}
+
+/* Zone de contenu principal */
+.content-area {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 0 15 15 0;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 0);
+}
+
+/* Textes de bienvenue */
+.welcome-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E7D32;
+}
+
+.instruction-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4A5568;
+}
+/* Styles pour les boutons du menu supérieur */
+.top-menu-button {
+    -fx-background-color: rgba(46, 125, 50, 0.8);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 12;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 1);
+}
+
+.top-menu-button:hover {
+    -fx-background-color: rgba(27, 94, 32, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 8, 0, 0, 2);
+}
+
+.top-menu-button:pressed {
+    -fx-background-color: rgba(27, 94, 32, 1.0);
+}
+
+/* Bouton de déconnexion */
+.logout-button {
+    -fx-background-color: rgba(211, 47, 47, 0.8);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(183, 28, 28, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+/* Styles pour les conteneurs de contenu */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: rgba(46, 125, 50, 0.7);
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: rgba(240, 240, 240, 0.7);
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: rgba(46, 125, 50, 0.3);
+}
+
+/* Styles pour le panneau d'entités */
+.entity-item {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.entity-item:hover {
+    -fx-background-color: rgba(240, 240, 240, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+/* Styles pour les labels et titres */
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E7D32;
+}
+
+.section-subtitle {
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #424242;
+}
+
+/* Styles pour les scrollpanes */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+/* Styles pour barre de menu personnalisée */
+.custom-menu-bar {
+    -fx-background-color: rgba(46, 125, 50, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.custom-menu-bar .menu {
+    -fx-padding: 5 15;
+}
+
+.custom-menu-bar .menu:hover {
+    -fx-background-color: rgba(27, 94, 32, 0.9);
+}
+
+.custom-menu-bar .menu-item {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.custom-menu-bar .menu .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Styles pour les éléments de menu déroulants */
+.menu-item {
+    -fx-padding: 8 15;
+}
+
+.menu-item:focused {
+    -fx-background-color: rgba(46, 125, 50, 0.7);
+}
+
+.menu-item .label {
+    -fx-text-fill: #333333;
+    -fx-font-size: 13px;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+.context-menu {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 2);
+}
+
+/* Bouton de déconnexion */
+.logout-button {
+    -fx-background-color: rgba(211, 47, 47, 0.8);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(183, 28, 28, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+/* Styles pour les conteneurs de contenu */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: rgba(46, 125, 50, 0.7);
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: rgba(255, 255, 255, 0.7);
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: rgba(240, 240, 240, 0.7);
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: rgba(46, 125, 50, 0.3);
+}
+
+/* Styles pour le panneau d'entités */
+.entity-item {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 5;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}
+
+.entity-item:hover {
+    -fx-background-color: rgba(240, 240, 240, 0.9);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
+
+/* Styles pour les scrollpanes */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+/* Styles pour la barre latérale */
+.sidebar {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-padding: 0;
+}
+
+.sidebar-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.sidebar-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.sidebar-section {
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+
+/* Boutons du menu principal */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2E7D32;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 15;
+    -fx-alignment: center-left;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent transparent #E0E0E0 transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(46, 125, 50, 0.1);
+}
+
+.sidebar-button:pressed {
+    -fx-background-color: rgba(46, 125, 50, 0.2);
+}
+
+/* Sous-menu */
+.sub-menu {
+    -fx-background-color: rgba(240, 240, 240, 0.6);
+    -fx-padding: 0;
+    -fx-spacing: 0;
+}
+
+/* Boutons du sous-menu */
+.submenu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #424242;
+    -fx-font-size: 13px;
+    -fx-padding: 8 8 8 25;
+    -fx-alignment: center-left;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.submenu-button:hover {
+    -fx-background-color: rgba(46, 125, 50, 0.1);
+    -fx-text-fill: #2E7D32;
+}
+
+.submenu-button:pressed {
+    -fx-background-color: rgba(46, 125, 50, 0.2);
+}
+
+/* Bouton de déconnexion */
+.logout-button {
+    -fx-background-color: rgba(211, 47, 47, 0.8);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: rgba(183, 28, 28, 0.9);
+}
+
+/* Zone de contenu */
+.content-area {
+    -fx-padding: 15;
+    -fx-background-color: transparent;
+}
+
+/* Styles pour les scrollpanes */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical, .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+/* Styles pour les conteneurs de contenu */
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header {
+    -fx-background-color: rgba(46, 125, 50, 0.7);
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

@@ -4,69 +4,136 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.*?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/17"
            fx:controller="controllers.LoginController"
-           stylesheets="@style.css"
-           style="-fx-background-color: linear-gradient(to bottom right, #F0F4F8, #D9E2EC);">
+           stylesheets="@style.css">
 
-    <!-- Carte de connexion -->
-    <VBox fx:id="loginForm" alignment="CENTER" spacing="20.0"
-          style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.5, 0, 5);"
-          maxWidth="350">
+    <!-- Image de fond -->
+    <ImageView fitWidth="1280" fitHeight="720" preserveRatio="false">
+        <Image url="@/images/BackgroundLogin.png"/>
+    </ImageView>
 
-        <Label text="Connexion" styleClass="title-label">
-            <font>
-                <Font name="Segoe UI Semibold" size="26.0"/>
-            </font>
-        </Label>
+    <!-- Overlay semi-transparent pour améliorer la lisibilité -->
+    <StackPane style="-fx-background-color: rgba(0, 0, 0, 0.4);">
 
-        <VBox spacing="15.0" fillWidth="true">
-            <Label text="Email" style="-fx-font-size: 12px;"/>
-            <TextField fx:id="emailField" promptText="Entrez votre email"/>
+        <!-- Contenu principal -->
+        <BorderPane>
+            <!-- Logo ou titre en haut -->
+            <top>
+                <VBox alignment="CENTER" spacing="10" style="-fx-padding: 30 0 0 0;">
+                    <Label text="DigiFarm" style="-fx-font-size: 36px; -fx-text-fill: white; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 3, 0, 0, 1);"/>
+                    <Label text="Connectez-vous pour accéder à votre espace." style="-fx-font-size: 16px; -fx-text-fill: white; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 2, 0, 0, 1);"/>
+                </VBox>
+            </top>
 
-            <Label text="Mot de passe" style="-fx-font-size: 12px;"/>
-            <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe"/>
-            <CheckBox fx:id="rememberMeCheckBox" text="Se souvenir de moi" />
+            <center>
+                <!-- Container pour les formulaires -->
+                <StackPane>
+                    <!-- Formulaire de connexion -->
+                    <VBox fx:id="loginForm" alignment="CENTER" spacing="20.0"
+                          style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0.5, 0, 5);"
+                          maxWidth="400" maxHeight="500">
 
-            <HBox spacing="10.0" alignment="CENTER">
-                <Button fx:id="loginButton" text="Se connecter" onAction="#handleLogin" styleClass="primary-button"/>
-                <Button fx:id="signUpButton" text="S'inscrire" onAction="#showRegisterForm" styleClass="secondary-button"/>
-            </HBox>
+                        <Label text="Connexion" styleClass="title-label">
+                            <font>
+                                <Font name="Segoe UI Semibold" size="28.0"/>
+                            </font>
+                        </Label>
 
-            <Label fx:id="errorLabel" styleClass="error-label" visible="false"/>
-        </VBox>
-    </VBox>
+                        <VBox spacing="15.0" fillWidth="true">
+                            <!-- Champ email avec icône -->
+                            <Label text="Email" styleClass="form-label"/>
+                            <HBox styleClass="input-container">
+                                <TextField fx:id="emailField" promptText="Entrez votre email" styleClass="form-input" HBox.hgrow="ALWAYS"/>
+                            </HBox>
 
-    <!-- Carte d'inscription -->
-    <VBox fx:id="registerForm" alignment="CENTER" spacing="20.0" visible="false"
-          style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.5, 0, 5);"
-          maxWidth="400" maxHeight="500">
+                            <!-- Champ mot de passe avec icône -->
+                            <Label text="Mot de passe" styleClass="form-label"/>
+                            <HBox styleClass="input-container">
+                                <PasswordField fx:id="passwordField" promptText="Entrez votre mot de passe" styleClass="form-input" HBox.hgrow="ALWAYS"/>
+                            </HBox>
 
-        <Label text="Inscription" styleClass="title-label">
-            <font>
-                <Font name="Segoe UI Semibold" size="26.0"/>
-            </font>
-        </Label>
+                            <!-- Options supplémentaires -->
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="rememberMeCheckBox" text="Se souvenir de moi" styleClass="check-box"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Hyperlink text="Mot de passe oublié ?" onAction="#handleForgotPassword" styleClass="link"/>
+                            </HBox>
 
-        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-            <VBox spacing="12.0" fillWidth="true">
+                            <!-- Boutons d'action -->
+                            <VBox spacing="15.0" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                                <Button fx:id="loginButton" text="SE CONNECTER" onAction="#handleLogin" styleClass="primary-button" maxWidth="Infinity"/>
+                                <HBox alignment="CENTER" spacing="5">
+                                    <Label text="Pas encore inscrit ?" styleClass="text-muted"/>
+                                    <Hyperlink text="Créer un compte" onAction="#showRegisterForm" styleClass="link"/>
+                                </HBox>
+                            </VBox>
 
-                <TextField fx:id="registerNom" promptText="Nom"/>
-                <TextField fx:id="registerPrenom" promptText="Prénom"/>
-                <TextField fx:id="registerEmail" promptText="Email"/>
-                <PasswordField fx:id="registerPassword" promptText="Mot de passe"/>
-                <PasswordField fx:id="confirmPassword" promptText="Confirmez le mot de passe"/>
-                <ComboBox fx:id="roleComboBox" promptText="Type de compte" maxWidth="Infinity"/>
+                            <Label fx:id="errorLabel" styleClass="error-label" visible="false"/>
+                        </VBox>
+                    </VBox>
 
-                <HBox spacing="10.0" alignment="CENTER" style="-fx-padding: 10 0 10 0;">
-                    <Button fx:id="registerButton" text="S'inscrire" onAction="#handleRegister" styleClass="primary-button"/>
-                    <Button fx:id="backToLoginButton" text="Retour" onAction="#showLoginForm" styleClass="secondary-button"/>
-                </HBox>
+                    <!-- Formulaire d'inscription -->
+                    <VBox fx:id="registerForm" alignment="CENTER" spacing="20.0" visible="false"
+                          style="-fx-background-color: white; -fx-padding: 30; -fx-border-radius: 15; -fx-background-radius: 15; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 15, 0.5, 0, 5);"
+                          maxWidth="450" maxHeight="600">
 
-                <Label fx:id="registerErrorLabel" styleClass="error-label" visible="false"/>
-            </VBox>
-        </ScrollPane>
-    </VBox>
+                        <Label text="Inscription" styleClass="title-label">
+                            <font>
+                                <Font name="Segoe UI Semibold" size="28.0"/>
+                            </font>
+                        </Label>
+
+                        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-border-color: transparent;" maxHeight="400">
+                            <VBox spacing="15.0" fillWidth="true">
+                                <HBox spacing="10">
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Nom" styleClass="form-label"/>
+                                        <TextField fx:id="registerNom" promptText="Nom" styleClass="form-input"/>
+                                    </VBox>
+                                    <VBox spacing="5" HBox.hgrow="ALWAYS">
+                                        <Label text="Prénom" styleClass="form-label"/>
+                                        <TextField fx:id="registerPrenom" promptText="Prénom" styleClass="form-input"/>
+                                    </VBox>
+                                </HBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Email" styleClass="form-label"/>
+                                    <TextField fx:id="registerEmail" promptText="Adresse email" styleClass="form-input"/>
+                                </VBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Mot de passe" styleClass="form-label"/>
+                                    <PasswordField fx:id="registerPassword" promptText="Mot de passe" styleClass="form-input"/>
+                                </VBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Confirmation" styleClass="form-label"/>
+                                    <PasswordField fx:id="confirmPassword" promptText="Confirmez le mot de passe" styleClass="form-input"/>
+                                </VBox>
+
+                                <VBox spacing="5">
+                                    <Label text="Type de compte" styleClass="form-label"/>
+                                    <ComboBox fx:id="roleComboBox" promptText="Sélectionnez un type de compte" styleClass="form-input" maxWidth="Infinity"/>
+                                </VBox>
+
+                                <VBox spacing="15.0" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                                    <Button fx:id="registerButton" text="CRÉER MON COMPTE" onAction="#handleRegister" styleClass="primary-button" maxWidth="Infinity"/>
+                                    <HBox alignment="CENTER" spacing="5">
+                                        <Label text="Déjà inscrit ?" styleClass="text-muted"/>
+                                        <Hyperlink text="Se connecter" onAction="#showLoginForm" styleClass="link"/>
+                                    </HBox>
+                                </VBox>
+
+                                <Label fx:id="registerErrorLabel" styleClass="error-label" visible="false"/>
+                            </VBox>
+                        </ScrollPane>
+                    </VBox>
+                </StackPane>
+            </center>
+        </BorderPane>
+    </StackPane>
 </StackPane>

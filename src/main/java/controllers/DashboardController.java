@@ -31,6 +31,11 @@ public class DashboardController {
     private Label welcomeLabel;
     @FXML
     private Button logoutButton;
+    @FXML private VBox etudeSubMenu;
+    @FXML private VBox animauxSubMenu;
+    @FXML private VBox abonnementSubMenu;
+    @FXML private VBox machineSubMenu;
+    @FXML private VBox stockSubMenu;
 
     private final UserService userService = UserService.getInstance();
     private User currentUser;
@@ -62,47 +67,27 @@ public class DashboardController {
         }
     }
 
-    private void redirectToLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) logoutButton.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Connexion");
-            stage.show();
-
-            System.out.println("Navigation vers login effectuée");
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Erreur lors de la redirection: " + e.getMessage());
-        }
-    }
-
     @FXML
     private void handleLogout() {
         try {
             // 1. Détruire la session utilisateur
             userService.logout();
             currentUser = null;
-            
+
             // 2. Effacer les données "Se souvenir de moi"
             RememberMeStore.clear();
-            
+
             // 3. Obtenir la fenêtre actuelle
             Stage currentStage = (Stage) logoutButton.getScene().getWindow();
-            
+
             // 4. Charger l'interface de login
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
-            
+
             // 5. Remplacer le contenu de la fenêtre par l'interface de login
             Scene loginScene = new Scene(root);
             currentStage.setScene(loginScene);
             currentStage.setTitle("Connexion");
-            
-            System.out.println("Session détruite et interface login affichée");
         } catch (Exception e) {
             e.printStackTrace();
             showError("Erreur lors de la déconnexion: " + e.getMessage());
@@ -190,4 +175,106 @@ public class DashboardController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+    /**
+     * Méthode pour basculer l'affichage du sous-menu Étude
+     */
+    @FXML
+    private void toggleEtudeSubMenu() {
+        etudeSubMenu.setVisible(!etudeSubMenu.isVisible());
+        etudeSubMenu.setManaged(!etudeSubMenu.isManaged());
+
+        // Si vous voulez que seul un menu soit ouvert à la fois, ajoutez cette ligne
+        // et répétez-la dans toutes les méthodes toggle pour fermer les autres menus
+        if (etudeSubMenu.isVisible()) {
+            animauxSubMenu.setVisible(false);
+            animauxSubMenu.setManaged(false);
+            abonnementSubMenu.setVisible(false);
+            abonnementSubMenu.setManaged(false);
+            machineSubMenu.setVisible(false);
+            machineSubMenu.setManaged(false);
+            stockSubMenu.setVisible(false);
+            stockSubMenu.setManaged(false);
+        }
+    }
+
+    /**
+     * Méthode pour basculer l'affichage du sous-menu Animaux
+     */
+    @FXML
+    private void toggleAnimauxSubMenu() {
+        animauxSubMenu.setVisible(!animauxSubMenu.isVisible());
+        animauxSubMenu.setManaged(!animauxSubMenu.isManaged());
+
+        if (animauxSubMenu.isVisible()) {
+            etudeSubMenu.setVisible(false);
+            etudeSubMenu.setManaged(false);
+            abonnementSubMenu.setVisible(false);
+            abonnementSubMenu.setManaged(false);
+            machineSubMenu.setVisible(false);
+            machineSubMenu.setManaged(false);
+            stockSubMenu.setVisible(false);
+            stockSubMenu.setManaged(false);
+        }
+    }
+
+    /**
+     * Méthode pour basculer l'affichage du sous-menu Abonnement
+     */
+    @FXML
+    private void toggleAbonnementSubMenu() {
+        abonnementSubMenu.setVisible(!abonnementSubMenu.isVisible());
+        abonnementSubMenu.setManaged(!abonnementSubMenu.isManaged());
+
+        if (abonnementSubMenu.isVisible()) {
+            etudeSubMenu.setVisible(false);
+            etudeSubMenu.setManaged(false);
+            animauxSubMenu.setVisible(false);
+            animauxSubMenu.setManaged(false);
+            machineSubMenu.setVisible(false);
+            machineSubMenu.setManaged(false);
+            stockSubMenu.setVisible(false);
+            stockSubMenu.setManaged(false);
+        }
+    }
+
+    /**
+     * Méthode pour basculer l'affichage du sous-menu Machine
+     */
+    @FXML
+    private void toggleMachineSubMenu() {
+        machineSubMenu.setVisible(!machineSubMenu.isVisible());
+        machineSubMenu.setManaged(!machineSubMenu.isManaged());
+
+        if (machineSubMenu.isVisible()) {
+            etudeSubMenu.setVisible(false);
+            etudeSubMenu.setManaged(false);
+            animauxSubMenu.setVisible(false);
+            animauxSubMenu.setManaged(false);
+            abonnementSubMenu.setVisible(false);
+            abonnementSubMenu.setManaged(false);
+            stockSubMenu.setVisible(false);
+            stockSubMenu.setManaged(false);
+        }
+    }
+
+    /**
+     * Méthode pour basculer l'affichage du sous-menu Stock
+     */
+    @FXML
+    private void toggleStockSubMenu() {
+        stockSubMenu.setVisible(!stockSubMenu.isVisible());
+        stockSubMenu.setManaged(!stockSubMenu.isManaged());
+
+        if (stockSubMenu.isVisible()) {
+            etudeSubMenu.setVisible(false);
+            etudeSubMenu.setManaged(false);
+            animauxSubMenu.setVisible(false);
+            animauxSubMenu.setManaged(false);
+            abonnementSubMenu.setVisible(false);
+            abonnementSubMenu.setManaged(false);
+            machineSubMenu.setVisible(false);
+            machineSubMenu.setManaged(false);
+        }
+    }
+
 }

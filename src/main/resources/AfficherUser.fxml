@@ -17,7 +17,7 @@
     <Label text="Gestion des Utilisateurs" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
     
     <!-- Tableau des utilisateurs -->
-    <TableView fx:id="userTableView" VBox.vgrow="ALWAYS">
+    <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
             <TableColumn fx:id="nomColumn" text="Nom" prefWidth="120"/>

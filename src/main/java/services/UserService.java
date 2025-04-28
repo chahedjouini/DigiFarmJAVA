@@ -245,4 +245,75 @@ public class UserService implements IService<User> {
         
         return user;
     }
+    public boolean emailExists(String email) {
+        String query = "SELECT COUNT(*) FROM user WHERE adresse_mail = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String getResetToken(String email) {
+        String query = "SELECT reset_token FROM user WHERE adresse_mail = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("reset_token");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        // Hasher le nouveau mot de passe
+        String hashedPassword = PasswordUtils.hashPasswordWithSalt(newPassword);
+
+        // Trouver l'utilisateur avec ce token et mettre à jour son mot de passe
+        String query = "UPDATE user SET password = ?, reset_token = NULL WHERE reset_token = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, hashedPassword);
+            pstmt.setString(2, token);
+
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isValidToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        String query = "SELECT id FROM user WHERE reset_token = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, token);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); // Si un utilisateur est trouvé, le token est valide
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 }
