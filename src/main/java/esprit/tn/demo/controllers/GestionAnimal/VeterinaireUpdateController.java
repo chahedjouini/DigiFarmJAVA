@@ -2,8 +2,10 @@ package esprit.tn.demo.controllers.GestionAnimal;
 
 import esprit.tn.demo.entities.GestionAnimal.Veterinaire;
 import esprit.tn.demo.services.GestionAnimal.VeterinaireServiceImpl;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class VeterinaireUpdateController {
 
@@ -14,7 +16,15 @@ public class VeterinaireUpdateController {
     @FXML private TextField adresseCabineField;
 
     private final VeterinaireServiceImpl service = new VeterinaireServiceImpl();
+    private Veterinaire veterinaire; // ADD THIS
 
+    // Setter to pre-fill the form
+    public void setVeterinaire(Veterinaire veterinaire) {
+        this.veterinaire = veterinaire;
+        if (veterinaire != null) {
+            idField.setText(String.valueOf(veterinaire.getId()));
+        }
+    }
     @FXML
     public void handleUpdateVeterinaire() {
         try {
@@ -28,5 +38,11 @@ public class VeterinaireUpdateController {
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Erreur: " + e.getMessage()).show();
         }
+    }
+
+    @FXML
+    public void handleCancel(ActionEvent event) {
+        Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 }

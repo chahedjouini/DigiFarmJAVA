@@ -2,15 +2,23 @@ package esprit.tn.demo.controllers.GestionAnimal;
 
 import esprit.tn.demo.entities.GestionAnimal.Veterinaire;
 import esprit.tn.demo.services.GestionAnimal.VeterinaireServiceImpl;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.collections.*;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class VeterinaireReadController {
-
-
 
     @FXML private TableView<Veterinaire> veterinaireTable;
     @FXML private TableColumn<Veterinaire, Number> idCol;
@@ -18,6 +26,7 @@ public class VeterinaireReadController {
     @FXML private TableColumn<Veterinaire, Number> numTelCol;
     @FXML private TableColumn<Veterinaire, String> emailCol;
     @FXML private TableColumn<Veterinaire, String> adresse_cabineCol;
+    @FXML private TableColumn<Veterinaire, Void> actionsCol;
 
     private final VeterinaireServiceImpl veterinaireService = new VeterinaireServiceImpl();
 
@@ -29,7 +38,126 @@ public class VeterinaireReadController {
         emailCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
         adresse_cabineCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getadresse_cabine()));
 
-        ObservableList<Veterinaire> list = FXCollections.observableArrayList(veterinaireService.getAllVeterinaires());
-        veterinaireTable.setItems(list);
+        actionsCol.setCellFactory(col -> new TableCell<>() {
+            private final Button updateButton = new Button("Update");
+            private final Button deleteButton = new Button("Delete");
+
+            {
+                updateButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
+                deleteButton.setStyle("-fx-background-color: #f44336; -fx-text-fill: white;");
+
+                updateButton.setOnAction(event -> {
+                    Veterinaire veterinaire = getTableView().getItems().get(getIndex());
+                    if (veterinaire != null) {
+                        openUpdateVeterinaireForm(veterinaire);
+                    } else {
+                        showAlert(Alert.AlertType.WARNING, "Selection Error", "No Veterinaire selected for update.");
+                    }
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Veterinaire veterinaire = getTableView().getItems().get(getIndex());
+                    if (veterinaire != null) {
+                        openDeleteVeterinaireForm(veterinaire);
+                    } else {
+                        showAlert(Alert.AlertType.WARNING, "Selection Error", "No Veterinaire selected for deletion.");
+                    }
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(new HBox(5, updateButton, deleteButton));
+                }
+            }
+        });
+
+        veterinaireTable.setOnMouseClicked(event -> {
+            Veterinaire selectedVeterinaire = veterinaireTable.getSelectionModel().getSelectedItem();
+            if (selectedVeterinaire != null) {
+                showAlert(Alert.AlertType.INFORMATION, "Veterinaire Details",
+                        "Name: " + selectedVeterinaire.getNom() + "\n" +
+                                "Phone: " + selectedVeterinaire.getnum_tel() + "\n" +
+                                "Email: " + selectedVeterinaire.getEmail() + "\n" +
+                                "Address: " + selectedVeterinaire.getadresse_cabine());
+            }
+        });
+
+        loadVeterinaireData();
+    }
+
+    private void loadVeterinaireData() {
+        veterinaireTable.setItems(FXCollections.observableArrayList(veterinaireService.getAllVeterinaires()));
+    }
+
+    @FXML
+    private void handleAddVeterinaire() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/VeterinaireAddView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find VeterinaireAddView.fxml at esprit/tn/demo/VeterinaireAddView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Add Veterinaire");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            loadVeterinaireData();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Add Veterinaire form: " + e.getMessage());
+        }
+    }
+
+    private void openUpdateVeterinaireForm(Veterinaire veterinaire) {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/VeterinaireUpdateView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find VeterinaireUpdateView.fxml at esprit/tn/demo/VeterinaireUpdateView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Update Veterinaire");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            VeterinaireUpdateController controller = loader.getController();
+            controller.setVeterinaire(veterinaire);
+            stage.showAndWait();
+            loadVeterinaireData();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Update Veterinaire form: " + e.getMessage());
+        }
+    }
+
+    private void openDeleteVeterinaireForm(Veterinaire veterinaire) {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/VeterinaireDeleteView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find VeterinaireDeleteView.fxml at esprit/tn/demo/VeterinaireDeleteView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Delete Veterinaire");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            VeterinaireDeleteController controller = loader.getController();
+            controller.setVeterinaire(veterinaire);
+            stage.showAndWait();
+            loadVeterinaireData();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Delete Veterinaire form: " + e.getMessage());
+        }
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
