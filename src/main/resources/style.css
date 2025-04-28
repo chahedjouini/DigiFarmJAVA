@@ -717,3 +717,45 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+/* Styles pour le conteneur du CAPTCHA */
+.captcha-container {
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8;
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+}
+
+/* Style pour la question du CAPTCHA */
+.captcha-question {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+    -fx-font-weight: normal;
+}
+
+/* Style pour le bouton de rafraîchissement */
+.captcha-container Button {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 50;
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-padding: 5;
+    -fx-cursor: hand;
+}
+
+.captcha-container Button:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+.captcha-container Button:pressed {
+    -fx-background-color: #c0c0c0;
+}
+
+/* Style pour le champ de réponse */
+.captcha-container .form-input {
+    -fx-font-size: 14px;
+    -fx-padding: 8;
+}

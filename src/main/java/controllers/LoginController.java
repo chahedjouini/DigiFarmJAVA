@@ -20,6 +20,7 @@ import utils.RememberMeStore;
 import javafx.scene.control.CheckBox;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class LoginController {
     @FXML
@@ -70,10 +71,35 @@ public class LoginController {
     @FXML
     private Button backToLoginButton;
 
-    @FXML private CheckBox rememberMeCheckBox;
+    @FXML
+    private CheckBox rememberMeCheckBox;
 
+    // Champs pour le CAPTCHA du formulaire de connexion
+    @FXML
+    private Label captchaQuestion;
+
+    @FXML
+    private TextField captchaField;
+
+    @FXML
+    private Button refreshCaptchaButton;
+
+    // Champs pour le CAPTCHA du formulaire d'inscription
+    @FXML
+    private Label registerCaptchaQuestion;
+
+    @FXML
+    private TextField registerCaptchaField;
+
+    @FXML
+    private Button refreshRegisterCaptchaButton;
+
+    // Variables pour stocker les réponses attendues aux énigmes
+    private int captchaAnswer;
+    private int registerCaptchaAnswer;
 
     private final UserService userService = UserService.getInstance();
+    private final Random random = new Random();
 
     @FXML
     public void initialize() {
@@ -88,6 +114,127 @@ public class LoginController {
             roleComboBox.getItems().addAll(Role.AGRICULTEUR, Role.CLIENT);
             roleComboBox.setValue(Role.CLIENT); // Valeur par défaut
         }
+
+        // Générer les énigmes initiales
+        generateCaptcha();
+        generateRegisterCaptcha();
+    }
+
+    /**
+     * Génère une nouvelle énigme mathématique simple pour le formulaire de connexion
+     */
+    private void generateCaptcha() {
+        // Générer deux nombres aléatoires entre 1 et 10
+        int num1 = random.nextInt(10) + 1;
+        int num2 = random.nextInt(10) + 1;
+
+        // Choisir aléatoirement une opération (addition, soustraction ou multiplication)
+        int operation = random.nextInt(3);
+
+        switch (operation) {
+            case 0: // Addition
+                captchaQuestion.setText("Énigme: Combien font " + num1 + " + " + num2 + " ?");
+                captchaAnswer = num1 + num2;
+                break;
+            case 1: // Soustraction (s'assurer que le résultat est positif)
+                if (num1 < num2) {
+                    int temp = num1;
+                    num1 = num2;
+                    num2 = temp;
+                }
+                captchaQuestion.setText("Énigme: Combien font " + num1 + " - " + num2 + " ?");
+                captchaAnswer = num1 - num2;
+                break;
+            case 2: // Multiplication (limiter pour éviter des calculs trop complexes)
+                int smaller1 = Math.min(num1, 5);
+                int smaller2 = Math.min(num2, 5);
+                captchaQuestion.setText("Énigme: Combien font " + smaller1 + " × " + smaller2 + " ?");
+                captchaAnswer = smaller1 * smaller2;
+                break;
+        }
+
+        // Vider le champ de réponse
+        if (captchaField != null) {
+            captchaField.clear();
+        }
+    }
+
+    /**
+     * Génère une nouvelle énigme pour le formulaire d'inscription
+     */
+    private void generateRegisterCaptcha() {
+        // Même logique que pour le captcha de connexion mais avec des opérations légèrement différentes
+        int num1 = random.nextInt(10) + 1;
+        int num2 = random.nextInt(10) + 1;
+
+        int operation = random.nextInt(3);
+
+        switch (operation) {
+            case 0: // Addition
+                registerCaptchaQuestion.setText("Énigme: Combien font " + num1 + " + " + num2 + " ?");
+                registerCaptchaAnswer = num1 + num2;
+                break;
+            case 1: // Soustraction
+                if (num1 < num2) {
+                    int temp = num1;
+                    num1 = num2;
+                    num2 = temp;
+                }
+                registerCaptchaQuestion.setText("Énigme: Combien font " + num1 + " - " + num2 + " ?");
+                registerCaptchaAnswer = num1 - num2;
+                break;
+            case 2: // Multiplication
+                int smaller1 = Math.min(num1, 5);
+                int smaller2 = Math.min(num2, 5);
+                registerCaptchaQuestion.setText("Énigme: Combien font " + smaller1 + " × " + smaller2 + " ?");
+                registerCaptchaAnswer = smaller1 * smaller2;
+                break;
+        }
+
+        // Vider le champ de réponse
+        if (registerCaptchaField != null) {
+            registerCaptchaField.clear();
+        }
+    }
+
+    /**
+     * Rafraîchit l'énigme du formulaire de connexion
+     */
+    @FXML
+    private void refreshCaptcha() {
+        generateCaptcha();
+    }
+
+    /**
+     * Rafraîchit l'énigme du formulaire d'inscription
+     */
+    @FXML
+    private void refreshRegisterCaptcha() {
+        generateRegisterCaptcha();
+    }
+
+    /**
+     * Vérifie si la réponse à l'énigme de connexion est correcte
+     */
+    private boolean isCaptchaValid() {
+        try {
+            int userAnswer = Integer.parseInt(captchaField.getText().trim());
+            return userAnswer == captchaAnswer;
+        } catch (NumberFormatException e) {
+            return false; // Si la réponse n'est pas un nombre
+        }
+    }
+
+    /**
+     * Vérifie si la réponse à l'énigme d'inscription est correcte
+     */
+    private boolean isRegisterCaptchaValid() {
+        try {
+            int userAnswer = Integer.parseInt(registerCaptchaField.getText().trim());
+            return userAnswer == registerCaptchaAnswer;
+        } catch (NumberFormatException e) {
+            return false; // Si la réponse n'est pas un nombre
+        }
     }
 
     @FXML
@@ -97,6 +244,9 @@ public class LoginController {
         registerForm.setVisible(true);
         registerForm.setManaged(true);
         registerErrorLabel.setText("");
+
+        // Générer une nouvelle énigme pour le formulaire d'inscription
+        generateRegisterCaptcha();
     }
 
     @FXML
@@ -106,6 +256,9 @@ public class LoginController {
         loginForm.setVisible(true);
         loginForm.setManaged(true);
         errorLabel.setText("");
+
+        // Générer une nouvelle énigme pour le formulaire de connexion
+        generateCaptcha();
     }
 
     @FXML
@@ -134,6 +287,13 @@ public class LoginController {
 
         if (!PasswordUtils.isValidEmail(email)) {
             registerErrorLabel.setText("Format d'email invalide");
+            return;
+        }
+
+        // Vérifier l'énigme
+        if (!isRegisterCaptchaValid()) {
+            registerErrorLabel.setText("La réponse à l'énigme est incorrecte");
+            generateRegisterCaptcha(); // Générer une nouvelle énigme
             return;
         }
 
@@ -180,6 +340,13 @@ public class LoginController {
         // Validation du format de l'email
         if (!PasswordUtils.isValidEmail(email)) {
             showError("Format d'adresse email invalide");
+            return;
+        }
+
+        // Vérifier l'énigme
+        if (!isCaptchaValid()) {
+            showError("La réponse à l'énigme est incorrecte");
+            generateCaptcha(); // Générer une nouvelle énigme
             return;
         }
 
