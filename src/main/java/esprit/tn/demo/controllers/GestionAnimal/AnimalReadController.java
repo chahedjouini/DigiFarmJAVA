@@ -20,14 +20,22 @@ import java.net.URL;
 
 public class AnimalReadController {
 
-    @FXML private TableView<Animal> animalTable;
-    @FXML private TableColumn<Animal, Number> idCol;
-    @FXML private TableColumn<Animal, String> nomCol;
-    @FXML private TableColumn<Animal, String> typeCol;
-    @FXML private TableColumn<Animal, String> raceCol;
-    @FXML private TableColumn<Animal, Number> ageCol;
-    @FXML private TableColumn<Animal, Number> poidsCol;
-    @FXML private TableColumn<Animal, Void> actionsCol;
+    @FXML
+    private TableView<Animal> animalTable;
+    @FXML
+    private TableColumn<Animal, Number> idCol;
+    @FXML
+    private TableColumn<Animal, String> nomCol;
+    @FXML
+    private TableColumn<Animal, String> typeCol;
+    @FXML
+    private TableColumn<Animal, String> raceCol;
+    @FXML
+    private TableColumn<Animal, Number> ageCol;
+    @FXML
+    private TableColumn<Animal, Number> poidsCol;
+    @FXML
+    private TableColumn<Animal, Void> actionsCol;
 
     private final AnimalServiceImpl animalService = new AnimalServiceImpl();
 
@@ -158,5 +166,23 @@ public class AnimalReadController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleOpenStatistiques() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/AnimalStatistiquesView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find AnimalStatistiquesView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Statistiques des Animaux");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Animal Statistics form: " + e.getMessage());
+        }
     }
 }

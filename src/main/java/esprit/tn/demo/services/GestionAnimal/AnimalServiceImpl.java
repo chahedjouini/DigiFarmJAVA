@@ -6,10 +6,17 @@ import esprit.tn.demo.tools.MyDataBase;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AnimalServiceImpl implements IAnimalService {
 
     private Connection connection;
+    private static final Logger logger = Logger.getLogger(AnimalServiceImpl.class.getName());
 
     public AnimalServiceImpl() {
         // Use the MyDataBase class to get the DB connection
@@ -111,5 +118,47 @@ public class AnimalServiceImpl implements IAnimalService {
             e.printStackTrace();
         }
         return null;
+    }
+    public Map<String, Long> groupAnimalsByType() {
+        Map<String, Long> counts = new HashMap<>();
+        String query = "SELECT type, COUNT(*) FROM animal GROUP BY type";
+        try (Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(query)) {
+            while (rs.next()) {
+                String type = rs.getString("type");
+                long count = rs.getLong(2);
+                counts.put(type, count);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error grouping animals by type", e);
+        }
+        return counts;
+    }
+    public Double getAverageAge() {
+        String query = "SELECT AVG(age) FROM animal";
+        try (Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(query)) {
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error calculating average age", e);
+        }
+        return null;
+    }
+    public Map<String, Long> getRaceDistribution() {
+        Map<String, Long> counts = new HashMap<>();
+        String query = "SELECT race, COUNT(*) FROM animal GROUP BY race";
+        try (Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(query)) {
+            while (rs.next()) {
+                String race = rs.getString("race");
+                long count = rs.getLong(2);
+                counts.put(race, count);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error getting race distribution", e);
+        }
+        return counts;
     }
 }
