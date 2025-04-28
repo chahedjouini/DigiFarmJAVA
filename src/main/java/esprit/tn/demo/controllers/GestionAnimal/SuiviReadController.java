@@ -216,4 +216,37 @@ public class SuiviReadController {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la fenêtre des statistiques : " + e.getMessage());
         }
     }
+
+    @FXML
+    private void handleOpenAnimaux() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/AnimalReadView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find AnimalReadView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Liste des Animaux");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Animaux form: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleOpenVeterinaires() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/VeterinaireReadView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find VeterinaireReadView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Liste des Vétérinaires");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Veterinaires form: " + e.getMessage());
+        }
+    }
 }

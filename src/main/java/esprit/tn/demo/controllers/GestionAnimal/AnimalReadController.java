@@ -6,11 +6,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,8 +37,16 @@ public class AnimalReadController {
     private TableColumn<Animal, Number> poidsCol;
     @FXML
     private TableColumn<Animal, Void> actionsCol;
+    @FXML
+    private TextField searchNomField;
+    @FXML
+    private TextField searchTypeField;
+    @FXML
+    private TextField searchRaceField;
 
     private final AnimalServiceImpl animalService = new AnimalServiceImpl();
+    private ObservableList<Animal> allAnimals;
+    private FilteredList<Animal> filteredAnimals;
 
     @FXML
     public void initialize() {
@@ -88,14 +97,44 @@ public class AnimalReadController {
             }
         });
 
-        // Load animal data into the table
+        // Load animal data and set up filtering
         loadAnimalData();
+        setupSearchListeners();
     }
 
-    // Load the animal data into the table
+    // Load the animal data into the table and initialize FilteredList
     private void loadAnimalData() {
-        animalTable.setItems(FXCollections.observableArrayList(animalService.getAllAnimals()));
+        allAnimals = FXCollections.observableArrayList(animalService.getAllAnimals());
+        filteredAnimals = new FilteredList<>(allAnimals, p -> true); // Initially show all
+        animalTable.setItems(filteredAnimals);
     }
+
+    // Set up listeners for the search fields
+    private void setupSearchListeners() {
+        searchNomField.textProperty().addListener((observable, oldValue, newValue) -> filterAnimals());
+        searchTypeField.textProperty().addListener((observable, oldValue, newValue) -> filterAnimals());
+        searchRaceField.textProperty().addListener((observable, oldValue, newValue) -> filterAnimals());
+    }
+
+    // Filter the animals based on the search terms
+    private void filterAnimals() {
+        if (filteredAnimals != null) {
+            filteredAnimals.setPredicate(animal -> {
+                String nomFiltre = searchNomField.getText().toLowerCase();
+                String typeFiltre = searchTypeField.getText().toLowerCase();
+                String raceFiltre = searchRaceField.getText().toLowerCase();
+
+                // Check if the animal's properties contain the filter text
+                boolean nomMatch = nomFiltre.isEmpty() || animal.getNom().toLowerCase().contains(nomFiltre);
+                boolean typeMatch = typeFiltre.isEmpty() || animal.getType().toLowerCase().contains(typeFiltre);
+                boolean raceMatch = raceFiltre.isEmpty() || animal.getRace().toLowerCase().contains(raceFiltre);
+
+                // Combine the matches (you can modify this for OR logic if needed)
+                return nomMatch && typeMatch && raceMatch;
+            });
+        }
+    }
+
 
     // Handle adding a new animal
     @FXML
@@ -183,6 +222,40 @@ public class AnimalReadController {
             stage.show();
         } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Animal Statistics form: " + e.getMessage());
+        }
+
+    }
+
+    @FXML
+    private void handleOpenVeterinaires() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/VeterinaireReadView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find VeterinaireReadView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Liste des Vétérinaires");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Veterinaires form: " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleOpenSuivi() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/SuiviReadView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find SuiviReadView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Suivi des Animaux");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Suivi form: " + e.getMessage());
         }
     }
 }

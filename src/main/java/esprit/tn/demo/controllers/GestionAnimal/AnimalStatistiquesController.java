@@ -47,4 +47,5 @@ public class AnimalStatistiquesController {
         }
         raceDistributionPieChart.setData(racePieChartData);
     }
+
 }

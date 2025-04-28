@@ -34,5 +34,15 @@
                 <Insets top="5.0" />
             </VBox.margin>
         </Button>
+        <Button mnemonicParsing="false" onAction="#handleOpenAnimaux" text="Retour à la Liste des Animaux">
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#handleOpenVeterinaires" text="Retour à la Liste des Vétérinaires">
+            <VBox.margin>
+                <Insets top="5.0" />
+            </VBox.margin>
+        </Button>
     </children>
 </VBox>

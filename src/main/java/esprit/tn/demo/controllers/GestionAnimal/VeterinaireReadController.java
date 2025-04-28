@@ -6,11 +6,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -27,8 +27,11 @@ public class VeterinaireReadController {
     @FXML private TableColumn<Veterinaire, String> emailCol;
     @FXML private TableColumn<Veterinaire, String> adresse_cabineCol;
     @FXML private TableColumn<Veterinaire, Void> actionsCol;
+    @FXML private TextField searchNomField;
 
     private final VeterinaireServiceImpl veterinaireService = new VeterinaireServiceImpl();
+    private ObservableList<Veterinaire> allVeterinaires;
+    private FilteredList<Veterinaire> filteredVeterinaires;
 
     @FXML
     public void initialize() {
@@ -88,10 +91,27 @@ public class VeterinaireReadController {
         });
 
         loadVeterinaireData();
+        setupSearchListeners(); // Initialize search listeners
     }
 
     private void loadVeterinaireData() {
-        veterinaireTable.setItems(FXCollections.observableArrayList(veterinaireService.getAllVeterinaires()));
+        allVeterinaires = FXCollections.observableArrayList(veterinaireService.getAllVeterinaires());
+        filteredVeterinaires = new FilteredList<>(allVeterinaires, p -> true); // Initially show all
+        veterinaireTable.setItems(filteredVeterinaires);
+    }
+
+    private void setupSearchListeners() {
+        searchNomField.textProperty().addListener((observable, oldValue, newValue) -> filterVeterinaires(newValue));
+    }
+
+    private void filterVeterinaires(String searchTerm) {
+        if (filteredVeterinaires != null && searchTerm != null) {
+            String lowerCaseSearchTerm = searchTerm.toLowerCase();
+            filteredVeterinaires.setPredicate(veterinaire ->
+                    veterinaire.getNom().toLowerCase().contains(lowerCaseSearchTerm));
+        } else if (filteredVeterinaires != null) {
+            filteredVeterinaires.setPredicate(p -> true); // Show all if search term is empty
+        }
     }
 
     @FXML
@@ -159,5 +179,38 @@ public class VeterinaireReadController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    @FXML
+    private void handleOpenAnimaux() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/AnimalReadView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find AnimalReadView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Liste des Animaux");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Animaux form: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleOpenSuivi() {
+        try {
+            URL location = getClass().getResource("/esprit/tn/demo/SuiviReadView.fxml");
+            if (location == null) {
+                throw new IOException("Cannot find SuiviReadView.fxml");
+            }
+            FXMLLoader loader = new FXMLLoader(location);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(loader.load()));
+            stage.setTitle("Suivi des Animaux");
+            stage.show();
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Suivi form: " + e.getMessage());
+        }
     }
 }
