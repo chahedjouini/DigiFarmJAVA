@@ -15,9 +15,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AnimalReadController {
 
@@ -43,10 +52,13 @@ public class AnimalReadController {
     private TextField searchTypeField;
     @FXML
     private TextField searchRaceField;
+    @FXML
+    private TextField emailField; // Added for email input
 
     private final AnimalServiceImpl animalService = new AnimalServiceImpl();
     private ObservableList<Animal> allAnimals;
     private FilteredList<Animal> filteredAnimals;
+    private static final Logger LOGGER = Logger.getLogger(AnimalReadController.class.getName());
 
     @FXML
     public void initialize() {
@@ -152,6 +164,7 @@ public class AnimalReadController {
             stage.showAndWait();
             loadAnimalData();  // Refresh the table after adding an animal
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error opening Add Animal form", e);
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Add Animal form: " + e.getMessage());
         }
     }
@@ -173,6 +186,7 @@ public class AnimalReadController {
             stage.showAndWait();
             loadAnimalData();
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error opening Update Animal form", e);
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Update Animal form: " + e.getMessage());
         }
     }
@@ -194,6 +208,7 @@ public class AnimalReadController {
             stage.showAndWait();
             loadAnimalData();
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error opening Delete Animal form", e);
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Delete Animal form: " + e.getMessage());
         }
     }
@@ -221,6 +236,7 @@ public class AnimalReadController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error opening Statistics form", e);
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Animal Statistics form: " + e.getMessage());
         }
 
@@ -239,6 +255,7 @@ public class AnimalReadController {
             stage.setTitle("Liste des Vétérinaires");
             stage.show();
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error opening Veterinarians form", e);
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Veterinaires form: " + e.getMessage());
         }
     }
@@ -255,7 +272,63 @@ public class AnimalReadController {
             stage.setTitle("Suivi des Animaux");
             stage.show();
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error opening Suivi form", e);
             showAlert(Alert.AlertType.ERROR, "Error", "Failed to open Suivi form: " + e.getMessage());
         }
     }
+
+    private File generateExcelFile() {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Animals");
+
+        // Create header row
+        Row headerRow = sheet.createRow(0);
+        String[] headers = {"ID", "Nom", "Type", "Race", "Age", "Poids"};
+        for (int i = 0; i < headers.length; i++) {
+            org.apache.poi.ss.usermodel.Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+        }
+
+        // Populate data rows
+        int rowNum = 1;
+        for (Animal animal : animalTable.getItems()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(animal.getId());
+            row.createCell(1).setCellValue(animal.getNom());
+            row.createCell(2).setCellValue(animal.getType());
+            row.createCell(3).setCellValue(animal.getRace());
+            row.createCell(4).setCellValue(animal.getAge());
+            row.createCell(5).setCellValue(animal.getPoids());
+        }
+
+        // Auto-resize columns
+        for (int i = 0; i < headers.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Save the workbook to a temporary file
+        try {
+            File tempFile = File.createTempFile("animals_", ".xlsx");
+            try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+                workbook.write(outputStream);
+            }
+            workbook.close();
+            return tempFile;
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error generating Excel file", e);
+            showAlert(Alert.AlertType.ERROR, "Error", "Error generating Excel file: " + e.getMessage());
+            return null; // Return null to indicate failure
+        }
+    }
+    @FXML
+    private void handleExportToExcel() {
+        File excelFile = generateExcelFile();
+        if (excelFile != null) {
+            //show a message
+            showAlert(Alert.AlertType.INFORMATION, "Export Successful", "Data exported to " + excelFile.getName());
+        }
+    }
+
+
 }
+

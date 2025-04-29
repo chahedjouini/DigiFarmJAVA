@@ -33,7 +33,7 @@
         </TableView>
         <HBox spacing="10.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#handleAddAnimal" text="Ajouter Animal" />
+                <Button fx:id="addAnimalButton" mnemonicParsing="false" onAction="#handleAddAnimal" text="Ajouter Animal" />
                 <Button mnemonicParsing="false" onAction="#handleOpenStatistiques" text="Afficher les Statistiques" />
                 <Button mnemonicParsing="false" onAction="#handleOpenVeterinaires" text="Afficher les Vétérinaires">
                     <VBox.margin>
@@ -45,6 +45,12 @@
                         <Insets top="5.0" />
                     </VBox.margin>
                 </Button>
+                <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleExportToExcel" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Exporter vers Excel" textAlignment="CENTER">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Button>
+                <TextField fx:id="emailField" promptText="Destinataire Email" />
             </children>
             <VBox.margin>
                 <Insets top="10.0" />
