@@ -26,7 +26,13 @@
                 </ImageView>
                 <Region HBox.hgrow="ALWAYS" />
                 <Label fx:id="welcomeLabel" styleClass="welcome-text"/>
-                <Button fx:id="profileBtn" text="Mon Profil" onAction="#handleProfile" styleClass="profile-button"/>
+                <MenuButton fx:id="profileBtn" text="Mon Profil" styleClass="profile-button">
+                    <items>
+                        <MenuItem text="Afficher mes informations" onAction="#handleShowProfile"/>
+                        <MenuItem text="Modifier mon compte" onAction="#handleEditProfile"/>
+                        <MenuItem text="Supprimer mon compte" onAction="#handleDeleteProfile"/>
+                    </items>
+                </MenuButton>
                 <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" styleClass="logout-button"/>
             </children>
         </HBox>

@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton; // Ajout pour le MenuButton
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import services.UserService;
@@ -17,7 +18,9 @@ import utils.RememberMeStore;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.scene.control.ButtonType; // Pour la boîte de dialogue de confirmation
 
 public class FrontboardController implements Initializable {
     // ========== FXML Components ==========
@@ -26,6 +29,9 @@ public class FrontboardController implements Initializable {
     @FXML private Label userEmailLabel;
     @FXML private StackPane contentPane;
     @FXML private Button logoutButton;
+
+    // Changer de Button à MenuButton
+    @FXML private MenuButton profileBtn;
 
     // Menus spécifiques aux rôles
     @FXML private Button etudeMesDemandesBtn;
@@ -38,7 +44,6 @@ public class FrontboardController implements Initializable {
     @FXML private Button machineConsulterBtn;
     @FXML private Button stockAcheterBtn;
     @FXML private Button stockCommandesBtn;
-    @FXML private Button profileBtn;
 
     // ========== Service & Data ==========
     private final UserService userService = UserService.getInstance();
@@ -167,12 +172,80 @@ public class FrontboardController implements Initializable {
         void setUser(User user);
     }
 
-    // ========== Handlers des boutons de menu ==========
+    // ========== Nouvelle méthodes pour le menu profil ==========
 
     @FXML
-    private void handleProfile() {
+    private void handleShowProfile() {
+        // Charger le profil de l'utilisateur
         loadContent("/UserProfile.fxml");
     }
+
+    @FXML
+    private void handleEditProfile() {
+        // Ouvrir le formulaire d'édition du profil utilisateur
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserForm.fxml"));
+            Parent root = loader.load();
+
+            // Passer l'utilisateur actuel au contrôleur du formulaire
+            UserFormController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            // Créer une nouvelle fenêtre pour l'édition
+            Stage stage = new Stage();
+            stage.setTitle("Modifier mon compte");
+            stage.setScene(new Scene(root));
+
+            // Afficher la fenêtre modale
+            stage.showAndWait();
+
+            // Mettre à jour les données utilisateur après modification
+            if (currentUser != null) {
+                // Rafraîchir les informations de l'utilisateur depuis la base de données
+                User refreshedUser = userService.getUserById(currentUser.getId());
+                if (refreshedUser != null) {
+                    setCurrentUser(refreshedUser);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Erreur lors du chargement du formulaire: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleDeleteProfile() {
+        // Demander confirmation avant suppression
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirmation de suppression");
+        confirmDialog.setHeaderText("Supprimer votre compte");
+        confirmDialog.setContentText("Êtes-vous sûr de vouloir supprimer définitivement votre compte? Cette action est irréversible.");
+
+        Optional<ButtonType> result = confirmDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Supprimer le compte
+                userService.deleteUser(currentUser.getId());
+
+                // Déconnecter l'utilisateur et rediriger vers la page de connexion
+                handleLogout();
+
+                // Afficher une confirmation
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Compte supprimé");
+                alert.setHeaderText(null);
+                alert.setContentText("Votre compte a été supprimé avec succès.");
+                alert.showAndWait();
+            } catch (Exception e) {
+                e.printStackTrace();
+                showError("Erreur lors de la suppression du compte: " + e.getMessage());
+            }
+        }
+    }
+
+    // ========== Handlers des boutons de menu ==========
+
+    // Note: handleProfile est supprimé car remplacé par les méthodes ci-dessus
 
     @FXML
     private void handleEtudeMesDemandes() {

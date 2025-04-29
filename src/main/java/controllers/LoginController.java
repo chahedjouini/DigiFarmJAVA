@@ -348,7 +348,7 @@ public class LoginController {
                 RememberMeStore.clear();
             }
 
-            // MODIFICATION: Redirection différente selon le rôle
+            // CORRECTION: Redirection différente selon le rôle
             if (user.getRole() == Role.ADMIN) {
                 navigateToDashboard(user); // Backoffice pour admin
             } else {
