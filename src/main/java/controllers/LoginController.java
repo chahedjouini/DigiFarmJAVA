@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class LoginController {
+    // ... (garder tous les champs et variables existants)
     @FXML
     private TextField emailField;
 
@@ -101,6 +102,7 @@ public class LoginController {
     private final UserService userService = UserService.getInstance();
     private final Random random = new Random();
 
+    // ... (garder toutes les méthodes existantes)
     @FXML
     public void initialize() {
         // Cacher le formulaire d'inscription au démarrage
@@ -120,9 +122,6 @@ public class LoginController {
         generateRegisterCaptcha();
     }
 
-    /**
-     * Génère une nouvelle énigme mathématique simple pour le formulaire de connexion
-     */
     private void generateCaptcha() {
         // Générer deux nombres aléatoires entre 1 et 10
         int num1 = random.nextInt(10) + 1;
@@ -159,9 +158,6 @@ public class LoginController {
         }
     }
 
-    /**
-     * Génère une nouvelle énigme pour le formulaire d'inscription
-     */
     private void generateRegisterCaptcha() {
         // Même logique que pour le captcha de connexion mais avec des opérations légèrement différentes
         int num1 = random.nextInt(10) + 1;
@@ -197,25 +193,16 @@ public class LoginController {
         }
     }
 
-    /**
-     * Rafraîchit l'énigme du formulaire de connexion
-     */
     @FXML
     private void refreshCaptcha() {
         generateCaptcha();
     }
 
-    /**
-     * Rafraîchit l'énigme du formulaire d'inscription
-     */
     @FXML
     private void refreshRegisterCaptcha() {
         generateRegisterCaptcha();
     }
 
-    /**
-     * Vérifie si la réponse à l'énigme de connexion est correcte
-     */
     private boolean isCaptchaValid() {
         try {
             int userAnswer = Integer.parseInt(captchaField.getText().trim());
@@ -225,9 +212,6 @@ public class LoginController {
         }
     }
 
-    /**
-     * Vérifie si la réponse à l'énigme d'inscription est correcte
-     */
     private boolean isRegisterCaptchaValid() {
         try {
             int userAnswer = Integer.parseInt(registerCaptchaField.getText().trim());
@@ -363,12 +347,19 @@ public class LoginController {
             } else {
                 RememberMeStore.clear();
             }
-            navigateToDashboard(user);
+
+            // MODIFICATION: Redirection différente selon le rôle
+            if (user.getRole() == Role.ADMIN) {
+                navigateToDashboard(user); // Backoffice pour admin
+            } else {
+                navigateToFrontboard(user); // Frontend pour client/agriculteur
+            }
         } else {
             showError("Email ou mot de passe incorrect");
         }
     }
 
+    // Méthode existante pour naviguer vers le dashboard (pour admin)
     private void navigateToDashboard(User user) {
         try {
             // Charger le dashboard
@@ -382,6 +373,26 @@ public class LoginController {
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Dashboard - Digifarm");
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Erreur lors du chargement de l'interface");
+        }
+    }
+
+    // AJOUT: Nouvelle méthode pour naviguer vers le frontboard (pour client/agriculteur)
+    private void navigateToFrontboard(User user) {
+        try {
+            // Charger le frontboard
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontboard.fxml"));
+            Parent root = loader.load();
+
+            // Passer l'utilisateur connecté au contrôleur du frontboard
+            FrontboardController frontboardController = loader.getController();
+            frontboardController.setCurrentUser(user);
+
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("DigiFarm - Espace Utilisateur");
         } catch (IOException e) {
             e.printStackTrace();
             showError("Erreur lors du chargement de l'interface");

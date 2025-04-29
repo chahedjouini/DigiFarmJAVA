@@ -759,3 +759,360 @@
     -fx-font-size: 14px;
     -fx-padding: 8;
 }
+/* Couleurs principales avec différentes nuances de vert */
+.root {
+    -fx-primary-darkest: #0D5D36;   /* vert très foncé */
+    -fx-primary-dark: #147844;      /* vert foncé */
+    -fx-primary: #1A9553;           /* vert principal */
+    -fx-primary-light: #43B77A;     /* vert clair */
+    -fx-primary-lightest: #A9DFBF;  /* vert très clair */
+
+    -fx-accent-dark: #1A5276;       /* bleu foncé */
+    -fx-accent: #2471A3;            /* bleu accent */
+    -fx-accent-light: #5499C7;      /* bleu clair */
+    -fx-accent-lightest: #85C1E9;   /* bleu très clair */
+
+    -fx-light-gray: #F5F5F5;        /* gris très clair */
+    -fx-mid-gray: #E0E0E0;          /* gris moyen */
+    -fx-dark-text: #2C3E50;         /* texte foncé */
+    -fx-light-text: #FFFFFF;        /* texte clair */
+}
+
+/* Styles globaux */
+.button {
+    -fx-cursor: hand;
+}
+
+/* Barre supérieure qui s'étend sur toute la largeur */
+.top-header {
+    -fx-background-color: -fx-primary-dark;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 3);
+}
+
+.logo-text {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-light-text;
+    -fx-padding: 0 0 0 15;
+}
+
+.welcome-text {
+    -fx-text-fill: -fx-light-text;
+    -fx-font-size: 14px;
+}
+
+.logout-button {
+    -fx-background-color: #D32F2F;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8 15;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    -fx-transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+    -fx-background-color: #B71C1C;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+/* Menu latéral - visuellement unifié avec la barre supérieure */
+.unified-sidebar {
+    -fx-background-color: -fx-primary-darkest;
+    -fx-min-width: 280;
+    -fx-pref-width: 280;
+    -fx-max-width: 280;
+    -fx-border-color: -fx-accent;
+    -fx-border-width: 0 1 0 0;
+}
+
+/* Titre du menu */
+.sidebar-header {
+    -fx-text-fill: -fx-light-text;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 15 0 5 20;
+}
+
+.divider {
+    -fx-stroke: -fx-primary-light;
+    -fx-opacity: 0.6;
+    -fx-margin: 5 0 10 0;
+}
+
+.nav-menu {
+    -fx-padding: 15 0 0 0;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-light-text;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 15 12 20;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-color: transparent;
+    -fx-pref-width: 280;
+}
+
+.nav-button:hover {
+    -fx-background-color: -fx-primary-dark;
+    -fx-border-color: -fx-accent-light;
+}
+
+.nav-button:pressed, .nav-button.active {
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-accent;
+}
+
+/* Sous-menu des entités */
+.submenu {
+    -fx-background-color: derive(-fx-primary-darkest, 15%);
+    -fx-padding: 5 0 5 0;
+    -fx-spacing: 2;
+}
+
+.submenu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-light-text;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 15 8 35;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-color: transparent;
+    -fx-pref-width: 280;
+}
+
+.submenu-button:hover {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-light-text;
+    -fx-border-color: -fx-accent;
+    -fx-font-weight: bold;
+}
+
+.submenu-button:pressed, .submenu-button.active {
+    -fx-background-color: -fx-primary-light;
+    -fx-border-color: -fx-accent;
+    -fx-font-weight: bold;
+}
+
+/* Icônes pour les boutons de navigation */
+.icon-admin, .icon-etude, .icon-animaux,
+.icon-abonnement, .icon-machine, .icon-stock {
+    -fx-min-width: 20;
+    -fx-min-height: 20;
+    -fx-max-width: 20;
+    -fx-max-height: 20;
+    -fx-background-color: -fx-light-text;
+    -fx-shape: "M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z";
+    -fx-opacity: 0.85;
+    -fx-padding: 0 10 0 0;
+}
+
+/* Zone de contenu de l'entité */
+.entity-content {
+    -fx-background-color: white;
+    -fx-padding: 25;
+    -fx-border-color: -fx-accent-light;
+    -fx-border-width: 0 0 0 1;
+}
+
+/* Contenu d'accueil */
+.welcome-content {
+    -fx-spacing: 15;
+}
+
+.dashboard-icon {
+    -fx-min-width: 80;
+    -fx-min-height: 80;
+    -fx-max-width: 80;
+    -fx-max-height: 80;
+    -fx-background-color: -fx-primary;
+    -fx-background-radius: 40px;
+    -fx-shape: "M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z";
+    -fx-padding: 0 0 20 0;
+}
+
+.dashboard-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-dark-text;
+}
+
+.dashboard-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: derive(-fx-dark-text, 30%);
+}
+
+/* Styles pour le conteneur du logo */
+.logo-container {
+    -fx-background-color: derive(-fx-primary-darkest, 5%);
+    -fx-border-width: 1 0 0 0;
+    -fx-border-color: -fx-accent-light;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, -2);
+    -fx-padding: 15;
+}
+/* Styles pour le conteneur avec l'image de fond */
+.background-container {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+    -fx-min-width: 100%;
+    -fx-min-height: 100%;
+}
+
+/* Style pour l'image de fond */
+.background-image {
+    -fx-opacity: 1;
+}
+
+/* Ajuster les styles des titres pour qu'ils ressortent sur l'image */
+.welcome-content {
+    -fx-spacing: 15;
+    -fx-background-color: transparent;
+}
+
+.dashboard-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.dashboard-subtitle {
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 8, 0, 0, 0);
+}
+
+/* Modifier le style du contenu principal pour qu'il s'adapte à l'image de fond */
+.entity-content {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0 0 0 1;
+    -fx-border-color: -fx-accent-light;
+}
+/* Styles pour Frontboard.fxml */
+
+/* Barre d'en-tête pour le frontboard */
+.front-header {
+    -fx-background-color: #388e3c; /* Vert plus foncé */
+    -fx-padding: 10px 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 10, 0, 0, 4);
+}
+
+/* Sidebar pour le frontboard */
+.front-sidebar {
+    -fx-background-color: #f5f5f5;
+    -fx-min-width: 250px;
+    -fx-pref-width: 250px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 1px 0 0;
+}
+
+/* Panneau d'information utilisateur dans la sidebar */
+.user-info-panel {
+    -fx-background-color: #4caf50; /* Vert */
+    -fx-padding: 15px;
+    -fx-alignment: center;
+}
+
+.sidebar-user-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 10px 0 5px 0;
+}
+
+.sidebar-user-role {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e8f5e9; /* Vert très clair */
+    -fx-padding: 0 0 5px 0;
+}
+
+.sidebar-user-email {
+    -fx-font-size: 12px;
+    -fx-text-fill: #e8f5e9; /* Vert très clair */
+}
+
+/* Accordion et menus */
+.front-accordion {
+    -fx-background-color: transparent;
+}
+
+.front-titled-pane {
+    -fx-text-fill: #333333;
+}
+
+.front-titled-pane > .title {
+    -fx-background-color: #e8f5e9;
+    -fx-font-weight: bold;
+}
+
+.front-titled-pane:expanded > .title {
+    -fx-background-color: #c8e6c9;
+}
+
+.front-menu-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #424242;
+    -fx-alignment: center-left;
+    -fx-padding: 10px 15px;
+    -fx-cursor: hand;
+}
+
+.front-menu-button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+/* Boutton de profil */
+.profile-button {
+    -fx-background-color: #8bc34a; /* Vert clair */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
+}
+
+.profile-button:hover {
+    -fx-background-color: #9ccc65; /* Vert un peu plus clair */
+}
+
+/* Contenu principal */
+.content-area {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+}
+
+/* Titres de bienvenue sur la page d'accueil frontboard */
+.front-welcome-title {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 3, 0, 0, 1);
+}
+
+.front-welcome-subtitle {
+    -fx-font-size: 24px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 2, 0, 0, 1);
+}
+
+.front-instruction {
+    -fx-font-size: 18px;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 2, 0, 0, 1);
+    -fx-padding: 20px 0 0 0;
+}
+
+/* Logo container dans la sidebar */
+.logo-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4caf50; /* Vert */
+}
+
+.logo-subtext {
+    -fx-font-size: 14px;
+    -fx-text-fill: #757575; /* Gris */
+}

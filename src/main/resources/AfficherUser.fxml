@@ -31,10 +31,16 @@
         </HBox>
     </VBox>
 
-    <!-- Filtres et Tri des utilisateurs -->
+    <!-- Filtres, Recherche et Tri des utilisateurs -->
     <HBox spacing="10" alignment="CENTER_LEFT">
+        <!-- Filtre par rôle -->
         <Label text="Filtrer par rôle:" />
         <ComboBox fx:id="roleFilterComboBox" prefWidth="150" onAction="#handleRoleFilter" />
+
+        <!-- Barre de recherche -->
+        <Separator orientation="VERTICAL" />
+        <Label text="Rechercher:" />
+        <TextField fx:id="searchField" promptText="Nom, prénom, email..." prefWidth="200" onKeyReleased="#handleSearch" />
 
         <!-- Boutons de tri -->
         <Separator orientation="VERTICAL" />

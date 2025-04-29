@@ -2,6 +2,8 @@ package controllers;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import entities.User;
 import enums.Role;
 import javafx.collections.FXCollections;
@@ -20,25 +22,18 @@ import javafx.geometry.Insets;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import services.UserService;
-
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import utils.EmailSender;
-
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Paths;
-
-
-import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UserController implements Initializable {
+    // ========== FXML Components ==========
     @FXML private Label welcomeLabel;
     @FXML private TableView<User> userTable;
     @FXML private TableColumn<User, Integer> idColumn;
@@ -50,18 +45,19 @@ public class UserController implements Initializable {
     @FXML private Label messageLabel;
     @FXML private ComboBox<String> roleFilterComboBox;
     @FXML private Button sendGreetingsButton;
-
-    // Labels pour les statistiques
     @FXML private Label adminStatsLabel;
     @FXML private Label clientStatsLabel;
     @FXML private Label agriculteurStatsLabel;
     @FXML private Label totalStatsLabel;
+    @FXML private TextField searchField;
 
+    // ========== Service & Data ==========
     private final UserService userService = UserService.getInstance();
     private User currentUser;
     private ObservableList<User> userList;
     private FilteredList<User> filteredUserList;
 
+    // ========== Initialization Methods ==========
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (userTable != null) {
@@ -72,55 +68,38 @@ public class UserController implements Initializable {
             setupRoleFilter();
         }
 
+        // Initialiser le champ de recherche avec un écouteur de texte vide pour éviter les erreurs
+        if (searchField != null) {
+            searchField.setText("");
+        }
+
         loadUserData();
     }
 
     private void setupRoleFilter() {
-        // Options pour le filtre (Tous + les différents rôles)
         ObservableList<String> filterOptions = FXCollections.observableArrayList(
                 "Tous", "ADMIN", "CLIENT", "AGRICULTEUR"
         );
         roleFilterComboBox.setItems(filterOptions);
-        roleFilterComboBox.setValue("Tous"); // Valeur par défaut
-    }
-
-    @FXML
-    private void handleRoleFilter() {
-        if (filteredUserList == null) return;
-
-        String selectedFilter = roleFilterComboBox.getValue();
-
-        if (selectedFilter == null || selectedFilter.equals("Tous")) {
-            // Pas de filtre, montrer tous les utilisateurs
-            filteredUserList.setPredicate(user -> true);
-        } else {
-            // Filtrer par le rôle sélectionné
-            Role selectedRole = Role.valueOf(selectedFilter);
-            filteredUserList.setPredicate(user -> user.getRole() == selectedRole);
-        }
-    }
-
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-        if (welcomeLabel != null) {
-            welcomeLabel.setText("Bienvenue, " + user.getNom() + " " + user.getPrenom());
-        }
+        roleFilterComboBox.setValue("Tous");
     }
 
     private void setupTableColumns() {
+        // Setup column value factories
         if (idColumn != null) idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         if (nomColumn != null) nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         if (prenomColumn != null) prenomColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         if (emailColumn != null) emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         if (roleColumn != null) roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
-        // Activer le tri sur les colonnes
+        // Enable column sorting
         if (idColumn != null) idColumn.setSortable(true);
         if (nomColumn != null) nomColumn.setSortable(true);
         if (prenomColumn != null) prenomColumn.setSortable(true);
         if (emailColumn != null) emailColumn.setSortable(true);
         if (roleColumn != null) roleColumn.setSortable(true);
 
+        // Setup actions column with edit and delete buttons
         if (actionsColumn != null) {
             actionsColumn.setCellFactory(param -> new TableCell<>() {
                 private final Button editButton = new Button("Modifier");
@@ -128,19 +107,18 @@ public class UserController implements Initializable {
                 private final HBox pane = new HBox(5, editButton, deleteButton);
 
                 {
-                    // Style des boutons
+                    // Style buttons
                     editButton.setStyle("-fx-background-color: #FFC107; -fx-text-fill: white; -fx-font-size: 11px;");
                     deleteButton.setStyle("-fx-background-color: #F44336; -fx-text-fill: white; -fx-font-size: 11px;");
 
                     pane.setPadding(new Insets(5));
 
-                    // Action du bouton Modifier
+                    // Set button actions
                     editButton.setOnAction(event -> {
                         User user = getTableView().getItems().get(getIndex());
                         handleEditUser(user);
                     });
 
-                    // Action du bouton Supprimer
                     deleteButton.setOnAction(event -> {
                         User user = getTableView().getItems().get(getIndex());
                         handleDeleteUser(user);
@@ -156,26 +134,30 @@ public class UserController implements Initializable {
         }
     }
 
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+        if (welcomeLabel != null) {
+            welcomeLabel.setText("Bienvenue, " + user.getNom() + " " + user.getPrenom());
+        }
+    }
+
+    // ========== Data Loading & Filtering ==========
     private void loadUserData() {
         try {
-            // Récupérer tous les utilisateurs
+            // Get all users
             List<User> users = userService.getAllUsers();
             userList = FXCollections.observableArrayList(users);
 
-            // Créer une liste filtrée
+            // Create filtered list
             filteredUserList = new FilteredList<>(userList, p -> true);
 
-            // Utiliser une SortedList qui enveloppe la FilteredList
+            // Create sorted list from filtered list
             SortedList<User> sortedData = new SortedList<>(filteredUserList);
 
-            // Vérifier si userTable existe avant de l'utiliser
             if (userTable != null) {
-                // Lier le comparateur de la SortedList au comparateur de la TableView
+                // Bind sorted list comparator to table comparator
                 sortedData.comparatorProperty().bind(userTable.comparatorProperty());
-
-                // Utiliser la SortedList comme items de la TableView
                 userTable.setItems(sortedData);
-
                 userTable.refresh();
             }
 
@@ -183,12 +165,12 @@ public class UserController implements Initializable {
                 messageLabel.setText("");
             }
 
-            // Appliquer le filtre actuel (si déjà sélectionné)
+            // Apply current filter if selected
             if (roleFilterComboBox != null && roleFilterComboBox.getValue() != null) {
                 handleRoleFilter();
             }
 
-            // Mettre à jour les statistiques par rôle
+            // Update role statistics
             updateRoleStats();
 
         } catch (Exception e) {
@@ -197,16 +179,47 @@ public class UserController implements Initializable {
         }
     }
 
-    // Méthode pour calculer les statistiques par rôle
+    @FXML
+    private void handleRoleFilter() {
+        if (filteredUserList == null) return;
+
+        String selectedFilter = roleFilterComboBox.getValue();
+        String searchText = searchField != null ? searchField.getText().toLowerCase().trim() : "";
+
+        filteredUserList.setPredicate(user -> {
+            // Vérifie d'abord le filtre de rôle
+            boolean matchesRole = (selectedFilter == null || selectedFilter.equals("Tous")) ||
+                    (user.getRole() == Role.valueOf(selectedFilter));
+
+            // Si pas de texte de recherche, on applique seulement le filtre de rôle
+            if (searchText.isEmpty()) {
+                return matchesRole;
+            }
+
+            // Sinon, on vérifie à la fois le rôle et la correspondance au texte
+            if (!matchesRole) {
+                return false;
+            }
+
+            String nom = user.getNom() != null ? user.getNom().toLowerCase() : "";
+            String prenom = user.getPrenom() != null ? user.getPrenom().toLowerCase() : "";
+            String email = user.getEmail() != null ? user.getEmail().toLowerCase() : "";
+
+            return nom.contains(searchText) ||
+                    prenom.contains(searchText) ||
+                    email.contains(searchText);
+        });
+    }
+
     private void updateRoleStats() {
         if (userList == null || userList.isEmpty()) return;
 
-        // Calculer le nombre d'utilisateurs par rôle
+        // Calculate user count by role
         long adminCount = userList.stream().filter(user -> user.getRole() == Role.ADMIN).count();
         long clientCount = userList.stream().filter(user -> user.getRole() == Role.CLIENT).count();
         long agriculteurCount = userList.stream().filter(user -> user.getRole() == Role.AGRICULTEUR).count();
 
-        // Mettre à jour les labels de statistiques dans l'interface
+        // Update statistics labels
         if (adminStatsLabel != null) {
             adminStatsLabel.setText("ADMIN: " + adminCount);
         }
@@ -217,26 +230,22 @@ public class UserController implements Initializable {
             agriculteurStatsLabel.setText("AGRICULTEUR: " + agriculteurCount);
         }
 
-        // Calculer le total
+        // Update total count
         if (totalStatsLabel != null) {
             totalStatsLabel.setText("Total: " + userList.size());
         }
     }
 
+    // ========== User Management Operations ==========
     @FXML
-    private void handleRefresh() {
-        loadUserData();
+    private void handleAddUser() {
+        showUserDialog(null);
     }
 
     @FXML
     private void handleAdd() {
-        // Méthode ajoutée pour compatibilité avec AfficherUser.fxml
+        // Method added for compatibility with AfficherUser.fxml
         handleAddUser();
-    }
-
-    @FXML
-    private void handleAddUser() {
-        showUserDialog(null);
     }
 
     private void handleEditUser(User user) {
@@ -262,12 +271,41 @@ public class UserController implements Initializable {
         }
     }
 
+    private void showUserDialog(User user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserForm.fxml"));
+            Parent root = loader.load();
+
+            UserFormController controller = loader.getController();
+            controller.setUser(user);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle(user == null ? "Ajouter un utilisateur" : "Modifier l'utilisateur");
+            stage.setScene(new Scene(root));
+
+            // Update table when window closes
+            stage.setOnHidden(e -> loadUserData());
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Erreur lors de l'ouverture du formulaire: " + e.getMessage());
+        }
+    }
+
+    // ========== UI Action Handlers ==========
+    @FXML
+    private void handleRefresh() {
+        loadUserData();
+    }
+
     @FXML
     private void handleSortById() {
         if (userTable != null && idColumn != null) {
             userTable.getSortOrder().clear();
             userTable.getSortOrder().add(idColumn);
-            // Alterner entre ASC et DESC si déjà trié par cette colonne
+            // Toggle between ASC and DESC if already sorted by this column
             if (idColumn.getSortType() == TableColumn.SortType.ASCENDING) {
                 idColumn.setSortType(TableColumn.SortType.DESCENDING);
             } else {
@@ -281,109 +319,12 @@ public class UserController implements Initializable {
         if (userTable != null && nomColumn != null) {
             userTable.getSortOrder().clear();
             userTable.getSortOrder().add(nomColumn);
-            // Alterner entre ASC et DESC si déjà trié par cette colonne
+            // Toggle between ASC and DESC if already sorted by this column
             if (nomColumn.getSortType() == TableColumn.SortType.ASCENDING) {
                 nomColumn.setSortType(TableColumn.SortType.DESCENDING);
             } else {
                 nomColumn.setSortType(TableColumn.SortType.ASCENDING);
             }
-        }
-    }
-
-    @FXML
-    public void handleSendGreetings() {
-        // Récupérer les utilisateurs filtrés actuellement affichés
-        ObservableList<User> usersToSend = userTable.getItems();
-
-        // Vérifier s'il y a des utilisateurs à qui envoyer
-        if (usersToSend.isEmpty()) {
-            showError("Aucun utilisateur à qui envoyer les voeux !");
-            return;
-        }
-
-        // Demander confirmation avant l'envoi massif
-        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmDialog.setTitle("Confirmation d'envoi");
-        confirmDialog.setHeaderText("Envoyer les voeux Aid Idhha Mubarak");
-
-        String message = "Vous êtes sur le point d'envoyer un message de voeux à ";
-        if (roleFilterComboBox != null && !roleFilterComboBox.getValue().equals("Tous")) {
-            message += "tous les " + roleFilterComboBox.getValue() + "S (" + usersToSend.size() + " utilisateurs).";
-        } else {
-            message += "tous les utilisateurs (" + usersToSend.size() + " au total).";
-        }
-
-        confirmDialog.setContentText(message + "\nVoulez-vous continuer ?");
-
-        Optional<ButtonType> result = confirmDialog.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            // Créer un thread pour l'envoi des emails (pour ne pas bloquer l'interface)
-            new Thread(() -> {
-                int successCount = 0;
-                int errorCount = 0;
-
-                // Désactiver le bouton d'envoi pendant le traitement
-                javafx.application.Platform.runLater(() -> {
-                    if (messageLabel != null) {
-                        messageLabel.setText("Envoi des emails en cours...");
-                        messageLabel.setStyle("-fx-text-fill: blue;");
-                    }
-                    if (sendGreetingsButton != null) {
-                        sendGreetingsButton.setDisable(true);
-                    }
-                });
-
-                // Envoyer à chaque utilisateur
-                for (User user : usersToSend) {
-                    boolean success = EmailSender.sendGreetingsEmail(
-                            user.getEmail(),
-                            user.getNom(),
-                            user.getPrenom()
-                    );
-
-                    if (success) {
-                        successCount++;
-                    } else {
-                        errorCount++;
-                    }
-
-                    // Mettre à jour le message de progression tous les 5 emails
-                    if ((successCount + errorCount) % 5 == 0 || (successCount + errorCount) == usersToSend.size()) {
-                        final int currentSuccess = successCount;
-                        final int currentError = errorCount;
-                        javafx.application.Platform.runLater(() -> {
-                            if (messageLabel != null) {
-                                messageLabel.setText("Envoi en cours... " + (currentSuccess + currentError) +
-                                        "/" + usersToSend.size() + " emails envoyés.");
-                            }
-                        });
-                    }
-
-                    // Petite pause pour ne pas surcharger le serveur SMTP
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                // Afficher le résultat final
-                final int finalSuccess = successCount;
-                final int finalError = errorCount;
-
-                javafx.application.Platform.runLater(() -> {
-                    if (finalError == 0) {
-                        showSuccess("Tous les messages ont été envoyés avec succès ! (" + finalSuccess + " emails)");
-                    } else {
-                        showError("Terminé avec " + finalSuccess + " emails envoyés et " + finalError + " erreurs.");
-                    }
-
-                    // Réactiver le bouton
-                    if (sendGreetingsButton != null) {
-                        sendGreetingsButton.setDisable(false);
-                    }
-                });
-            }).start();
         }
     }
 
@@ -394,7 +335,7 @@ public class UserController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Login.fxml"));
             Parent root = loader.load();
 
-            // Trouver une fenêtre valide à utiliser
+            // Find a valid window to use
             Stage stage = null;
             if (welcomeLabel != null && welcomeLabel.getScene() != null) {
                 stage = (Stage) welcomeLabel.getScene().getWindow();
@@ -416,29 +357,263 @@ public class UserController implements Initializable {
         }
     }
 
-    private void showUserDialog(User user) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserForm.fxml"));
-            Parent root = loader.load();
+    // ========== Email Functionality ==========
+    @FXML
+    public void handleSendGreetings() {
+        // Get currently filtered users
+        ObservableList<User> usersToSend = userTable.getItems();
 
-            UserFormController controller = loader.getController();
-            controller.setUser(user);
+        // Check if there are users to send to
+        if (usersToSend.isEmpty()) {
+            showError("Aucun utilisateur à qui envoyer les voeux !");
+            return;
+        }
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle(user == null ? "Ajouter un utilisateur" : "Modifier l'utilisateur");
-            stage.setScene(new Scene(root));
+        // Ask for confirmation before mass sending
+        Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmDialog.setTitle("Confirmation d'envoi");
+        confirmDialog.setHeaderText("Envoyer les voeux Aid Idhha Mubarak");
 
-            // Gérer la fermeture de la fenêtre pour mettre à jour le tableau
-            stage.setOnHidden(e -> loadUserData());
+        String message = "Vous êtes sur le point d'envoyer un message de voeux à ";
+        if (roleFilterComboBox != null && !roleFilterComboBox.getValue().equals("Tous")) {
+            message += "tous les " + roleFilterComboBox.getValue() + "S (" + usersToSend.size() + " utilisateurs).";
+        } else {
+            message += "tous les utilisateurs (" + usersToSend.size() + " au total).";
+        }
 
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Erreur lors de l'ouverture du formulaire: " + e.getMessage());
+        confirmDialog.setContentText(message + "\nVoulez-vous continuer ?");
+
+        Optional<ButtonType> result = confirmDialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Create a thread for sending emails (to avoid blocking the UI)
+            new Thread(() -> {
+                int successCount = 0;
+                int errorCount = 0;
+
+                // Disable the send button during processing
+                javafx.application.Platform.runLater(() -> {
+                    if (messageLabel != null) {
+                        messageLabel.setText("Envoi des emails en cours...");
+                        messageLabel.setStyle("-fx-text-fill: blue;");
+                    }
+                    if (sendGreetingsButton != null) {
+                        sendGreetingsButton.setDisable(true);
+                    }
+                });
+
+                // Send to each user
+                for (User user : usersToSend) {
+                    boolean success = EmailSender.sendGreetingsEmail(
+                            user.getEmail(),
+                            user.getNom(),
+                            user.getPrenom()
+                    );
+
+                    if (success) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                    }
+
+                    // Update progress message every 5 emails
+                    if ((successCount + errorCount) % 5 == 0 || (successCount + errorCount) == usersToSend.size()) {
+                        final int currentSuccess = successCount;
+                        final int currentError = errorCount;
+                        javafx.application.Platform.runLater(() -> {
+                            if (messageLabel != null) {
+                                messageLabel.setText("Envoi en cours... " + (currentSuccess + currentError) +
+                                        "/" + usersToSend.size() + " emails envoyés.");
+                            }
+                        });
+                    }
+
+                    // Small pause to avoid overloading the SMTP server
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                // Display final result
+                final int finalSuccess = successCount;
+                final int finalError = errorCount;
+
+                javafx.application.Platform.runLater(() -> {
+                    if (finalError == 0) {
+                        showSuccess("Tous les messages ont été envoyés avec succès ! (" + finalSuccess + " emails)");
+                    } else {
+                        showError("Terminé avec " + finalSuccess + " emails envoyés et " + finalError + " erreurs.");
+                    }
+
+                    // Reactivate the button
+                    if (sendGreetingsButton != null) {
+                        sendGreetingsButton.setDisable(false);
+                    }
+                });
+            }).start();
         }
     }
 
+    // ========== PDF Export Functionality ==========
+    @FXML
+    public void handleExportPdf() {
+        // Get currently filtered users
+        ObservableList<User> usersToExport = userTable.getItems();
+
+        // Create document
+        Document document = new Document();
+
+        try {
+            // Set custom page size (A4)
+            document.setPageSize(PageSize.A4);
+            document.setMargins(36, 72, 108, 180); // Margins: left, right, top, bottom
+
+            // Path to user's Downloads folder
+            String home = System.getProperty("user.home");
+
+            // Add filter to filename if active
+            String fileName = "Liste des utilisateurs";
+            if (roleFilterComboBox != null && !roleFilterComboBox.getValue().equals("Tous")) {
+                fileName += " - " + roleFilterComboBox.getValue();
+            }
+            fileName += ".pdf";
+
+            String downloadPath = Paths.get(home, "Downloads", fileName).toString();
+
+            // Create writer that writes the document to a file
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(downloadPath));
+            document.open(); // Open document for writing
+
+            // Add title with color (green)
+            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, new BaseColor(34, 139, 34)); // Dark Green
+            Paragraph title = new Paragraph("Liste des utilisateurs de DigiFarm", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            // Add filter information if active
+            if (roleFilterComboBox != null && !roleFilterComboBox.getValue().equals("Tous")) {
+                Font filterFont = new Font(Font.FontFamily.HELVETICA, 14, Font.ITALIC, new BaseColor(0, 0, 139)); // Dark Blue
+                Paragraph filterInfo = new Paragraph("Filtre appliqué: " + roleFilterComboBox.getValue(), filterFont);
+                filterInfo.setAlignment(Element.ALIGN_CENTER);
+                document.add(filterInfo);
+            }
+
+            // Add statistics
+            Font statsFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, new BaseColor(0, 102, 204)); // Blue
+
+            if (userList != null && !userList.isEmpty()) {
+                long adminCount = userList.stream().filter(user -> user.getRole() == Role.ADMIN).count();
+                long clientCount = userList.stream().filter(user -> user.getRole() == Role.CLIENT).count();
+                long agriculteurCount = userList.stream().filter(user -> user.getRole() == Role.AGRICULTEUR).count();
+
+                Paragraph statsInfo = new Paragraph();
+                statsInfo.add(new Chunk("Statistiques: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+                statsInfo.add(new Chunk("ADMIN: " + adminCount + " | ", statsFont));
+                statsInfo.add(new Chunk("CLIENT: " + clientCount + " | ", statsFont));
+                statsInfo.add(new Chunk("AGRICULTEUR: " + agriculteurCount + " | ", statsFont));
+                statsInfo.add(new Chunk("Total: " + userList.size(), new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
+
+                statsInfo.setAlignment(Element.ALIGN_CENTER);
+                document.add(statsInfo);
+            }
+
+            // Add space
+            document.add(new Chunk("\n"));
+
+            // Create table with background color (sky blue)
+            PdfPTable table = new PdfPTable(5); // 5 columns: ID, Name, First Name, Email, Role
+            table.setWidthPercentage(100); // Fill page width
+
+            // Set background color for column headers (sky blue)
+            BaseColor skyBlue = new BaseColor(135, 206, 250); // Sky blue
+
+            // Add column headers with background color (sky blue)
+            PdfPCell cell = new PdfPCell(new Phrase("ID"));
+            cell.setBackgroundColor(skyBlue);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Nom"));
+            cell.setBackgroundColor(skyBlue);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Prénom"));
+            cell.setBackgroundColor(skyBlue);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Email"));
+            cell.setBackgroundColor(skyBlue);
+            table.addCell(cell);
+
+            cell = new PdfPCell(new Phrase("Rôle"));
+            cell.setBackgroundColor(skyBlue);
+            table.addCell(cell);
+
+            // Add filtered user data
+            for (User user : usersToExport) {
+                // Add data to table
+                table.addCell(String.valueOf(user.getId()));
+                table.addCell(user.getNom());
+                table.addCell(user.getPrenom());
+                table.addCell(user.getEmail());
+                table.addCell(user.getRole().toString());
+            }
+
+            // Add table to document
+            document.add(table);
+
+            // Close document
+            document.close();
+
+            // Show success message
+            showSuccess("PDF exporté avec succès dans votre dossier Téléchargements !");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            showError("Erreur lors de l'exportation du PDF : " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleSearch() {
+        if (filteredUserList == null) return;
+
+        String searchText = searchField.getText().toLowerCase().trim();
+
+        // Si le champ de recherche est vide, on applique uniquement le filtre par rôle
+        if (searchText.isEmpty()) {
+            handleRoleFilter(); // Réapplique uniquement le filtre par rôle
+            return;
+        }
+
+        // Récupère le filtre de rôle actuel
+        String selectedFilter = roleFilterComboBox.getValue();
+        Role selectedRole = (selectedFilter != null && !selectedFilter.equals("Tous"))
+                ? Role.valueOf(selectedFilter)
+                : null;
+
+        // Applique à la fois le filtre de rôle et le filtre de recherche
+        filteredUserList.setPredicate(user -> {
+            // Vérifie d'abord si l'utilisateur correspond au filtre de rôle
+            boolean matchesRole = (selectedRole == null) || (user.getRole() == selectedRole);
+
+            // Si pas de correspondance de rôle, on rejette directement
+            if (!matchesRole) {
+                return false;
+            }
+
+            // Sinon on vérifie la correspondance avec le texte de recherche
+            String nom = user.getNom() != null ? user.getNom().toLowerCase() : "";
+            String prenom = user.getPrenom() != null ? user.getPrenom().toLowerCase() : "";
+            String email = user.getEmail() != null ? user.getEmail().toLowerCase() : "";
+
+            // Cherche dans le nom, prénom ou email
+            return nom.contains(searchText) ||
+                    prenom.contains(searchText) ||
+                    email.contains(searchText);
+        });
+    }
+
+    // ========== UI Feedback Methods ==========
     private void showError(String message) {
         if (messageLabel != null) {
             messageLabel.setText(message);
@@ -462,123 +637,6 @@ public class UserController implements Initializable {
             alert.setHeaderText(null);
             alert.setContentText(message);
             alert.showAndWait();
-        }
-    }
-
-    @FXML
-    public void handleExportPdf() {
-        // Récupérer les utilisateurs filtrés actuellement affichés
-        ObservableList<User> usersToExport = userTable.getItems();
-
-        // Création du document
-        Document document = new Document();
-
-        try {
-            // Choisir une taille de page personnalisée (A4)
-            document.setPageSize(PageSize.A4);
-            document.setMargins(36, 72, 108, 180); // Marges : gauche, droite, haut, bas
-
-            // Chemin vers le dossier Téléchargements de l'utilisateur
-            String home = System.getProperty("user.home");
-
-            // Ajouter le filtre au nom du fichier s'il est activé
-            String fileName = "Liste des utilisateurs";
-            if (roleFilterComboBox != null && !roleFilterComboBox.getValue().equals("Tous")) {
-                fileName += " - " + roleFilterComboBox.getValue();
-            }
-            fileName += ".pdf";
-
-            String downloadPath = Paths.get(home, "Downloads", fileName).toString();
-
-            // Création d'un writer qui écrit le document dans un fichier
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(downloadPath));
-            document.open(); // Ouvre le document pour écrire
-
-            // Ajouter un titre avec couleur (vert)
-            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD, new BaseColor(34, 139, 34)); // Vert (DarkGreen)
-            Paragraph title = new Paragraph("Liste des utilisateurs de DigiFarm", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-
-            // Ajouter une information sur le filtre si activé
-            if (roleFilterComboBox != null && !roleFilterComboBox.getValue().equals("Tous")) {
-                Font filterFont = new Font(Font.FontFamily.HELVETICA, 14, Font.ITALIC, new BaseColor(0, 0, 139)); // Bleu foncé
-                Paragraph filterInfo = new Paragraph("Filtre appliqué: " + roleFilterComboBox.getValue(), filterFont);
-                filterInfo.setAlignment(Element.ALIGN_CENTER);
-                document.add(filterInfo);
-            }
-
-            // Ajouter les statistiques
-            Font statsFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, new BaseColor(0, 102, 204)); // Bleu
-
-            if (userList != null && !userList.isEmpty()) {
-                long adminCount = userList.stream().filter(user -> user.getRole() == Role.ADMIN).count();
-                long clientCount = userList.stream().filter(user -> user.getRole() == Role.CLIENT).count();
-                long agriculteurCount = userList.stream().filter(user -> user.getRole() == Role.AGRICULTEUR).count();
-
-                Paragraph statsInfo = new Paragraph();
-                statsInfo.add(new Chunk("Statistiques: ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
-                statsInfo.add(new Chunk("ADMIN: " + adminCount + " | ", statsFont));
-                statsInfo.add(new Chunk("CLIENT: " + clientCount + " | ", statsFont));
-                statsInfo.add(new Chunk("AGRICULTEUR: " + agriculteurCount + " | ", statsFont));
-                statsInfo.add(new Chunk("Total: " + userList.size(), new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)));
-
-                statsInfo.setAlignment(Element.ALIGN_CENTER);
-                document.add(statsInfo);
-            }
-
-            // Ajouter un espace
-            document.add(new Chunk("\n"));
-
-            // Création du tableau avec des couleurs de fond (bleu ciel)
-            PdfPTable table = new PdfPTable(5); // 5 colonnes : ID, Nom, Prénom, Email, Rôle
-            table.setWidthPercentage(100); // Remplir la largeur de la page
-
-            // Définir une couleur d'arrière-plan pour les en-têtes de colonnes (bleu ciel)
-            BaseColor skyBlue = new BaseColor(135, 206, 250); // Bleu ciel
-
-            // Ajouter les en-têtes de colonnes avec une couleur de fond (bleu ciel)
-            PdfPCell cell = new PdfPCell(new Phrase("ID"));
-            cell.setBackgroundColor(skyBlue);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Nom"));
-            cell.setBackgroundColor(skyBlue);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Prénom"));
-            cell.setBackgroundColor(skyBlue);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Email"));
-            cell.setBackgroundColor(skyBlue);
-            table.addCell(cell);
-
-            cell = new PdfPCell(new Phrase("Rôle"));
-            cell.setBackgroundColor(skyBlue);
-            table.addCell(cell);
-
-            // Ajouter les données des utilisateurs filtrés
-            for (User user : usersToExport) {
-                // Ajouter les données dans le tableau
-                table.addCell(String.valueOf(user.getId()));
-                table.addCell(user.getNom());
-                table.addCell(user.getPrenom());
-                table.addCell(user.getEmail());
-                table.addCell(user.getRole().toString());
-            }
-
-            // Ajouter le tableau au document
-            document.add(table);
-
-            // Fermer le document
-            document.close();
-
-            // Afficher un message de succès
-            showSuccess("PDF exporté avec succès dans votre dossier Téléchargements !");
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();
-            showError("Erreur lors de l'exportation du PDF : " + e.getMessage());
         }
     }
 }
