@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
 
-<VBox prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviReadController">
+<VBox prefHeight="543.0" prefWidth="848.0" style="-fx-border-color: #4CAF50;" stylesheets="@../../../dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviReadController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <children>
-        <TableView fx:id="suiviTableView" prefHeight="350.0" prefWidth="600.0">
+        <TableView fx:id="suiviTableView" prefHeight="350.0" prefWidth="600.0" stylesheets="@../../../dashboardDesign.css">
             <columns>
                 <TableColumn fx:id="idColumn" prefWidth="40.0" text="ID" />
                 <TableColumn fx:id="animalColumn" prefWidth="100.0" text="Animal" />
@@ -24,22 +24,22 @@
                 <TableColumn fx:id="actionsColumn" prefWidth="100.0" text="Actions" />
             </columns>
         </TableView>
-        <Button mnemonicParsing="false" onAction="#handleAddSuivi" text="Ajouter un Suivi">
+        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleAddSuivi" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Ajouter un Suivi" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
         </Button>
-        <Button mnemonicParsing="false" onAction="#handleOpenStatistiques" text="Afficher les Statistiques">
+        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleOpenStatistiques" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Afficher les Statistiques" textAlignment="CENTER">
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
         </Button>
-        <Button mnemonicParsing="false" onAction="#handleOpenAnimaux" text="Retour à la Liste des Animaux">
+        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleOpenAnimaux" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Retour à la Liste des Animaux" textAlignment="CENTER">
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
         </Button>
-        <Button mnemonicParsing="false" onAction="#handleOpenVeterinaires" text="Retour à la Liste des Vétérinaires">
+        <Button minHeight="35.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleOpenVeterinaires" prefWidth="210.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Retour à la Liste des Vétérinaires" textAlignment="CENTER">
             <VBox.margin>
                 <Insets top="5.0" />
             </VBox.margin>
