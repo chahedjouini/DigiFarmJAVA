@@ -63,4 +63,6 @@ public class Suivi {
     public void setIdClient(int idClient) { this.idClient.set(idClient); }
     public void setAnalysis(String analysis) { this.analysis.set(analysis); }
     public void setVeterinaire(Veterinaire veterinaire) { this.veterinaire.set(veterinaire); }
+
+
 }
