@@ -57,14 +57,11 @@ public class ModifierExpert {
 
     @FXML
     private void onRetour() {
-        // Navigate back to the previous page (AfficherExpert)
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherExpert.fxml"));
             Parent root = loader.load();
-            // Assuming you are replacing content in a StackPane
             StackPane dashboardContent = (StackPane) nomField.getScene().getRoot().lookup("#entityContentPane");
 
-            // Load the form inside the StackPane
             dashboardContent.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();

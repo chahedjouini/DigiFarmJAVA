@@ -28,21 +28,18 @@ public class StatisticsController {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName("Average Cost per Culture");
 
-            // Loop through all the etudes and group by culture
             etudes.stream()
-                    .map(etude -> etude.getCulture())  // Get culture for each study
-                    .distinct()  // Get distinct cultures
+                    .map(etude -> etude.getCulture())
+                    .distinct()
                     .forEach(culture -> {
-                        // Calculate the average cost for each culture
                         double totalCost = etudes.stream()
-                                .filter(etude -> etude.getCulture().equals(culture))  // Filter studies for this culture
-                                .mapToDouble(Etude::getPrix)  // Get price for each study
+                                .filter(etude -> etude.getCulture().equals(culture))
+                                .mapToDouble(Etude::getPrix)
                                 .sum();
                         double averageCost = totalCost / etudes.stream()
-                                .filter(etude -> etude.getCulture().equals(culture))  // Count number of studies for this culture
+                                .filter(etude -> etude.getCulture().equals(culture))
                                 .count();
 
-                        // Add the data for this culture to the series
                         series.getData().add(new XYChart.Data<>(culture.getNom(), averageCost));
                     });
 

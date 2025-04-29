@@ -41,7 +41,7 @@
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Button text="Ajouter" onAction="#onAjouter" styleClass="action-button"/>
+            <Button text="Ajouter" onAction="#onAjouter" styleClass="secondary-button"/>
             <Button text="Modifier" onAction="#onModifier" styleClass="secondary-button"/>
             <Button text="Supprimer" onAction="#onSupprimer" styleClass="secondary-button"/>
         </HBox>

@@ -40,8 +40,7 @@ public class AjouterEtude {
         typeSolCombo.getItems().setAll(TypeSol.values());
 
         try {
-            List<Expert> experts = expertService.select(); // Select all experts
-            // Filter only available experts
+            List<Expert> experts = expertService.select();
             experts.removeIf(expert -> expert.getDispo().toString().equals("non disponible"));
             expertCombo.getItems().setAll(experts);
 
@@ -68,9 +67,9 @@ public class AjouterEtude {
             etude.setPrecipitations(Float.parseFloat(precipitationField.getText()));
             etude.setMainOeuvre(Float.parseFloat(mainField.getText()));
 
-            // Add the study and mark the expert as unavailable
+
             etudeService.add(etude);
-            expertService.markAsUnavailable(etude.getExpert().getId()); // Mark expert as unavailable
+            expertService.markAsUnavailable(etude.getExpert().getId());
 
             messageLabel.setStyle("-fx-text-fill: green;");
             messageLabel.setText("Étude ajoutée !");

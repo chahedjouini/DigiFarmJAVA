@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="controllers.FrontboardController"
+            stylesheets="@style.css"
+            prefWidth="1200" prefHeight="700">
+
+    <!-- Barre supérieure -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="front-header">
+            <padding><Insets top="15" right="30" bottom="15" left="30"/></padding>
+            <children>
+                <ImageView fitWidth="150" fitHeight="50" preserveRatio="true">
+                    <image>
+                        <Image url="@images/Logo.png"/>
+                    </image>
+                </ImageView>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label fx:id="welcomeLabel" styleClass="welcome-text"/>
+                <Button fx:id="profileBtn" text="Mon Profil" onAction="#handleProfile" styleClass="profile-button"/>
+                <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" styleClass="logout-button"/>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Menu latéral avec onglets -->
+    <left>
+        <VBox styleClass="front-sidebar">
+            <children>
+                <!-- Informations utilisateur -->
+                <VBox styleClass="user-info-panel">
+                    <children>
+                        <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
+                            <image>
+                                <Image url="@images/user-avatar.png"/>
+                            </image>
+                        </ImageView>
+                        <Label fx:id="userRoleLabel" styleClass="sidebar-user-role" />
+                        <Label fx:id="userEmailLabel" styleClass="sidebar-user-email" />
+                    </children>
+                </VBox>
+
+                <Line startX="0" endX="230" styleClass="divider"/>
+
+                <!-- Menus -->
+                <Accordion styleClass="front-accordion">
+                    <panes>
+                        <!-- Section Études -->
+                        <TitledPane text="Études" styleClass="front-titled-pane">
+                            <content>
+                                <VBox spacing="5">
+                                    <children>
+                                        <Button fx:id="etudeMesDemandesBtn" text="Mes demandes d'études"
+                                                onAction="#handleEtudeMesDemandes" styleClass="front-menu-button"/>
+                                        <Button fx:id="etudeConsulterBtn" text="Consulter les études"
+                                                onAction="#handleEtudeConsulter" styleClass="front-menu-button"/>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+
+                        <!-- Section Animaux -->
+                        <TitledPane text="Animaux" styleClass="front-titled-pane">
+                            <content>
+                                <VBox spacing="5">
+                                    <children>
+                                        <Button fx:id="animauxMesAnimauxBtn" text="Mes animaux"
+                                                onAction="#handleAnimauxMesAnimaux" styleClass="front-menu-button"/>
+                                        <Button fx:id="animauxConsulterVetoBtn" text="Consulter les vétérinaires"
+                                                onAction="#handleAnimauxConsulterVeto" styleClass="front-menu-button"/>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+
+                        <!-- Section Abonnement -->
+                        <TitledPane text="Abonnement" styleClass="front-titled-pane">
+                            <content>
+                                <VBox spacing="5">
+                                    <children>
+                                        <Button fx:id="abonnementMonAbonnementBtn" text="Mon abonnement"
+                                                onAction="#handleAbonnementMon" styleClass="front-menu-button"/>
+                                        <Button fx:id="abonnementFacturesBtn" text="Mes factures"
+                                                onAction="#handleAbonnementFactures" styleClass="front-menu-button"/>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+
+                        <!-- Section Machines -->
+                        <TitledPane text="Machines" styleClass="front-titled-pane">
+                            <content>
+                                <VBox spacing="5">
+                                    <children>
+                                        <Button fx:id="machineReserverBtn" text="Réserver une machine"
+                                                onAction="#handleMachineReserver" styleClass="front-menu-button"/>
+                                        <Button fx:id="machineConsulterBtn" text="Consulter les machines"
+                                                onAction="#handleMachineConsulter" styleClass="front-menu-button"/>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+
+                        <!-- Section Produits -->
+                        <TitledPane text="Produits" styleClass="front-titled-pane">
+                            <content>
+                                <VBox spacing="5">
+                                    <children>
+                                        <Button fx:id="stockAcheterBtn" text="Acheter des produits"
+                                                onAction="#handleStockAcheter" styleClass="front-menu-button"/>
+                                        <Button fx:id="stockCommandesBtn" text="Mes commandes"
+                                                onAction="#handleStockCommandes" styleClass="front-menu-button"/>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+
+                <!-- Logo en bas -->
+                <Region VBox.vgrow="ALWAYS"/>
+                <VBox alignment="CENTER" styleClass="logo-container">
+                    <children>
+                        <Label text="DigiFarm" styleClass="logo-text"/>
+                        <Label text="Votre partenaire agricole" styleClass="logo-subtext"/>
+                    </children>
+                    <padding><Insets top="20" bottom="20"/></padding>
+                </VBox>
+            </children>
+        </VBox>
+    </left>
+
+    <!-- Zone de contenu principal -->
+    <center>
+        <StackPane fx:id="contentPane" styleClass="content-area">
+            <children>
+                <VBox alignment="CENTER" styleClass="welcome-front-content">
+                    <children>
+                        <StackPane styleClass="background-container">
+                            <children>
+                                <ImageView styleClass="background-image" fitWidth="970" fitHeight="650" preserveRatio="false">
+                                    <image>
+                                        <Image url="@images/BackgroundLogin.png"/>
+                                    </image>
+                                </ImageView>
+                                <VBox alignment="CENTER" spacing="20">
+                                    <children>
+                                        <ImageView fitHeight="200" fitWidth="200" preserveRatio="true">
+                                            <image>
+                                                <Image url="@images/Logo.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <Label text="Bienvenue sur DigiFarm" styleClass="front-welcome-title"/>
+                                        <Label text="Votre plateforme agricole complète" styleClass="front-welcome-subtitle"/>
+                                        <Label text="Sélectionnez une option dans le menu pour commencer" styleClass="front-instruction"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                    </children>
+                </VBox>
+            </children>
+        </StackPane>
+    </center>
+</BorderPane>

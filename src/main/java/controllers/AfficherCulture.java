@@ -236,7 +236,6 @@ public class AfficherCulture {
         }
     }
 
-    // Open the calendar window when the button is clicked
     @FXML
     private void onOpenCalendar() {
         try {
@@ -260,7 +259,6 @@ public class AfficherCulture {
         }
 
         try {
-            // Ensure to run the correct command with all the arguments properly passed
             String command = "python src/main/resources/script/analyse_rendement.py --densite "
                     + selectedCulture.getDensitePlantation() +
                     " --eau " + selectedCulture.getBesoinsEau() +
@@ -268,17 +266,16 @@ public class AfficherCulture {
             Process process = new ProcessBuilder(command.split(" ")).start();
 
 
-            // Read the output from the Python script
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuilder output = new StringBuilder();  // To store the script's output
+            StringBuilder output = new StringBuilder();
             String line;
 
             while ((line = reader.readLine()) != null) {
-                output.append(line).append("\n"); // Accumulate the output
+                output.append(line).append("\n");
             }
-            process.waitFor(); // Wait for the process to finish
+            process.waitFor();
 
-            // Display the output in an Alert message
+
             showPredictionAlert(output.toString());
 
         } catch (IOException | InterruptedException e) {
@@ -287,13 +284,12 @@ public class AfficherCulture {
     }
 
     private void showPredictionAlert(String message) {
-        // Create an Alert dialog to show the prediction result
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Prediction Result");
         alert.setHeaderText("Prediction Completed");
-        alert.setContentText("The predicted result is: \n" + message);  // Display the message from the Python script
+        alert.setContentText("The predicted result is: \n" + message);
 
-        // Show the Alert dialog
         alert.showAndWait();
     }
 

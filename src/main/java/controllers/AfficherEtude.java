@@ -1,36 +1,32 @@
 package controllers;
 
-import entities.Etude;  // Ensure this import is correct
-import enums.Climat;
-import enums.TypeSol;
+import entities.Etude;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import services.EtudeService;
-import utils.PDFGenerator;  // Ensure this import is correct
+import utils.PDFGenerator;
+
 import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.List;
-import java.util.Map;
-
-import javafx.scene.chart.PieChart;
 
 public class AfficherEtude {
 
     @FXML private GridPane etudeGrid;
     @FXML private TextField searchField;
+    @FXML private ComboBox<String> sortComboBox;
 
     private final EtudeService service = new EtudeService();
     private ObservableList<Etude> etudeList;
@@ -38,8 +34,40 @@ public class AfficherEtude {
 
     @FXML
     public void initialize() {
+        setupSortComboBox();
         loadEtudes();
         setupSearch();
+    }
+
+    private void setupSortComboBox() {
+        sortComboBox.getItems().addAll(
+                "Nom (A-Z)",
+                "Nom (Z-A)",
+                "Date (A-Z)",
+                "Date (Z-A)"
+        );
+        sortComboBox.setValue("Nom (A-Z)");
+        sortComboBox.setOnAction(e -> sortEtudes());
+    }
+
+    private void sortEtudes() {
+        if (etudeList == null) return;
+
+        switch (sortComboBox.getValue()) {
+            case "Nom (A-Z)":
+                etudeList.sort((e1, e2) -> e1.getCulture().getNom().compareToIgnoreCase(e2.getCulture().getNom()));
+                break;
+            case "Nom (Z-A)":
+                etudeList.sort((e1, e2) -> e2.getCulture().getNom().compareToIgnoreCase(e1.getCulture().getNom()));
+                break;
+            case "Date (A-Z)":
+                etudeList.sort((e1, e2) -> e1.getDateR().compareTo(e2.getDateR()));
+                break;
+            case "Date (Z-A)":
+                etudeList.sort((e1, e2) -> e2.getDateR().compareTo(e1.getDateR()));
+                break;
+        }
+        filterEtudes(searchField.getText());
     }
 
     private void setupSearch() {
@@ -59,6 +87,8 @@ public class AfficherEtude {
                     col = 0;
                     row++;
                 }
+
+                animateCard(card);
             }
         }
     }
@@ -95,9 +125,8 @@ public class AfficherEtude {
         addCardField(content, "Précipitations", etude.getPrecipitations() + " mm");
         addCardField(content, "Main-d'œuvre", etude.getMainOeuvre() + " H");
 
-        // Add the PDF button here
         Button pdfButton = new Button("Générer PDF");
-        pdfButton.setOnAction(event -> onGeneratePDF(etude));  // Pass the Etude to the onGeneratePDF method
+        pdfButton.setOnAction(event -> onGeneratePDF(etude));
 
         card.getChildren().addAll(title, content, pdfButton);
 
@@ -122,6 +151,21 @@ public class AfficherEtude {
     private void updateCardSelection(VBox selectedCard) {
         etudeGrid.getChildren().forEach(node -> node.getStyleClass().remove("selected-card"));
         selectedCard.getStyleClass().add("selected-card");
+    }
+
+
+    private void animateCard(VBox card) {
+        TranslateTransition translateTransition = new TranslateTransition(Duration.millis(500), card);
+        translateTransition.setFromX(100);
+        translateTransition.setToX(0);
+        translateTransition.setCycleCount(1);
+        translateTransition.setAutoReverse(false);
+        translateTransition.play();
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.millis(500), card);
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+        fadeTransition.play();
     }
 
     private void loadEtudes() {
@@ -194,10 +238,10 @@ public class AfficherEtude {
     private void showAlert(String titre, String contenu) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titre);
+        alert.setHeaderText(null);
         alert.setContentText(contenu);
         alert.showAndWait();
     }
-
 
     @FXML
     private void onGeneratePDF(Etude selectedEtude) {
@@ -207,30 +251,29 @@ public class AfficherEtude {
         }
 
         try {
-            // Define the output path where you want to save the PDF
+
             String outputPath = "C:\\Users\\yassi\\OneDrive - ESPRIT\\Desktop\\" + "etude_" + selectedEtude.getId() + ".pdf";
 
-            // Generate the PDF
+
             PDFGenerator.generateEtudePDF(selectedEtude, outputPath);
 
-            // Show success alert
+
             showAlert("Succès", "PDF généré avec succès.");
 
-            // Attempt to open the PDF if generated successfully
             File pdfFile = new File(outputPath);
             if (pdfFile.exists() && Desktop.isDesktopSupported()) {
                 Desktop desktop = Desktop.getDesktop();
-                desktop.open(pdfFile); // Open the file with the default application
+                desktop.open(pdfFile);
             } else {
                 showAlert("Erreur", "Impossible d'ouvrir le fichier PDF.");
             }
 
         } catch (Exception e) {
-            // Show error message if an exception occurs
             showAlert("Erreur", "Erreur lors de la génération du PDF: " + e.getMessage());
-            e.printStackTrace();  // Print stack trace for debugging
+            e.printStackTrace();
         }
     }
+
     @FXML
     private void onStatistics() {
         try {
@@ -244,6 +287,4 @@ public class AfficherEtude {
             showAlert("Erreur", "Impossible d'ouvrir les statistiques.");
         }
     }
-
-
 }

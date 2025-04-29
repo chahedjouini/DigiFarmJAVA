@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Expert {
-
     private int id;
     private String nom;
     private String prenom;
@@ -37,7 +36,6 @@ public class Expert {
         this.dispo = dispo;
     }
 
-    // Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -70,8 +68,10 @@ public class Expert {
         this.etudes.remove(etude);
     }
 
+
     @Override
     public String toString() {
-        return nom + " " + prenom;
+        return nom + " " + prenom; // Nom complet de l’expert
     }
+
 }

@@ -35,7 +35,6 @@ public class AjouterExpert {
 
     @FXML
     private void onAjout() {
-        // Clear previous error messages
         clearErrorMessages();
 
         try {
@@ -48,7 +47,6 @@ public class AjouterExpert {
 
             boolean isValid = true;
 
-            // Validate fields
             if (nom.isEmpty()) {
                 nomErrorLabel.setText("Nom est requis.");
                 isValid = false;
@@ -80,7 +78,7 @@ public class AjouterExpert {
             }
 
             if (!isValid) {
-                return;  // Stop the process if validation fails
+                return;
             }
 
             Expert expert = new Expert(nom, prenom, Integer.parseInt(tel), email, zone, dispo);
@@ -90,7 +88,6 @@ public class AjouterExpert {
             messageLabel.setText("Expert ajouté avec succès !");
             clearFields();
 
-            // After adding the expert, navigate back to the expert list inside the dashboard
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherExpert.fxml"));
             Parent root = loader.load();
             StackPane dashboardContent = (StackPane) nomField.getScene().getRoot().lookup("#entityContentPane");
@@ -125,14 +122,11 @@ public class AjouterExpert {
 
     @FXML
     private void onRetour() {
-        // Navigate back to the previous page (AfficherExpert)
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AfficherExpert.fxml"));
             Parent root = loader.load();
-            // Assuming you are replacing content in a StackPane
             StackPane dashboardContent = (StackPane) nomField.getScene().getRoot().lookup("#entityContentPane");
 
-            // Load the form inside the StackPane
             dashboardContent.getChildren().setAll(root);
         } catch (IOException e) {
             e.printStackTrace();

@@ -43,22 +43,18 @@ public class EtudeService implements IService<Etude> {
         ps.setFloat(12, etude.getMainOeuvre());
         ps.executeUpdate();
 
-        // Mark the expert as unavailable when assigned to this study
         ExpertService expertService = new ExpertService();
         expertService.markAsUnavailable(etude.getExpert().getId());
 
-        // Send email notification to the expert
         sendEmailToExpert(etude.getExpert(), etude);
     }
 
     private void sendEmailToExpert(Expert expert, Etude etude) {
-        // Check if the expert's email is valid
         if (expert.getEmail() == null || expert.getEmail().isEmpty()) {
             System.err.println("Expert has no email address.");
             return;
         }
 
-        // Prepare the email content
         String subject = "Nouvelle étude assignée";
         String content = "Bonjour " + expert.getNom() + " " + expert.getPrenom() + ",\n\n" +
                 "Vous avez une nouvelle étude assignée. Détails de l'étude :\n" +
@@ -68,10 +64,10 @@ public class EtudeService implements IService<Etude> {
                 "Type de Sol: " + etude.getTypeSol() + "\n\n" +
                 "Merci de bien vouloir procéder à l'exécution de cette étude.\n\n" +
                 "Cordialement,\n" +
+                "Chef de Departement d'etude Yassine Abidi,\n" +
                 "L'équipe DigiFarm";
 
         try {
-            // Send the email
             MailUtil.sendEmail(expert.getEmail(), subject, content);
             System.out.println("Email sent successfully to: " + expert.getEmail());
         } catch (Exception e) {
@@ -94,7 +90,7 @@ public class EtudeService implements IService<Etude> {
                 "rendement = ?, " +
                 "precipitations = ?, " +
                 "main_oeuvre = ? " +
-                "WHERE id = ?"; // Excluding id_user_id from the update
+                "WHERE id = ?";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setDate(1, Date.valueOf(etude.getDateR()));
@@ -114,7 +110,7 @@ public class EtudeService implements IService<Etude> {
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Failed to update Etude: " + e.getMessage());
-            throw e; // Rethrow the exception after logging
+            throw e;
         }
     }
 
@@ -127,12 +123,10 @@ public class EtudeService implements IService<Etude> {
 
         if (rs.next()) {
             int expertId = rs.getInt("expert_id");
-            // Mark the expert as available when the study is deleted
             ExpertService expertService = new ExpertService();
             expertService.markAsAvailable(expertId);
         }
 
-        // Now delete the study
         String deleteSql = "DELETE FROM etude WHERE id = ?";
         PreparedStatement deletePs = connection.prepareStatement(deleteSql);
         deletePs.setInt(1, id);
@@ -171,20 +165,18 @@ public class EtudeService implements IService<Etude> {
             etude.setCulture(culture);
             etude.setExpert(expert);
 
-            // Handle Climat - Ensure uppercase for matching enum values
             try {
                 etude.setClimat(Climat.valueOf(rs.getString("climat").toUpperCase()));
             } catch (IllegalArgumentException e) {
                 System.err.println("⚠ Erreur Climat non reconnu : " + rs.getString("climat"));
-                continue; // Skip this entry if invalid
+                continue;
             }
 
-            // Handle TypeSol - Ensure uppercase for matching enum values
             try {
                 etude.setTypeSol(TypeSol.valueOf(rs.getString("type_sol").toUpperCase()));
             } catch (IllegalArgumentException e) {
                 System.err.println("⚠ Erreur TypeSol non reconnu : " + rs.getString("type_sol"));
-                continue; // Skip this entry if invalid
+                continue;
             }
 
             etude.setIrrigation(rs.getBoolean("irrigation"));
@@ -200,7 +192,6 @@ public class EtudeService implements IService<Etude> {
         return etudes;
     }
 
-    // Methods to fetch statistics (Pie chart or bar chart data)
     public Map<String, Integer> getStatisticsByClimat() throws SQLException {
         Map<String, Integer> climatStats = new HashMap<>();
         String sql = "SELECT climat, COUNT(*) AS count FROM etude GROUP BY climat";
@@ -234,7 +225,6 @@ public class EtudeService implements IService<Etude> {
     public Map<String, Double> getStatistics() throws SQLException {
         Map<String, Double> statistics = new HashMap<>();
 
-        // Calculate average price
         String priceSql = "SELECT AVG(prix) FROM etude";
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(priceSql);
@@ -242,14 +232,12 @@ public class EtudeService implements IService<Etude> {
             statistics.put("price", rs.getDouble(1));
         }
 
-        // Calculate average rendement
         String rendementSql = "SELECT AVG(rendement) FROM etude";
         rs = stmt.executeQuery(rendementSql);
         if (rs.next()) {
             statistics.put("rendement", rs.getDouble(1));
         }
 
-        // Calculate average main d'œuvre
         String mainOeuvreSql = "SELECT AVG(main_oeuvre) FROM etude";
         rs = stmt.executeQuery(mainOeuvreSql);
         if (rs.next()) {

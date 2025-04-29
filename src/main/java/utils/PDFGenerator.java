@@ -18,19 +18,16 @@ public class PDFGenerator {
             PdfWriter.getInstance(document, new FileOutputStream(outputPath));
             document.open();
 
-            // Title
             Paragraph title = new Paragraph("Rapport d'Étude Agricole", TITLE_FONT);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
             document.add(new Paragraph(" ")); // Add space
 
-            // Informations Générales
             addSection(document, "Informations Générales");
             addField(document, "Date de l'Étude", DATE_FORMATTER.format(etude.getDateR()));
             addField(document, "Expert", etude.getExpert().getNom() + " " + etude.getExpert().getPrenom());
             addField(document, "Culture", etude.getCulture().getNom());
 
-            // Détails de la Culture
             addSection(document, "Détails de la Culture");
             addField(document, "Type de Culture", etude.getCulture().getTypeCulture());
             addField(document, "Surface", etude.getCulture().getSurface() + " ha");
@@ -40,7 +37,6 @@ public class PDFGenerator {
                     DATE_FORMATTER.format(etude.getCulture().getDateRecolte()) : "Non défini");
             addField(document, "Région", etude.getCulture().getRegion());
 
-            // Conditions Environnementales
             addSection(document, "Conditions Environnementales");
             addField(document, "Climat", etude.getClimat().toString());
             addField(document, "Type de Sol", etude.getTypeSol().toString());
@@ -48,13 +44,11 @@ public class PDFGenerator {
             addField(document, "Irrigation", etude.isIrrigation() ? "Oui" : "Non");
             addField(document, "Fertilisation", etude.isFertilisation() ? "Oui" : "Non");
 
-            // Données Économiques
             addSection(document, "Données Économiques");
             addField(document, "Prix", etude.getPrix() + " TND");
             addField(document, "Rendement", etude.getRendement() + " kg/ha");
             addField(document, "Main-d'œuvre", etude.getMainOeuvre() + " H");
 
-            // Footer
             document.add(new Paragraph(" "));
             Paragraph footer = new Paragraph("Document généré le " + DATE_FORMATTER.format(java.time.LocalDate.now()), NORMAL_FONT);
             footer.setAlignment(Element.ALIGN_RIGHT);
@@ -73,7 +67,6 @@ public class PDFGenerator {
         section.setSpacingAfter(10);
         document.add(section);
 
-        // Add a line under section title
         PdfPTable line = new PdfPTable(1);
         line.setWidthPercentage(100);
         PdfPCell cell = new PdfPCell(new Phrase(" "));

@@ -69,13 +69,11 @@ public class ModifierEtude {
     @FXML
     private void onModifier() {
         try {
-            // Validate fields before proceeding
             if (datePicker.getValue() == null) {
                 messageLabel.setText("La date de réalisation est obligatoire.");
                 return;
             }
 
-            // Validate numeric fields and convert
             try {
                 etude.setPrix(Float.parseFloat(prixField.getText()));
                 etude.setRendement(Float.parseFloat(rendementField.getText()));
@@ -86,14 +84,12 @@ public class ModifierEtude {
                 return;
             }
 
-            // Set values from ComboBoxes and CheckBoxes
             etude.setDateR(datePicker.getValue());
             etude.setClimat(climatCombo.getValue());
             etude.setTypeSol(typeSolCombo.getValue());
             etude.setIrrigation(irrigationCheck.isSelected());
             etude.setFertilisation(fertilisationCheck.isSelected());
 
-            // Update the Etude in the database
             etudeService.update(etude);
 
 

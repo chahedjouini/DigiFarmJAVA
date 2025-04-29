@@ -93,7 +93,6 @@ public class CultureService implements IService<Culture> {
             culture.setDensitePlantation(rsCulture.getFloat("densite_plantation"));
             culture.setBesoinsEau(rsCulture.getFloat("besoins_eau"));
 
-            // Conversion sécurisée de BesoinsEngrais
             String engraisStr = rsCulture.getString("besoins_engrais").toLowerCase();
             for (BesoinsEngrais be : BesoinsEngrais.values()) {
                 if (be.toString().equalsIgnoreCase(engraisStr)) {
@@ -106,7 +105,6 @@ public class CultureService implements IService<Culture> {
             culture.setCoutMoyen(rsCulture.getFloat("cout_moyen"));
             culture.setIdUser(rsCulture.getInt("id_user_id"));
 
-            // Charger les études associées
             String sqlEtude = """
             SELECT e.*, ex.id AS expert_id, ex.nom AS expert_nom, ex.prenom AS expert_prenom
             FROM etude e
@@ -135,14 +133,12 @@ public class CultureService implements IService<Culture> {
                 etude.setPrecipitations(rsEtude.getFloat("precipitations"));
                 etude.setMainOeuvre(rsEtude.getFloat("main_oeuvre"));
 
-                // Conversion sécurisée de Climat
                 try {
                     etude.setClimat(Climat.valueOf(rsEtude.getString("climat").toUpperCase()));
                 } catch (IllegalArgumentException e) {
                     etude.setClimat(null); // ou log
                 }
 
-                // Conversion sécurisée de TypeSol
                 try {
                     String solStr = rsEtude.getString("type_sol").toUpperCase();
                     for (TypeSol ts : TypeSol.values()) {
@@ -152,7 +148,7 @@ public class CultureService implements IService<Culture> {
                         }
                     }
                 } catch (Exception e) {
-                    etude.setTypeSol(null); // ou log
+                    etude.setTypeSol(null);
                 }
 
                 culture.getEtudes().add(etude);

@@ -5,11 +5,10 @@ import java.util.Properties;
 
 public class MailUtil {
 
-    private static final String FROM_EMAIL = "yassineabidi431@gmail.com"; // replace with your email
-    private static final String FROM_PASSWORD = "deem dhdl qoft gien"; // replace with your generated app password
+    private static final String FROM_EMAIL = "yassineabidi431@gmail.com";
+    private static final String FROM_PASSWORD = "deem dhdl qoft gien";
 
     public static void sendEmail(String toEmail, String subject, String body) {
-        // Set up the mail server properties
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
@@ -25,14 +24,12 @@ public class MailUtil {
         });
 
         try {
-            // Create the email message
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(FROM_EMAIL));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
             message.setSubject(subject);
             message.setText(body);
 
-            // Send the email
             Transport.send(message);
             System.out.println("Email sent successfully to: " + toEmail);
         } catch (MessagingException e) {

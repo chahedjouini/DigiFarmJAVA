@@ -4,33 +4,23 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.text.*?>
-
 <BorderPane xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.AfficherCulture"
             stylesheets="@style.css">
 
-    <!-- Top bar with title, search, and sort -->
     <top>
         <HBox spacing="10" alignment="CENTER_LEFT" styleClass="header">
-            <padding>
-                <Insets top="15" right="10" bottom="15" left="10"/>
-            </padding>
             <Label text="Liste des Cultures" styleClass="header-label"/>
             <Region HBox.hgrow="ALWAYS"/>
             <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-box"/>
             <ComboBox fx:id="sortComboBox" promptText="Trier par..." styleClass="sort-box"/>
-
         </HBox>
     </top>
 
-    <!-- Center content with grid of culture cards -->
     <center>
         <ScrollPane fitToWidth="true" styleClass="scroll-pane">
             <GridPane fx:id="cultureGrid" styleClass="card-grid" hgap="15" vgap="15">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
                 <columnConstraints>
                     <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
                     <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
@@ -40,18 +30,13 @@
         </ScrollPane>
     </center>
 
-    <!-- Bottom action buttons -->
     <bottom>
         <HBox spacing="10" alignment="CENTER_RIGHT">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
             <Button text="Ajouter" onAction="#onAjouter" styleClass="secondary-button"/>
             <Button text="Modifier" onAction="#onModifier" styleClass="secondary-button"/>
             <Button text="Supprimer" onAction="#onSupprimer" styleClass="secondary-button"/>
             <Button text="Calendrier" onAction="#onOpenCalendar" styleClass="secondary-button"/>
             <Button text="Predire" onAction="#onPredire" styleClass="secondary-button"/>
-
         </HBox>
     </bottom>
 </BorderPane>

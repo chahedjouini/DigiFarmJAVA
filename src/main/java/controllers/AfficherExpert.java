@@ -131,13 +131,11 @@ public class AfficherExpert {
         addCardField(content, "Email", expert.getEmail());
         addCardField(content, "Zone", expert.getZone());
 
-        // Add the status field (disponibility)
         Label status = new Label(expert.getDispo() == Dispo.DISPONIBLE ? "Disponible" : "Non disponible");
         status.getStyleClass().add(expert.getDispo() == Dispo.DISPONIBLE ? "status-available" : "status-unavailable");
 
         card.getChildren().addAll(title, content, status);
 
-        // Event handler to update the selection when the card is clicked
         card.setOnMouseClicked(e -> {
             selectedExpert = expert;
             updateCardSelection(card);
@@ -184,7 +182,6 @@ public class AfficherExpert {
             stage.setScene(scene);
             stage.showAndWait();
 
-            // Refresh the list after adding
             loadExperts();
         } catch (IOException e) {
             showError("Erreur lors du chargement de la vue d'ajout: " + e.getMessage());
@@ -210,7 +207,6 @@ public class AfficherExpert {
             stage.setTitle("Modifier Expert");
             stage.setScene(new Scene(root));
 
-            // Refresh table after window is closed
             stage.setOnHidden(e -> refreshTable());
 
             stage.showAndWait();
@@ -243,9 +239,8 @@ public class AfficherExpert {
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             try {
-                // Pass the ID of the selected expert
                 service.delete(selectedExpert.getId());
-                loadExperts();  // Refresh the list after deletion
+                loadExperts();
             } catch (SQLException e) {
                 showAlert("Erreur", "Impossible de supprimer l'expert: " + e.getMessage());
             }

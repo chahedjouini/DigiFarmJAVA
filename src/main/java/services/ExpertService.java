@@ -25,22 +25,18 @@ public class ExpertService implements IService<Expert> {
         ps.setInt(3, expert.getTel());
         ps.setString(4, expert.getEmail());
         ps.setString(5, expert.getZone());
-        ps.setString(6, expert.getDispo().toString()); // Convert enum to string before inserting
+        ps.setString(6, expert.getDispo().toString());
         ps.executeUpdate();
 
-        // Send a welcome email after adding the expert to the database
         sendWelcomeEmail(expert);
     }
 
-    // Method to send a welcome email to the expert
     private void sendWelcomeEmail(Expert expert) {
-        // Ensure the expert has an email address
         if (expert.getEmail() == null || expert.getEmail().isEmpty()) {
             System.err.println("Expert has no email address.");
             return;
         }
 
-        // Prepare the welcome email content
         String subject = "Bienvenue sur DigiFarm";
         String content = "Bonjour " + expert.getNom() + " " + expert.getPrenom() + ",\n\n" +
                 "Bienvenue sur DigiFarm ! Nous sommes ravis de vous avoir parmi nous.\n\n" +
@@ -67,25 +63,23 @@ public class ExpertService implements IService<Expert> {
         ps.setInt(3, expert.getTel());
         ps.setString(4, expert.getEmail());
         ps.setString(5, expert.getZone());
-        ps.setString(6, expert.getDispo().toString()); // Convert enum to string before updating
+        ps.setString(6, expert.getDispo().toString());
         ps.setInt(7, expert.getId());
         ps.executeUpdate();
     }
 
-    // Method to mark expert as unavailable when assigned to an étude
     public void markAsUnavailable(int expertId) throws SQLException {
         String sql = "UPDATE expert SET dispo = ? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, Dispo.NON_DISPONIBLE.toString()); // Mark as "non disponible"
+        ps.setString(1, Dispo.NON_DISPONIBLE.toString());
         ps.setInt(2, expertId);
         ps.executeUpdate();
     }
 
-    // Method to mark expert as available when étude is deleted
     public void markAsAvailable(int expertId) throws SQLException {
         String sql = "UPDATE expert SET dispo = ? WHERE id = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, Dispo.DISPONIBLE.toString()); // Mark as "disponible"
+        ps.setString(1, Dispo.DISPONIBLE.toString());
         ps.setInt(2, expertId);
         ps.executeUpdate();
     }
@@ -114,7 +108,6 @@ public class ExpertService implements IService<Expert> {
             expert.setEmail(rs.getString("email"));
             expert.setZone(rs.getString("zone"));
 
-            // Handle Dispo as a string in the database and convert it back to the Dispo enum
             String dispoStr = rs.getString("dispo");
             if (dispoStr != null) {
                 expert.setDispo(Dispo.valueOf(dispoStr.toUpperCase().replace(" ", "_")));
