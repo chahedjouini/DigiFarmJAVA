@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="esprit.tn.demo.controllers.DashboardController"
+            stylesheets="@style.css"
+            prefWidth="1200" prefHeight="700">
+
+    <!-- Barre supérieure qui s'étend sur toute la largeur -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_RIGHT" styleClass="top-header">
+            <Label text="BackOffice - DigiFarm" styleClass="logo-text"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="welcomeLabel" styleClass="welcome-text"/>
+    <!--  <Button fx:id="logoutButton" text="Déconnexion" onAction="#handleLogout" styleClass="logout-button"/>-->
+     <padding><Insets top="15" right="30" bottom="15" left="30"/></padding>
+ </HBox>
+</top>
+    <!-- -->
+    <!-- Menu latéral unifié avec la barre supérieure -->
+    <left>
+        <VBox styleClass="unified-sidebar">
+            <!-- Titre du menu -->
+            <Label text="MENU PRINCIPAL" styleClass="sidebar-header"/>
+            <Line startX="0" endX="250" styleClass="divider"/>
+
+            <VBox spacing="0" styleClass="nav-menu">
+                <!-- Gestion Admin avec entités -->
+
+                <!--
+                <Button text="Gestion des utilisateurs" onAction="#showGestionAdmin" styleClass="nav-button">
+                    <graphic>
+                        <Region styleClass="icon-admin"/>
+                    </graphic>
+                </Button>
+                 -->
+
+                <VBox fx:id="adminSubMenu" styleClass="submenu" managed="false" visible="false">
+                    <!-- Les entités seront ajoutées dynamiquement ici -->
+                </VBox>
+
+                <!-- Gestion Étude avec entités -->
+                <Button text="Gestion des études" onAction="#showGestionEtude" styleClass="nav-button">
+                    <graphic>
+                        <Region styleClass="icon-etude"/>
+                    </graphic>
+                </Button>
+                <VBox fx:id="etudeSubMenu" styleClass="submenu" managed="false" visible="false">
+                    <!-- Les entités seront ajoutées dynamiquement ici -->
+                </VBox>
+
+                <!-- Gestion Animaux avec entités -->
+                <Button text="Gestion des animaux" onAction="#showGestionAnimaux" styleClass="nav-button">
+                    <graphic>
+                        <Region styleClass="icon-animaux"/>
+                    </graphic>
+                </Button>
+                <VBox fx:id="animauxSubMenu" styleClass="submenu" managed="false" visible="false">
+                    <!-- Les entités seront ajoutées dynamiquement ici -->
+                </VBox>
+
+                <!-- Gestion Abonnement avec entités -->
+                <Button text="Gestion des abonnements" onAction="#showGestionAbonnement" styleClass="nav-button">
+                    <graphic>
+                        <Region styleClass="icon-abonnement"/>
+                    </graphic>
+                </Button>
+                <VBox fx:id="abonnementSubMenu" styleClass="submenu" managed="false" visible="false">
+                    <!-- Les entités seront ajoutées dynamiquement ici -->
+                </VBox>
+
+                <!-- Gestion Machine avec entités -->
+                <Button text="Gestion des machines" onAction="#showGestionMachine" styleClass="nav-button">
+                    <graphic>
+                        <Region styleClass="icon-machine"/>
+                    </graphic>
+                </Button>
+                <VBox fx:id="machineSubMenu" styleClass="submenu" managed="false" visible="false">
+                    <!-- Les entités seront ajoutées dynamiquement ici -->
+                </VBox>
+
+                <!-- Gestion Stock avec entités -->
+                <Button text="Gestion des produits" onAction="#showGestionStock" styleClass="nav-button">
+                    <graphic>
+                        <Region styleClass="icon-stock"/>
+                    </graphic>
+                </Button>
+                <VBox fx:id="stockSubMenu" styleClass="submenu" managed="false" visible="false">
+                    <!-- Les entités seront ajoutées dynamiquement ici -->
+                </VBox>
+            </VBox>
+
+            <!-- Espacement flexible pour pousser le logo vers le bas -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Logo en bas de la barre latérale -->
+            <VBox alignment="CENTER" styleClass="logo-container">
+                <ImageView fitWidth="200" fitHeight="120" preserveRatio="true">
+                    <Image url="@images/Logo.png"/>
+                </ImageView>
+                <padding><Insets top="20" bottom="20"/></padding>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- Zone de contenu principal -->
+    <center>
+        <StackPane fx:id="entityContentPane" styleClass="entity-content">
+            <VBox alignment="CENTER" styleClass="welcome-content">
+                <StackPane styleClass="background-container">
+                    <ImageView styleClass="background-image" fitWidth="970" fitHeight="650" preserveRatio="false">
+                        <Image url="@images/BackgroundBack.png"/>
+                    </ImageView>
+                    <VBox alignment="CENTER" spacing="20">
+                        <Region styleClass="dashboard-icon"/>
+                        <Label text="Bienvenue dans votre backoffice" styleClass="dashboard-title"/>
+                        <Label text="Sélectionnez une gestion pour commencer" styleClass="dashboard-subtitle"/>
+                    </VBox>
+                </StackPane>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

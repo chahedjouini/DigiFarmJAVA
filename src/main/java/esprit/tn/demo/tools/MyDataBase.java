@@ -7,7 +7,7 @@ public class MyDataBase {
     private static Connection connection;
     private static MyDataBase instance;
 
-    private final String URL = "jdbc:mysql://localhost:3306/digifarm2";
+    private final String URL = "jdbc:mysql://localhost:3306/gestionvente";
     private final String USER = "root";
     private final String PASSWORD = "";
 

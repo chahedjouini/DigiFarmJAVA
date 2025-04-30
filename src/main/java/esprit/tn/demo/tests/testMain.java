@@ -15,19 +15,13 @@ public class testMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/esprit/tn/demo/ViewMachine.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/Dashboard.fxml"));
+            Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Machine Management");
             primaryStage.show();
         } catch (Exception e) {
-            System.err.println("Error loading FXML:");
-            e.printStackTrace();
-            // More specific error handling
-            if (e.toString().contains("IllegalAccessException")) {
-                System.err.println("\nFIX REQUIRED: Add this to module-info.java:");
-                System.err.println("exports esprit.tn.demo.controllers.GestionMachine to javafx.fxml;");
-            }
+            e.printStackTrace(); // ⬅️ Montre ici ce qu'il imprime dans la console
         }
     }
 }
