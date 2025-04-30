@@ -19,11 +19,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
+import javafx.stage.Modality;
 
 public class ViewMachineController implements Initializable {
 
     @FXML private TableView<Machine> machineTableView;
-    @FXML private TableColumn<Machine, Integer> idCol;
     @FXML private TableColumn<Machine, String> nomCol;
     @FXML private TableColumn<Machine, String> typeCol;
     @FXML private TableColumn<Machine, String> dateAchatCol;
@@ -32,6 +32,7 @@ public class ViewMachineController implements Initializable {
     @FXML private TableColumn<Machine, Integer> ownerCol;
     @FXML private TableColumn<Machine, Void> actionsCol;
 
+    @FXML private ComboBox<String> searchCriteriaComboBox;
     @FXML private TextField searchField;
     @FXML private Button addButton;
     @FXML private Button refreshButton;
@@ -40,35 +41,98 @@ public class ViewMachineController implements Initializable {
     private final MachineService machineService = new MachineService();
     private final ObservableList<Machine> machineList = FXCollections.observableArrayList();
     private FilteredList<Machine> filteredMachineList;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns();
         loadMachines();
+        setupSearchCriteria();
         setupSearchFilter();
         setupActionButtons();
         setupButtonActions();
     }
 
     private void setupTableColumns() {
-        idCol.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getId_machine()).asObject());
         nomCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNom()));
         typeCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getType()));
-        dateAchatCol.setCellValueFactory(cellData -> {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            return new SimpleStringProperty(
-                    dateFormat.format(cellData.getValue().getDate_achat())
-            );
-        });
+        dateAchatCol.setCellValueFactory(cellData ->
+                new SimpleStringProperty(dateFormat.format(cellData.getValue().getDate_achat())));
         etatCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEtat()));
         etatPredCol.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getEtat_pred()));
         ownerCol.setCellValueFactory(cellData ->
                 new SimpleIntegerProperty(cellData.getValue().getOwner_id()).asObject());
+    }
+
+    private void setupSearchCriteria() {
+        searchCriteriaComboBox.getItems().addAll("Nom", "Date Achat", "État");
+        searchCriteriaComboBox.setValue("Nom"); // Default selection
+    }
+
+    private void setupSearchFilter() {
+        filteredMachineList = new FilteredList<>(machineList, p -> true);
+        machineTableView.setItems(filteredMachineList);
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredMachineList.setPredicate(machine -> {
+                if (newValue == null || newValue.trim().isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase().trim();
+                String criterion = searchCriteriaComboBox.getValue();
+
+                if (criterion == null) {
+                    return true; // No criterion selected, show all
+                }
+
+                switch (criterion) {
+                    case "Nom":
+                        return machine.getNom() != null &&
+                                machine.getNom().toLowerCase().contains(lowerCaseFilter);
+                    case "Date Achat":
+                        String formattedDate = dateFormat.format(machine.getDate_achat());
+                        return formattedDate.contains(lowerCaseFilter);
+                    case "État":
+                        return machine.getEtat() != null &&
+                                machine.getEtat().toLowerCase().contains(lowerCaseFilter);
+                    default:
+                        return true;
+                }
+            });
+        });
+
+        searchCriteriaComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            // Trigger filter update when criterion changes
+            filteredMachineList.setPredicate(machine -> {
+                String searchText = searchField.getText();
+                if (searchText == null || searchText.trim().isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = searchText.toLowerCase().trim();
+
+                if (newValue == null) {
+                    return true;
+                }
+
+                switch (newValue) {
+                    case "Nom":
+                        return machine.getNom() != null &&
+                                machine.getNom().toLowerCase().contains(lowerCaseFilter);
+                    case "Date Achat":
+                        String formattedDate = dateFormat.format(machine.getDate_achat());
+                        return formattedDate.contains(lowerCaseFilter);
+                    case "État":
+                        return machine.getEtat() != null &&
+                                machine.getEtat().toLowerCase().contains(lowerCaseFilter);
+                    default:
+                        return true;
+                }
+            });
+        });
     }
 
     private void loadMachines() {
@@ -80,29 +144,6 @@ public class ViewMachineController implements Initializable {
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les machines : " + e.getMessage());
         }
-    }
-
-    private void setupSearchFilter() {
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredMachineList.setPredicate(machine -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-                if (machine.getNom() != null && machine.getNom().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (machine.getType() != null && machine.getType().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (machine.getEtat() != null && machine.getEtat().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (machine.getEtat_pred() != null && machine.getEtat_pred().toLowerCase().contains(lowerCaseFilter)) {
-                    return true;
-                } else if (String.valueOf(machine.getOwner_id()).contains(lowerCaseFilter)) {
-                    return true;
-                }
-                return false;
-            });
-        });
     }
 
     private void setupActionButtons() {
@@ -148,11 +189,13 @@ public class ViewMachineController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/AjoutMachine.fxml"));
             Parent root = loader.load();
-            Stage stage = (Stage) addButton.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            Stage stage = new Stage();
+            stage.setTitle("Ajouter une Machine");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
-        } catch (Exception e) {
+            stage.setOnHidden(e -> refreshMachineList());
+        } catch (IOException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible d'ouvrir la vue d'ajout : " + e.getMessage());
             e.printStackTrace();
         }
@@ -167,6 +210,7 @@ public class ViewMachineController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("Modifier la machine");
             stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.show();
             stage.setOnHidden(e -> refreshMachineList());
         } catch (IOException e) {
@@ -196,6 +240,7 @@ public class ViewMachineController implements Initializable {
     private void refreshMachineList() {
         loadMachines();
         searchField.clear();
+        searchCriteriaComboBox.setValue("Nom");
     }
 
     @FXML

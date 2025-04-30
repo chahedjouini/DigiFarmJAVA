@@ -31,7 +31,7 @@ public class AjoutMachine {
     @FXML private Label dateErrorLabel;
     @FXML private ComboBox<String> etatComboBox;
     @FXML private Label etatErrorLabel;
-    @FXML private ComboBox<String> etatPredComboBox; // Changed to ComboBox
+    @FXML private ComboBox<String> etatPredComboBox;
     @FXML private Label etatPredErrorLabel;
     @FXML private Button annulerButton;
     @FXML private Button btnAjout;
@@ -42,20 +42,11 @@ public class AjoutMachine {
     @FXML
     public void initialize() {
         // Initialize the state ComboBox
-        etatComboBox.getItems().addAll(
-                "en_maintenance",
-                "actif",
-                "inactif"
-        );
+        etatComboBox.getItems().addAll("en_maintenance", "actif", "inactif");
         etatComboBox.setValue("en_maintenance");
 
         // Initialize the previous state ComboBox
-        etatPredComboBox.getItems().addAll(
-                "en_maintenance",
-                "actif",
-                "inactif"
-        );
-        // No default value, as it's optional
+        etatPredComboBox.getItems().addAll("en_maintenance", "actif", "inactif");
 
         // Configure text field validations
         configureTextField(nomField, MAX_NAME_LENGTH);
@@ -66,29 +57,17 @@ public class AjoutMachine {
     }
 
     private void configureTextField(TextField textField, int maxLength) {
-        // Text formatter for real-time validation
         textField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
-
-            // Skip validation if empty
             if (newText.isEmpty()) return change;
-
-            // Auto-capitalize first letter
             if (change.getCaretPosition() == 1 && Character.isLowerCase(newText.charAt(0))) {
                 change.setText(change.getText().toUpperCase());
-                newText = change.getControlNewText(); // Update newText
+                newText = change.getControlNewText();
             }
-
-            // Validate length
-            if (newText.length() > maxLength) {
-                return null;
-            }
-
-            // Validate alphabetic pattern
+            if (newText.length() > maxLength) return null;
             return ALPHA_PATTERN.matcher(newText).matches() ? change : null;
         }));
 
-        // Add listener to clear error when user starts typing
         textField.textProperty().addListener((obs, oldValue, newValue) -> {
             getErrorLabelForField(textField).setText("");
         });
@@ -96,14 +75,10 @@ public class AjoutMachine {
 
     @FXML
     void ajouter(ActionEvent event) {
-        if (!validateInputs()) {
-            return;
-        }
-
+        if (!validateInputs()) return;
         try {
             Machine newMachine = createMachineFromInput();
             machineService.add(newMachine);
-
             showSuccessMessage("Machine ajoutée avec succès !");
             clearFields();
         } catch (Exception e) {
@@ -116,17 +91,9 @@ public class AjoutMachine {
         clearErrorLabels();
         boolean isValid = true;
 
-        // Name validation
-        if (!validateAlphaField(nomField, "Nom", MAX_NAME_LENGTH, true, nomErrorLabel)) {
-            isValid = false;
-        }
+        if (!validateAlphaField(nomField, "Nom", MAX_NAME_LENGTH, true, nomErrorLabel)) isValid = false;
+        if (!validateAlphaField(typeField, "Type", MAX_TYPE_LENGTH, true, typeErrorLabel)) isValid = false;
 
-        // Type validation
-        if (!validateAlphaField(typeField, "Type", MAX_TYPE_LENGTH, true, typeErrorLabel)) {
-            isValid = false;
-        }
-
-        // Date validation
         if (dateAchatPicker.getValue() == null) {
             dateErrorLabel.setText("La date d'achat est obligatoire !");
             dateAchatPicker.requestFocus();
@@ -137,43 +104,32 @@ public class AjoutMachine {
             isValid = false;
         }
 
-        // State validation
         if (etatComboBox.getValue() == null) {
             etatErrorLabel.setText("Veuillez sélectionner un état !");
             etatComboBox.requestFocus();
             isValid = false;
         }
 
-        // Previous state validation (optional, no strict validation needed)
-        // ComboBox ensures valid options, so only check if needed in future
-
         return isValid;
     }
 
     private boolean validateAlphaField(TextField field, String fieldName, int maxLength, boolean required, Label errorLabel) {
         String value = field.getText().trim();
-
-        if (value.isEmpty()) {
-            if (required) {
-                errorLabel.setText(fieldName + " est obligatoire !");
-                field.requestFocus();
-                return false;
-            }
-            return true;
+        if (value.isEmpty() && required) {
+            errorLabel.setText(fieldName + " est obligatoire !");
+            field.requestFocus();
+            return false;
         }
-
-        if (!ALPHA_PATTERN.matcher(value).matches()) {
+        if (!value.isEmpty() && !ALPHA_PATTERN.matcher(value).matches()) {
             errorLabel.setText(fieldName + " doit commencer par une majuscule et contenir uniquement des lettres");
             field.requestFocus();
             return false;
         }
-
         if (value.length() > maxLength) {
             errorLabel.setText(fieldName + " ne doit pas dépasser " + maxLength + " caractères");
             field.requestFocus();
             return false;
         }
-
         return true;
     }
 
@@ -182,26 +138,21 @@ public class AjoutMachine {
         machine.setNom(nomField.getText().trim());
         machine.setType(typeField.getText().trim());
         machine.setDate_achat(Date.from(
-                dateAchatPicker.getValue().atStartOfDay()
-                        .atZone(ZoneId.systemDefault())
-                        .toInstant()
+                dateAchatPicker.getValue().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
         ));
-
         if (etatPredComboBox.getValue() != null) {
             machine.setEtat_pred(etatPredComboBox.getValue());
         }
-
         machine.setEtat(etatComboBox.getValue());
         machine.setOwner_id(1); // Default or get from session
-
         return machine;
     }
+
     @FXML
     private void handleLogout(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/login.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) logout.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -212,18 +163,11 @@ public class AjoutMachine {
     }
 
     @FXML
-private void handleAnnulerButton(ActionEvent event) {
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/machine-update.fxml"));
-        Parent root = loader.load();
+    private void handleAnnulerButton(ActionEvent event) {
+        // Close the current window
         Stage stage = (Stage) annulerButton.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    } catch (IOException e) {
-        showErrorMessage("Échec du chargement: " + e.getMessage());
-        e.printStackTrace();
+        stage.close();
     }
-}
 
     private void showSuccessMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -253,7 +197,7 @@ private void handleAnnulerButton(ActionEvent event) {
         nomField.clear();
         typeField.clear();
         dateAchatPicker.setValue(null);
-        etatPredComboBox.getSelectionModel().clearSelection(); // Clear ComboBox selection
+        etatPredComboBox.getSelectionModel().clearSelection();
         etatComboBox.setValue("en_maintenance");
         clearErrorLabels();
     }

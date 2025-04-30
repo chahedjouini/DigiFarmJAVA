@@ -11,7 +11,7 @@ import java.util.Objects;
 public class testMain extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/esprit/tn/demo/AjoutMachine.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/esprit/tn/demo/AjoutMaintenanace.fxml")));
         primaryStage.setTitle("Gestion d'Animal");
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();

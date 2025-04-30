@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.6" fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalController">
     <TableView fx:id="animalTable" layoutX="14" layoutY="14" prefHeight="200" prefWidth="400">
         <columns>
             <TableColumn fx:id="colNom" text="Nom" />

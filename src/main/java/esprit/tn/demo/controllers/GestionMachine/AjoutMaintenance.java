@@ -1,5 +1,7 @@
 package esprit.tn.demo.controllers.GestionMachine;
 
+import esprit.tn.demo.services.MaintenancePredictionClient;
+import esprit.tn.demo.entities.MaintenanceRecord;
 import esprit.tn.demo.entities.GestionMachine.Maintenance;
 import esprit.tn.demo.entities.GestionMachine.Technicien;
 import esprit.tn.demo.entities.GestionMachine.Machine;
@@ -10,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -22,7 +25,6 @@ import java.util.regex.Pattern;
 
 public class AjoutMaintenance {
 
-    // Regex patterns and constants
     private static final Pattern ETAT_PRED_PATTERN = Pattern.compile("^[A-Za-z0-9\\s\\-]{0,100}$");
     private static final double MIN_COUT = 0.0;
     private static final int MIN_TEMPERATURE = -50;
@@ -43,21 +45,32 @@ public class AjoutMaintenance {
     @FXML private ComboBox<String> technicienIdComboBox;
     @FXML private Button submitButton;
     @FXML private Button cancelButton;
+    @FXML private Button predictButton;
+    @FXML private Label resultLabel;
+    @FXML private Label errorLabel;
+    @FXML private TableView<MaintenanceRecord> historyTable;
+    @FXML private TableColumn<MaintenanceRecord, String> dateColumn;
+    @FXML private TableColumn<MaintenanceRecord, Double> coutColumn;
+    @FXML private TableColumn<MaintenanceRecord, Integer> temperatureColumn;
+    @FXML private TableColumn<MaintenanceRecord, Integer> humiditeColumn;
+    @FXML private TableColumn<MaintenanceRecord, Double> consoCarburantColumn;
+    @FXML private TableColumn<MaintenanceRecord, Double> consoEnergieColumn;
+    @FXML private TableColumn<MaintenanceRecord, String> statusColumn;
+    @FXML private TableColumn<MaintenanceRecord, Integer> idMachineColumn;
 
     private final MaintenanceService maintenanceService = new MaintenanceService();
     private final TechnicienService technicienService = new TechnicienService();
     private final MachineService machineService = new MachineService();
+    private final MaintenancePredictionClient predictionClient = new MaintenancePredictionClient();
     private Map<String, Integer> techNameToId = new HashMap<>();
 
     @FXML
     public void initialize() {
-        // Initialize status combo box
         statusComboBox.setItems(FXCollections.observableArrayList(
                 "Planifiée", "En cours", "Terminée", "Annulée"
         ));
         statusComboBox.setValue("Planifiée");
 
-        // Configure DatePicker to restrict future dates and limit range
         dateEntretienPicker.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -67,7 +80,6 @@ public class AjoutMaintenance {
             }
         });
 
-        // Configure text field validations
         configureNumericField(coutField, true, MIN_COUT);
         configureNumericField(consoCarburantField, false, MIN_CONSO);
         configureNumericField(consoEnergieField, false, MIN_CONSO);
@@ -75,7 +87,6 @@ public class AjoutMaintenance {
         configureIntegerField(humiditeField, false, MIN_HUMIDITE, MAX_HUMIDITE);
         configureEtatPredField();
 
-        // Add real-time visual feedback
         addRealTimeValidationFeedback(coutField);
         addRealTimeValidationFeedback(temperatureField);
         addRealTimeValidationFeedback(humiditeField);
@@ -85,6 +96,7 @@ public class AjoutMaintenance {
 
         loadMachineIds();
         loadTechnicienIds();
+        initializeHistoryTable();
     }
 
     private void configureNumericField(TextField field, boolean required, double minValue) {
@@ -195,6 +207,94 @@ public class AjoutMaintenance {
         }
     }
 
+    private void initializeHistoryTable() {
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("dateEntretien"));
+        coutColumn.setCellValueFactory(new PropertyValueFactory<>("cout"));
+        temperatureColumn.setCellValueFactory(new PropertyValueFactory<>("temperature"));
+        humiditeColumn.setCellValueFactory(new PropertyValueFactory<>("humidite"));
+        consoCarburantColumn.setCellValueFactory(new PropertyValueFactory<>("consoCarburant"));
+        consoEnergieColumn.setCellValueFactory(new PropertyValueFactory<>("consoEnergie"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        idMachineColumn.setCellValueFactory(new PropertyValueFactory<>("idMachine"));
+
+        try {
+            List<Maintenance> maintenances = maintenanceService.getAll();
+            ObservableList<MaintenanceRecord> records = FXCollections.observableArrayList();
+            for (Maintenance maintenance : maintenances) {
+                MaintenanceRecord record = new MaintenanceRecord();
+                record.setDateEntretien(maintenance.getDate_entretien().toString());
+                record.setCout(maintenance.getCout());
+                record.setTemperature(maintenance.getTemperature() != null ? maintenance.getTemperature() : 0);
+                record.setHumidite(maintenance.getHumidite() != null ? maintenance.getHumidite() : 0);
+                record.setConsoCarburant(maintenance.getConso_carburant() != null ? maintenance.getConso_carburant() : 0.0);
+                record.setConsoEnergie(maintenance.getConso_energie() != null ? maintenance.getConso_energie() : 0.0);
+                record.setStatus(maintenance.getStatus());
+                record.setIdMachine(maintenance.getId_machine_id());
+                records.add(record);
+            }
+            historyTable.setItems(records);
+        } catch (Exception e) {
+            showAlert("Erreur", "Échec du chargement de l'historique de maintenance : " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    private void predict() {
+        try {
+            if (coutField.getText().trim().isEmpty() ||
+                    temperatureField.getText().trim().isEmpty() ||
+                    humiditeField.getText().trim().isEmpty() ||
+                    consoCarburantField.getText().trim().isEmpty() ||
+                    consoEnergieField.getText().trim().isEmpty()) {
+                errorLabel.setText("All prediction fields (Cost, Temperature, Humidity, Fuel, Energy) are required.");
+                resultLabel.setText("");
+                return;
+            }
+
+            double cost = Double.parseDouble(coutField.getText().trim());
+            double temperature = Double.parseDouble(temperatureField.getText().trim());
+            double humidity = Double.parseDouble(humiditeField.getText().trim());
+            double fuelConsumption = Double.parseDouble(consoCarburantField.getText().trim());
+            double energyConsumption = Double.parseDouble(consoEnergieField.getText().trim());
+
+            if (cost < MIN_COUT) {
+                errorLabel.setText("Cost must be positive or zero.");
+                resultLabel.setText("");
+                return;
+            }
+            if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATURE) {
+                errorLabel.setText("Temperature must be between " + MIN_TEMPERATURE + " and " + MAX_TEMPERATURE + ".");
+                resultLabel.setText("");
+                return;
+            }
+            if (humidity < MIN_HUMIDITE || humidity > MAX_HUMIDITE) {
+                errorLabel.setText("Humidity must be between " + MIN_HUMIDITE + " and " + MAX_HUMIDITE + ".");
+                resultLabel.setText("");
+                return;
+            }
+            if (fuelConsumption < MIN_CONSO) {
+                errorLabel.setText("Fuel Consumption must be positive or zero.");
+                resultLabel.setText("");
+                return;
+            }
+            if (energyConsumption < MIN_CONSO) {
+                errorLabel.setText("Energy Consumption must be positive or zero.");
+                resultLabel.setText("");
+                return;
+            }
+
+            String prediction = predictionClient.predictMaintenance(cost, temperature, humidity, fuelConsumption, energyConsumption);
+            resultLabel.setText("Predicted Status: " + (prediction.equals("terminée") ? "Completed" : "EnAttente"));
+            errorLabel.setText("");
+        } catch (NumberFormatException e) {
+            errorLabel.setText("Please enter valid numbers for all fields.");
+            resultLabel.setText("");
+        } catch (Exception e) {
+            errorLabel.setText("Prediction Error: " + e.getMessage());
+            resultLabel.setText("");
+        }
+    }
+
     @FXML
     private void handleSubmit() {
         if (!validateInputs()) {
@@ -211,7 +311,6 @@ public class AjoutMaintenance {
             String etatPred = etatPredField.getText().trim();
             maintenance.setEtat_pred(etatPred.isEmpty() ? null : etatPred);
 
-            // Optional fields
             maintenance.setTemperature(parseIntOrNull(temperatureField.getText().trim()));
             maintenance.setHumidite(parseIntOrNull(humiditeField.getText().trim()));
             maintenance.setConso_carburant(parseDoubleOrNull(consoCarburantField.getText().trim()));
@@ -220,6 +319,7 @@ public class AjoutMaintenance {
             maintenanceService.add(maintenance);
             showAlert("Succès", "Maintenance ajoutée avec succès", Alert.AlertType.INFORMATION);
             clearFields();
+            initializeHistoryTable();
             closeWindow();
         } catch (Exception e) {
             showAlert("Erreur", "Échec de l'ajout de la maintenance : " + e.getMessage(), Alert.AlertType.ERROR);
@@ -249,14 +349,12 @@ public class AjoutMaintenance {
     }
 
     private boolean validateInputs() {
-        // Date validation
         if (dateEntretienPicker.getValue() == null) {
             showAlert("Validation", "La date d'entretien est requise", Alert.AlertType.WARNING);
             dateEntretienPicker.requestFocus();
             return false;
         }
 
-        // Cost validation
         String coutText = coutField.getText().trim();
         try {
             double cout = Double.parseDouble(coutText);
@@ -271,28 +369,24 @@ public class AjoutMaintenance {
             return false;
         }
 
-        // Status validation
         if (statusComboBox.getValue() == null) {
             showAlert("Validation", "Le statut est requis", Alert.AlertType.WARNING);
             statusComboBox.requestFocus();
             return false;
         }
 
-        // Machine ID validation
         if (machineIdComboBox.getValue() == null) {
             showAlert("Validation", "La machine est requise", Alert.AlertType.WARNING);
             machineIdComboBox.requestFocus();
             return false;
         }
 
-        // Technician ID validation
         if (technicienIdComboBox.getValue() == null) {
             showAlert("Validation", "Le technicien est requis", Alert.AlertType.WARNING);
             technicienIdComboBox.requestFocus();
             return false;
         }
 
-        // Optional fields validation
         if (!temperatureField.getText().trim().isEmpty()) {
             try {
                 int temp = Integer.parseInt(temperatureField.getText().trim());
@@ -353,7 +447,6 @@ public class AjoutMaintenance {
             }
         }
 
-        // EtatPred validation
         String etatPred = etatPredField.getText().trim();
         if (!etatPred.isEmpty() && !ETAT_PRED_PATTERN.matcher(etatPred).matches()) {
             showAlert("Validation", "L'état précédent doit contenir uniquement des lettres, chiffres, espaces ou tirets", Alert.AlertType.WARNING);
@@ -389,6 +482,8 @@ public class AjoutMaintenance {
         machineIdComboBox.setValue(null);
         technicienIdComboBox.setValue(null);
         resetFieldStyles();
+        resultLabel.setText("");
+        errorLabel.setText("");
     }
 
     private void resetFieldStyles() {

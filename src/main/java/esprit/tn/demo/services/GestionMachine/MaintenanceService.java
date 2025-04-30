@@ -30,9 +30,7 @@ public class MaintenanceService implements IService<Maintenance> {
             pst.setObject(8, maintenance.getConso_energie(), Types.DOUBLE);
             pst.setString(9, maintenance.getStatus());
             pst.setString(10, maintenance.getEtat_pred());
-
             pst.executeUpdate();
-
             try (ResultSet rs = pst.getGeneratedKeys()) {
                 if (rs.next()) {
                     maintenance.setId(rs.getInt(1));
@@ -61,7 +59,6 @@ public class MaintenanceService implements IService<Maintenance> {
             pst.setString(9, maintenance.getStatus());
             pst.setString(10, maintenance.getEtat_pred());
             pst.setInt(11, maintenance.getId());
-
             pst.executeUpdate();
         } catch (SQLException e) {
             System.err.println("Error updating maintenance: " + e.getMessage());
@@ -85,10 +82,8 @@ public class MaintenanceService implements IService<Maintenance> {
     public List<Maintenance> getAll() {
         List<Maintenance> maintenances = new ArrayList<>();
         String sql = "SELECT * FROM maintenance";
-
         try (Statement st = cnx.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
                 maintenances.add(mapResultSetToMaintenance(rs));
             }
@@ -96,7 +91,6 @@ public class MaintenanceService implements IService<Maintenance> {
             System.err.println("Error retrieving maintenances: " + e.getMessage());
             e.printStackTrace();
         }
-
         return maintenances;
     }
 
@@ -105,7 +99,6 @@ public class MaintenanceService implements IService<Maintenance> {
         String sql = "SELECT * FROM maintenance WHERE id = ?";
         try (PreparedStatement pst = cnx.prepareStatement(sql)) {
             pst.setInt(1, id);
-
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     return mapResultSetToMaintenance(rs);
@@ -118,7 +111,6 @@ public class MaintenanceService implements IService<Maintenance> {
         return null;
     }
 
-    // Additional specialized methods
     public List<Maintenance> getByMachineId(int machineId) {
         return getMaintenancesByField("id_machine_id", machineId);
     }
@@ -130,10 +122,8 @@ public class MaintenanceService implements IService<Maintenance> {
     private List<Maintenance> getMaintenancesByField(String fieldName, int value) {
         List<Maintenance> maintenances = new ArrayList<>();
         String sql = "SELECT * FROM maintenance WHERE " + fieldName + " = ?";
-
         try (PreparedStatement pst = cnx.prepareStatement(sql)) {
             pst.setInt(1, value);
-
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
                     maintenances.add(mapResultSetToMaintenance(rs));
@@ -143,7 +133,6 @@ public class MaintenanceService implements IService<Maintenance> {
             System.err.println("Error retrieving maintenances by " + fieldName + ": " + e.getMessage());
             e.printStackTrace();
         }
-
         return maintenances;
     }
 
@@ -163,4 +152,21 @@ public class MaintenanceService implements IService<Maintenance> {
         return maintenance;
     }
 
+    // Reporting method for maintenance cost over time
+    public List<Object[]> findMaintenanceCostOverTime() {
+        List<Object[]> results = new ArrayList<>();
+        String sql = "SELECT DATE_FORMAT(date_entretien, '%Y-%m-%d') as date_entretien, COALESCE(SUM(cout), 0) as total_cost " +
+                "FROM maintenance " +
+                "GROUP BY date_entretien " +
+                "ORDER BY date_entretien";
+        try (PreparedStatement pst = cnx.prepareStatement(sql);
+             ResultSet rs = pst.executeQuery()) {
+            while (rs.next()) {
+                results.add(new Object[]{rs.getString("date_entretien"), rs.getDouble("total_cost")});
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving maintenance cost over time: " + e.getMessage());
+        }
+        return results;
+    }
 }

@@ -2,197 +2,164 @@ package esprit.tn.demo.controllers.GestionMachine;
 
 import esprit.tn.demo.entities.GestionMachine.Technicien;
 import esprit.tn.demo.services.GestionMachine.TechnicienService;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class ViewTechnicienController implements Initializable {
+public class ViewTechnicienController {
 
-    @FXML private TableView<Technicien> technicienTableView;
-    @FXML private TableColumn<Technicien, String> nameCol;
-    @FXML private TableColumn<Technicien, String> prenomCol;
-    @FXML private TableColumn<Technicien, String> specialiteCol;
-    @FXML private TableColumn<Technicien, String> emailCol;
-    @FXML private TableColumn<Technicien, Integer> telephoneCol;
-    @FXML private TableColumn<Technicien, String> localisationCol;
-    @FXML private TableColumn<Technicien, Float> latitudeCol;
-    @FXML private TableColumn<Technicien, Float> longitudeCol;
-    @FXML private TableColumn<Technicien, Void> actionsCol;
+    @FXML
+    private TableView<Technicien> technicienTableView;
+    @FXML
+    private TableColumn<Technicien, String> nameCol, prenomCol, specialiteCol, emailCol, localisationCol;
+    @FXML
+    private TableColumn<Technicien, Integer> telephoneCol;
+    @FXML
+    private TableColumn<Technicien, Float> latitudeCol, longitudeCol;
+    @FXML
+    private TableColumn<Technicien, Void> actionsCol;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label logoutLabel;
 
-    @FXML private TextField searchField;
-    @FXML private Button addButton;
-    @FXML private Button refreshButton;
-    @FXML private Label logoutLabel;
+    private TechnicienService technicienService = new TechnicienService();
+    private ObservableList<Technicien> technicienList = FXCollections.observableArrayList();
 
-    private final TechnicienService technicienService = new TechnicienService();
-    private final ObservableList<Technicien> technicienList = FXCollections.observableArrayList();
-    private FilteredList<Technicien> filteredTechnicienList;
+    @FXML
+    private void initialize() {
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        prenomCol.setCellValueFactory(new PropertyValueFactory<>("prenom"));
+        specialiteCol.setCellValueFactory(new PropertyValueFactory<>("specialite"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        telephoneCol.setCellValueFactory(new PropertyValueFactory<>("telephone"));
+        localisationCol.setCellValueFactory(new PropertyValueFactory<>("localisation"));
+        latitudeCol.setCellValueFactory(new PropertyValueFactory<>("latitude"));
+        longitudeCol.setCellValueFactory(new PropertyValueFactory<>("longitude"));
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        setupTableColumns();
-        loadTechniciens();
-        setupSearchFilter();
-        setupActionButtons();
-        setupButtonActions();
-    }
-
-    private void setupTableColumns() {
-        nameCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getName()));
-        prenomCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getPrenom()));
-        specialiteCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getSpecialite()));
-        emailCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getEmail()));
-        telephoneCol.setCellValueFactory(cellData ->
-                new SimpleIntegerProperty(cellData.getValue().getTelephone()).asObject());
-        localisationCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getLocalisation()));
-        latitudeCol.setCellValueFactory(cellData ->
-                new SimpleFloatProperty(cellData.getValue().getLatitude()).asObject());
-        longitudeCol.setCellValueFactory(cellData ->
-                new SimpleFloatProperty(cellData.getValue().getLongitude()).asObject());
-    }
-
-    private void loadTechniciens() {
-        technicienList.clear();
-        technicienList.addAll(technicienService.getAll());
-        filteredTechnicienList = new FilteredList<>(technicienList, p -> true);
-        technicienTableView.setItems(filteredTechnicienList);
-    }
-
-    private void setupSearchFilter() {
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredTechnicienList.setPredicate(technicien -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-                return (technicien.getName() != null && technicien.getName().toLowerCase().contains(lowerCaseFilter)) ||
-                        (technicien.getPrenom() != null && technicien.getPrenom().toLowerCase().contains(lowerCaseFilter)) ||
-                        (technicien.getSpecialite() != null && technicien.getSpecialite().toLowerCase().contains(lowerCaseFilter)) ||
-                        (technicien.getEmail() != null && technicien.getEmail().toLowerCase().contains(lowerCaseFilter)) ||
-                        String.valueOf(technicien.getTelephone()).contains(lowerCaseFilter) ||
-                        (technicien.getLocalisation() != null && technicien.getLocalisation().toLowerCase().contains(lowerCaseFilter)) ||
-                        String.valueOf(technicien.getLatitude()).contains(lowerCaseFilter) ||
-                        String.valueOf(technicien.getLongitude()).contains(lowerCaseFilter);
-            });
-        });
-    }
-
-    private void setupActionButtons() {
         actionsCol.setCellFactory(param -> new TableCell<>() {
             private final Button editButton = new Button("Modifier");
             private final Button deleteButton = new Button("Supprimer");
-            private final HBox buttons = new HBox(5, editButton, deleteButton);
 
             {
-                editButton.getStyleClass().add("btn-primary");
-                deleteButton.getStyleClass().add("btn-danger");
-
                 editButton.setOnAction(event -> {
                     Technicien technicien = getTableView().getItems().get(getIndex());
-                    editTechnicien(technicien);
+                    showEditDialog(technicien);
                 });
-
                 deleteButton.setOnAction(event -> {
                     Technicien technicien = getTableView().getItems().get(getIndex());
-                    deleteTechnicien(technicien);
+                    technicienService.delete(technicien);
+                    refreshTable();
                 });
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : buttons);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(new javafx.scene.layout.HBox(5, editButton, deleteButton));
+                }
             }
         });
+
+        refreshTable();
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> searchTechnicien(newValue));
     }
 
-    private void setupButtonActions() {
-        addButton.setOnAction(event -> handleAddTechnicien());
-        refreshButton.setOnAction(event -> refreshTechnicienList());
-        logoutLabel.setOnMouseClicked(event -> handleLogout());
-    }
-
-    private void handleAddTechnicien() {
+    @FXML
+    private void addButton(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/AjoutTechnicien.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
-            stage.setTitle("Ajouter un technicien");
             stage.setScene(new Scene(root));
-            stage.show();
-            stage.setOnHidden(e -> refreshTechnicienList());
+            stage.setTitle("Ajouter Technicien");
+            stage.showAndWait();
+            refreshTable();
         } catch (IOException e) {
-            showAlert("Erreur", "Impossible d'ouvrir la vue d'ajout: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-    private void editTechnicien(Technicien technicien) {
+@FXML
+    private void showEditDialog(Technicien technicien) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/technicien-update.fxml"));
             Parent root = loader.load();
             ModifyTechnicien controller = loader.getController();
-            controller.setTechnicienData(technicien);
+            controller.setTechnicien(technicien);
             Stage stage = new Stage();
-            stage.setTitle("Modifier le technicien");
             stage.setScene(new Scene(root));
-            stage.show();
-            stage.setOnHidden(e -> refreshTechnicienList());
+            stage.setTitle("Modifier Technicien");
+            stage.showAndWait();
+            refreshTable();
         } catch (IOException e) {
-            showAlert("Erreur", "Impossible d'ouvrir la vue de modification: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private void deleteTechnicien(Technicien technicien) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation de suppression");
-        alert.setHeaderText("Supprimer ce technicien ?");
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer le technicien: " +
-                technicien.getPrenom() + " " + technicien.getName() + "?");
+    @FXML
+    private void refreshButton() {
+        refreshTable();
+    }
 
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                technicienService.delete(technicien);
-                refreshTechnicienList();
-                showAlert("Succès", "Technicien supprimé avec succès");
+    private void refreshTable() {
+        technicienList.clear();
+        technicienList.addAll(technicienService.getAll());
+        technicienTableView.setItems(technicienList);
+    }
+
+    private void searchTechnicien(String query) {
+        if (query.isEmpty()) {
+            technicienTableView.setItems(technicienList);
+        } else {
+            ObservableList<Technicien> filteredList = FXCollections.observableArrayList();
+            for (Technicien technicien : technicienList) {
+                if (technicien.getName().toLowerCase().contains(query.toLowerCase()) ||
+                        technicien.getPrenom().toLowerCase().contains(query.toLowerCase()) ||
+                        technicien.getSpecialite().toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(technicien);
+                }
             }
-        });
+            technicienTableView.setItems(filteredList);
+        }
     }
 
-    private void refreshTechnicienList() {
-        loadTechniciens();
-        searchField.clear();
+    @FXML
+    private void showTechnicianMap(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/technicianMap.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Technician Map");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void handleLogout() {
-        Stage stage = (Stage) logoutLabel.getScene().getWindow();
-        stage.close();
-        showAlert("Information", "Déconnexion réussie");
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    @FXML
+    private void showReports(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/reports.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Maintenance Reports");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

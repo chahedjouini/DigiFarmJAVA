@@ -2,7 +2,6 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -43,12 +42,12 @@
                                         <Image url="@images/about-v1-img1.jpg" />
                                     </image>
                                 </ImageView>
-                                <Button fx:id="logout" layoutX="102.0" layoutY="500.0" prefHeight="47.0" prefWidth="67.0" styleClass="add-btn" stylesheets="@Css/machine-theme.css" text="LOGOUT" textFill="#248659" onAction="#handleLogout">
+                                <Button fx:id="logout" layoutX="62.0" layoutY="546.0" onAction="#handleLogout" prefHeight="47.0" prefWidth="137.0" styleClass="add-btn" stylesheets="@Css/machine-theme.css" text="LOGOUT" textFill="#248659">
                                     <font>
                                         <Font name="Montserrat ExtraBold" size="20.0" />
                                     </font>
                                 </Button>
-                                <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="51.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fitHeight="38.0" fitWidth="40.0" layoutX="15.0" layoutY="551.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@images/logout_w.png" />
                                     </image>
@@ -60,11 +59,11 @@
             </left>
             <!-- Center Content -->
             <center>
-                <AnchorPane prefHeight="718.0" prefWidth="1401.0" stylesheets="@Css/machine-theme.css" BorderPane.alignment="CENTER">
+                <AnchorPane prefHeight="778.0" prefWidth="1043.0" stylesheets="@Css/machine-theme.css" BorderPane.alignment="CENTER">
                     <children>
-                        <AnchorPane fx:id="home_form" layoutX="36.0" layoutY="41.0" prefHeight="655.0" prefWidth="1321.0">
+                        <AnchorPane fx:id="home_form" layoutX="36.0" layoutY="41.0" prefHeight="599.0" prefWidth="874.0">
                             <children>
-                                <AnchorPane layoutX="-32.0" layoutY="40.0" prefHeight="569.0" prefWidth="870.0" stylesheets="@../../../dashboardDesign.css">
+                                <AnchorPane layoutX="-32.0" layoutY="-38.0" prefHeight="691.0" prefWidth="917.0" stylesheets="@../../../dashboardDesign.css">
                                     <Text blendMode="COLOR_BURN" layoutX="164.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Liste des Machines" textAlignment="CENTER" wrappingWidth="534.9367065429688">
                                         <font>
                                             <Font name="Montserrat SemiBold" size="36.0" />
@@ -92,14 +91,13 @@
                                     </Text>
                                     <!-- Search and Action Buttons -->
                                     <HBox layoutX="16.0" layoutY="86.0" prefHeight="37.0" prefWidth="798.0" spacing="10.0">
-                                        <TextField fx:id="searchField" prefWidth="300.0" promptText="Rechercher..." />
+                                        <TextField fx:id="searchField" prefHeight="32.0" prefWidth="558.0" promptText="Rechercher..." />
                                         <Button fx:id="addButton" prefHeight="39.0" prefWidth="96.0" styleClass="btn-primary" text="Ajouter" />
-                                        <Button fx:id="refreshButton" prefHeight="37.0" prefWidth="139.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Rafraîchir" />
+                                        <Button fx:id="refreshButton" prefHeight="37.0" prefWidth="125.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Rafraîchir" />
                                     </HBox>
                                     <!-- Machine Table -->
-                                    <TableView fx:id="machineTableView" layoutX="8.0" layoutY="123.0" prefHeight="437.0" prefWidth="1318.0">
+                                    <TableView fx:id="machineTableView" layoutX="8.0" layoutY="123.0" prefHeight="490.0" prefWidth="909.0">
                                         <columns>
-                                            <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
                                             <TableColumn fx:id="nomCol" prefWidth="150.0" text="Nom" />
                                             <TableColumn fx:id="typeCol" prefWidth="150.0" text="Type" />
                                             <TableColumn fx:id="dateAchatCol" prefWidth="120.0" text="Date Achat" />

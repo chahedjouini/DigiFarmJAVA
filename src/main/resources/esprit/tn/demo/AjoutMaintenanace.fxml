@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -11,17 +15,16 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.AjoutMaintenance">
-
+<StackPane xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.AjoutMaintenance">
     <children>
         <AnchorPane fx:id="main_form" prefHeight="614.0" prefWidth="1100.0">
             <children>
                 <BorderPane layoutX="79.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <left>
-                        <!-- Left navigation pane remains unchanged -->
                         <AnchorPane prefHeight="555.0" prefWidth="211.0" BorderPane.alignment="CENTER">
                             <!-- ... existing navigation code ... -->
                         </AnchorPane>
@@ -119,10 +122,11 @@
                                                         <ComboBox fx:id="machineIdComboBox" promptText="Sélectionner la machine" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                                         <ComboBox fx:id="technicienIdComboBox" promptText="Sélectionner le technicien" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
-                                                        <!-- Buttons -->
+                                                        <!-- Buttons and Prediction Section -->
                                                         <AnchorPane prefHeight="50.0" prefWidth="630.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                                                             <children>
                                                                 <Button id="btn-secondary" fx:id="cancelButton" layoutY="7.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="35.0" prefWidth="164.0" text="Annuler" />
+                                                                <Button fx:id="predictButton" layoutX="233.0" layoutY="7.0" mnemonicParsing="false" onAction="#predict" prefHeight="35.0" prefWidth="200.0" styleClass="btn-primary" text="Predict Maintenance Status" />
                                                                 <Button fx:id="submitButton" layoutX="467.0" layoutY="7.0" mnemonicParsing="false" onAction="#handleSubmit" prefHeight="35.0" prefWidth="156.0" styleClass="btn-primary" text="Ajouter" />
                                                             </children>
                                                         </AnchorPane>
@@ -133,6 +137,27 @@
                                                         <Font name="Montserrat SemiBold" size="36.0" />
                                                     </font>
                                                 </Text>
+                                                <!-- Prediction Result and Error Labels -->
+                                                <Label fx:id="resultLabel" layoutX="16.0" layoutY="539.0" prefWidth="400.0" text="" styleClass="result" />
+                                                <Label fx:id="errorLabel" layoutX="426.0" layoutY="539.0" prefWidth="400.0" text="" styleClass="error" />
+                                                <!-- Maintenance History Table -->
+                                                <VBox layoutX="16.0" layoutY="565.0" spacing="10">
+                                                    <children>
+                                                        <Label text="Maintenance History" styleClass="subtitle" />
+                                                        <TableView fx:id="historyTable" prefHeight="200.0" prefWidth="830.0">
+                                                            <columns>
+                                                                <TableColumn fx:id="dateColumn" text="Date" prefWidth="100"/>
+                                                                <TableColumn fx:id="coutColumn" text="Cost" prefWidth="80"/>
+                                                                <TableColumn fx:id="temperatureColumn" text="Temp" prefWidth="60"/>
+                                                                <TableColumn fx:id="humiditeColumn" text="Humidity" prefWidth="80"/>
+                                                                <TableColumn fx:id="consoCarburantColumn" text="Fuel" prefWidth="80"/>
+                                                                <TableColumn fx:id="consoEnergieColumn" text="Energy" prefWidth="80"/>
+                                                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+                                                                <TableColumn fx:id="idMachineColumn" text="Machine ID" prefWidth="80"/>
+                                                            </columns>
+                                                        </TableView>
+                                                    </children>
+                                                </VBox>
                                             </children>
                                         </AnchorPane>
                                     </children>

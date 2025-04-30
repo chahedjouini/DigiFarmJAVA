@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ViewTechnicienController">
+<StackPane xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionMachine.ViewTechnicienController">
     <AnchorPane fx:id="main_form" prefHeight="600.0" prefWidth="1100.0">
         <BorderPane layoutX="79.0" layoutY="100.0" prefHeight="600.0" prefWidth="1100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
@@ -95,8 +95,10 @@
                                     <!-- Search and Action Buttons -->
                                     <HBox layoutX="16.0" layoutY="86.0" prefHeight="37.0" prefWidth="798.0" spacing="10.0">
                                         <TextField fx:id="searchField" prefWidth="300.0" promptText="Rechercher..." />
-                                        <Button fx:id="addButton" prefHeight="39.0" prefWidth="96.0" styleClass="btn-primary" text="Ajouter" />
+                                        <Button onAction="#addButton" prefHeight="39.0" prefWidth="96.0" styleClass="btn-primary" text="Ajouter" />
                                         <Button fx:id="refreshButton" prefHeight="37.0" prefWidth="139.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Rafraîchir" />
+                                        <Button fx:id="mapButton" onAction="#showTechnicianMap" prefHeight="39.0" prefWidth="150.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Technician Map" />
+                                        <Button fx:id="reportsButton" onAction="#showReports" prefHeight="39.0" prefWidth="150.0" styleClass="btn-primary" stylesheets="@Css/machine-theme.css" text="Reports" />
                                     </HBox>
 
                                     <!-- Technicien Table -->
