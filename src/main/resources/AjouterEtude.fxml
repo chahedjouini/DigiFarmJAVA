@@ -1,43 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="700" prefWidth="600" stylesheets="@form.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AjouterEtude">
+<VBox alignment="TOP_CENTER" spacing="10.0"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.AjouterEtude"
+      stylesheets="@form.css"
+      prefWidth="600" prefHeight="680">
 
-    <VBox alignment="TOP_CENTER" layoutX="50" layoutY="20" prefWidth="400" spacing="15" styleClass="form-container">
+    <padding>
+        <Insets top="20" bottom="20" left="30" right="30"/>
+    </padding>
 
-        <Label styleClass="form-title" text="Ajouter une Étude" />
+    <!-- Titre -->
+    <Label text="Ajouter une Étude" styleClass="title-label">
+        <font>
+            <Font size="22.0"/>
+        </font>
+    </Label>
 
-        <DatePicker fx:id="dateField" promptText="Date Réalisation" styleClass="input-field" />
-        <ComboBox fx:id="cultureCombo" promptText="Culture" styleClass="input-field" />
-        <ComboBox fx:id="expertCombo" promptText="Expert" styleClass="input-field" />
-        <ComboBox fx:id="climatCombo" promptText="Climat" styleClass="input-field" />
-        <ComboBox fx:id="typeSolCombo" promptText="Type de Sol" styleClass="input-field" />
+    <!-- Formulaire -->
+    <VBox spacing="8.0" maxWidth="420">
 
-        <HBox spacing="10">
-            <Label styleClass="label" text="Irrigation :" />
-            <CheckBox fx:id="irrigationCheck" />
+        <Label text="Date de Réalisation"/>
+        <DatePicker fx:id="dateField" promptText="Sélectionnez une date"/>
+
+        <Label text="Culture"/>
+        <ComboBox fx:id="cultureCombo" promptText="Choisissez une culture"/>
+
+        <Label text="Expert"/>
+        <ComboBox fx:id="expertCombo" promptText="Choisissez un expert"/>
+
+        <Label text="Climat"/>
+        <ComboBox fx:id="climatCombo" promptText="Sélectionnez le climat"/>
+
+        <Label text="Type de Sol"/>
+        <ComboBox fx:id="typeSolCombo" promptText="Sélectionnez le type de sol"/>
+
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Irrigation"/>
+            <CheckBox fx:id="irrigationCheck"/>
         </HBox>
 
-        <HBox spacing="10">
-            <Label styleClass="label" text="Fertilisation :" />
-            <CheckBox fx:id="fertilisationCheck" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Fertilisation"/>
+            <CheckBox fx:id="fertilisationCheck"/>
         </HBox>
 
-        <TextField fx:id="prixField" promptText="Prix" styleClass="input-field" />
-        <TextField fx:id="rendementField" promptText="Rendement" styleClass="input-field" />
-        <TextField fx:id="precipitationField" promptText="Précipitations" styleClass="input-field" />
-        <TextField fx:id="mainField" promptText="Main d’œuvre" styleClass="input-field" />
+        <Label text="Prix (DT)"/>
+        <TextField fx:id="prixField" promptText="Ex: 50.0"/>
 
-        <Label fx:id="messageLabel" styleClass="message-label" />
-        <Button onAction="#onAjout" styleClass="submit-button" text="Ajouter" />
+        <Label text="Rendement (T)"/>
+        <TextField fx:id="rendementField" promptText="Ex: 3.2"/>
+
+        <Label text="Précipitations (mm)"/>
+        <TextField fx:id="precipitationField" promptText="Ex: 100.0"/>
+
+        <Label text="Main d’œuvre (H)"/>
+        <TextField fx:id="mainField" promptText="Ex: 20.0"/>
+
+        <Label fx:id="messageLabel" styleClass="error-label" visible="false"/>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button text="Ajouter" fx:id="ajouterBtn" onAction="#onAjout" styleClass="primary-button"/>
+        </HBox>
     </VBox>
-</AnchorPane>
+</VBox>
