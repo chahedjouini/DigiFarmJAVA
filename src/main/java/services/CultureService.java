@@ -7,7 +7,8 @@ import enums.BesoinsEngrais;
 import enums.Climat;
 import enums.TypeSol;
 import data.MyDataBase;
-
+import entities.User;
+import  enums.Role;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,11 +16,13 @@ import java.util.List;
 
 public class CultureService implements IService<Culture> {
     Connection connection;
-
+    private User currentUser;
     public CultureService() {
         connection = MyDataBase.getInstance().getConnection();
     }
-
+    public void setUser(User user) {
+        this.currentUser = user;
+    }
     @Override
     public void add(Culture culture) throws SQLException {
         String sql = "INSERT INTO culture (nom, surface, date_plantation, date_recolte, region, type_culture, densite_plantation, besoins_eau, besoins_engrais, rendement_moyen, cout_moyen, id_user_id) " +
@@ -159,5 +162,50 @@ public class CultureService implements IService<Culture> {
 
         return cultures;
     }
+    public List<Culture> getCulturesByUser() throws SQLException {
+        if (currentUser == null) {
+            return select(); // fallback admin
+        }
 
+        List<Culture> result = new ArrayList<>();
+        String sql = """
+            SELECT * FROM culture WHERE id_user_id = ?
+        """;
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, currentUser.getId());
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Culture culture = new Culture();
+            int cultureId = rs.getInt("id");
+
+            culture.setId(cultureId);
+            culture.setNom(rs.getString("nom"));
+            culture.setSurface(rs.getFloat("surface"));
+            culture.setDatePlantation(rs.getDate("date_plantation").toLocalDate());
+            culture.setDateRecolte(rs.getDate("date_recolte").toLocalDate());
+            culture.setRegion(rs.getString("region"));
+            culture.setTypeCulture(rs.getString("type_culture"));
+            culture.setDensitePlantation(rs.getFloat("densite_plantation"));
+            culture.setBesoinsEau(rs.getFloat("besoins_eau"));
+
+            String engraisStr = rs.getString("besoins_engrais").toLowerCase();
+            for (BesoinsEngrais be : BesoinsEngrais.values()) {
+                if (be.toString().equalsIgnoreCase(engraisStr)) {
+                    culture.setBesoinsEngrais(be);
+                    break;
+                }
+            }
+
+            culture.setRendementMoyen(rs.getFloat("rendement_moyen"));
+            culture.setCoutMoyen(rs.getFloat("cout_moyen"));
+            culture.setIdUser(rs.getInt("id_user_id"));
+
+            // Tu peux appeler ici une méthode loadEtudes(culture) si tu veux
+            result.add(culture);
+        }
+
+        return result;
+    }
 }

@@ -9,7 +9,7 @@
 <StackPane xmlns:fx="http://javafx.com/fxml/1"
            xmlns="http://javafx.com/javafx/17"
            fx:controller="controllers.LoginController"
-           stylesheets="@style.css">
+           stylesheets="@styleee.css">
 
     <!-- Image de fond -->
     <ImageView fitWidth="1280" fitHeight="720" preserveRatio="false">

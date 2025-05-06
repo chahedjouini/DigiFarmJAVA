@@ -99,17 +99,32 @@ public class RegisterController implements Initializable {
 
         if (createdUser != null) {
             try {
-                // Redirection vers le dashboard
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
-                Parent root = loader.load();
+                // Redirection différente selon le rôle
+                if (createdUser.getRole() == Role.ADMIN) {
+                    // Redirection vers le dashboard pour les administrateurs
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Dashboard.fxml"));
+                    Parent root = loader.load();
 
-                // Passer l'utilisateur connecté au contrôleur du dashboard
-                DashboardController dashboardController = loader.getController();
-                dashboardController.setCurrentUser(createdUser);
+                    // Passer l'utilisateur connecté au contrôleur du dashboard
+                    DashboardController dashboardController = loader.getController();
+                    dashboardController.setCurrentUser(createdUser);
 
-                Stage stage = (Stage) emailField.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Dashboard - Digifarm");
+                    Stage stage = (Stage) emailField.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("Dashboard - Digifarm");
+                } else {
+                    // Redirection vers le frontboard pour les clients et agriculteurs
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/Frontboard.fxml"));
+                    Parent root = loader.load();
+
+                    // Passer l'utilisateur connecté au contrôleur du frontboard
+                    FrontboardController frontboardController = loader.getController();
+                    frontboardController.setCurrentUser(createdUser);
+
+                    Stage stage = (Stage) emailField.getScene().getWindow();
+                    stage.setScene(new Scene(root));
+                    stage.setTitle("DigiFarm - Espace Utilisateur");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 showError("Erreur lors du chargement de l'interface");

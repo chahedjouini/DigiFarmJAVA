@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="700" prefWidth="600" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="controllers.AjouterExpert">
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjouterExpert"
+            prefWidth="600" prefHeight="720"
+            stylesheets="@form.css">
 
-   <children>
-      <VBox layoutX="39.0" layoutY="47.0" prefWidth="500" spacing="20" style="-fx-background-color: #2e7d32; -fx-padding: 20px;">
-         <children>
-            <Label style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: white;" text="Ajouter un Expert" />
+   <VBox alignment="TOP_CENTER" spacing="15" layoutX="50" layoutY="30" prefWidth="400" styleClass="form-container">
+      <Label text="Ajouter un Expert" styleClass="form-title"/>
 
-            <!-- Nom Field -->
-            <TextField fx:id="nomField" promptText="Nom" style="-fx-pref-width: 350px; -fx-padding: 8px; -fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px;" />
-            <Label fx:id="nomErrorLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+      <!-- Nom -->
+      <TextField fx:id="nomField" promptText="Nom" styleClass="input-field"/>
+      <Label fx:id="nomErrorLabel" styleClass="error-label"/>
 
-            <!-- Prenom Field -->
-            <TextField fx:id="prenomField" promptText="Prénom" style="-fx-pref-width: 350px; -fx-padding: 8px; -fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px;" />
-            <Label fx:id="prenomErrorLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+      <!-- Prénom -->
+      <TextField fx:id="prenomField" promptText="Prénom" styleClass="input-field"/>
+      <Label fx:id="prenomErrorLabel" styleClass="error-label"/>
 
-            <!-- Tel Field -->
-            <TextField fx:id="telField" promptText="Téléphone (8 chiffres)" style="-fx-pref-width: 350px; -fx-padding: 8px; -fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px;" />
-            <Label fx:id="telErrorLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+      <!-- Téléphone -->
+      <TextField fx:id="telField" promptText="Téléphone (8 chiffres)" styleClass="input-field"/>
+      <Label fx:id="telErrorLabel" styleClass="error-label"/>
 
-            <!-- Email Field -->
-            <TextField fx:id="emailField" promptText="Email" style="-fx-pref-width: 350px; -fx-padding: 8px; -fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px;" />
-            <Label fx:id="emailErrorLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+      <!-- Email -->
+      <TextField fx:id="emailField" promptText="Email" styleClass="input-field"/>
+      <Label fx:id="emailErrorLabel" styleClass="error-label"/>
 
-            <!-- Zone Field -->
-            <TextField fx:id="zoneField" promptText="Zone géographique" style="-fx-pref-width: 350px; -fx-padding: 8px; -fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px;" />
-            <Label fx:id="zoneErrorLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+      <!-- Zone géographique -->
+      <TextField fx:id="zoneField" promptText="Zone géographique" styleClass="input-field"/>
+      <Label fx:id="zoneErrorLabel" styleClass="error-label"/>
 
-            <!-- Disponibilité ComboBox -->
-            <ComboBox fx:id="dispoCombo" promptText="Disponibilité" style="-fx-pref-width: 350px; -fx-padding: 8px; -fx-background-color: white; -fx-border-color: #4CAF50; -fx-border-width: 2px;" />
-            <Label fx:id="dispoErrorLabel" style="-fx-text-fill: red; -fx-font-size: 12px;"/>
+      <!-- Disponibilité -->
+      <ComboBox fx:id="dispoCombo" promptText="Disponibilité" styleClass="input-field"/>
+      <Label fx:id="dispoErrorLabel" styleClass="error-label"/>
 
-            <!-- Ajouter Button -->
-            <Button onAction="#onAjout" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-pref-width: 350px; -fx-padding: 10px; -fx-border-radius: 5px;" text="Ajouter" />
+      <!-- Bouton Ajouter -->
+      <Button fx:id="ajouterBtn" text="Ajouter" onAction="#onAjout" styleClass="submit-button"/>
 
-            <!-- Error Message -->
-            <Label fx:id="messageLabel" style="-fx-text-fill: red; -fx-font-size: 12px;" />
-         </children>
-      </VBox>
-   </children>
+      <!-- Message global -->
+      <Label fx:id="messageLabel" styleClass="error-label"/>
+   </VBox>
 </AnchorPane>

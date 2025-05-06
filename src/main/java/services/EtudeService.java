@@ -10,7 +10,8 @@ import data.MyDataBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
-
+import entities.User;
+import  enums.Role;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +20,13 @@ import java.util.Map;
 
 public class EtudeService implements IService<Etude> {
     Connection connection;
-
+    private User currentUser;
     public EtudeService() {
         connection = MyDataBase.getInstance().getConnection();
     }
-
+    public void setUser(User user) {
+        this.currentUser = user;
+    }
     @Override
     public void add(Etude etude) throws SQLException {
         String sql = "INSERT INTO etude (date_r, culture_id, expert_id, id_user_id, climat, type_sol, irrigation, fertilisation, prix, rendement, precipitations, main_oeuvre) " +
@@ -246,5 +249,57 @@ public class EtudeService implements IService<Etude> {
 
         return statistics;
     }
+    public List<Etude> getEtudesByUser() throws SQLException {
+        if (currentUser == null) return select();
 
+        List<Etude> list = new ArrayList<>();
+        String sql = """
+            SELECT e.*, c.nom AS culture_nom, c.region AS culture_region,
+                   ex.id AS expert_id, ex.nom AS expert_nom, ex.prenom AS expert_prenom
+            FROM etude e
+            JOIN culture c ON e.culture_id = c.id
+            JOIN expert ex ON e.expert_id = ex.id
+            WHERE c.id_user_id = ?
+        """;
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, currentUser.getId());
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Etude etude = new Etude();
+            etude.setId(rs.getInt("id"));
+            etude.setDateR(rs.getDate("date_r").toLocalDate());
+
+            Culture culture = new Culture();
+            culture.setId(rs.getInt("culture_id"));
+            culture.setNom(rs.getString("culture_nom"));
+            culture.setRegion(rs.getString("culture_region"));
+            etude.setCulture(culture);
+
+            Expert expert = new Expert();
+            expert.setId(rs.getInt("expert_id"));
+            expert.setNom(rs.getString("expert_nom"));
+            expert.setPrenom(rs.getString("expert_prenom"));
+            etude.setExpert(expert);
+
+            try {
+                etude.setClimat(Climat.valueOf(rs.getString("climat").toUpperCase()));
+                etude.setTypeSol(TypeSol.valueOf(rs.getString("type_sol").toUpperCase()));
+            } catch (Exception e) {
+                continue;
+            }
+
+            etude.setIrrigation(rs.getBoolean("irrigation"));
+            etude.setFertilisation(rs.getBoolean("fertilisation"));
+            etude.setPrix(rs.getFloat("prix"));
+            etude.setRendement(rs.getFloat("rendement"));
+            etude.setPrecipitations(rs.getFloat("precipitations"));
+            etude.setMainOeuvre(rs.getFloat("main_oeuvre"));
+
+            list.add(etude);
+        }
+
+        return list;
+    }
 }
