@@ -2,9 +2,18 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+
+
+
 <VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalUpdateController">
+      fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalUpdateController"   >
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    <Text text=" Update Animal" style="-fx-font-size: 18; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
 
     <TextField fx:id="idField" promptText="ID"/>
     <TextField fx:id="nomField" promptText="Nom"/>
@@ -12,5 +21,5 @@
     <TextField fx:id="raceField" promptText="Race"/>
     <TextField fx:id="ageField" promptText="Âge"/>
     <TextField fx:id="poidsField" promptText="Poids"/>
-    <Button text="Mettre à jour" onAction="#handleUpdateAnimal"/>
+    <Button text="Mettre à jour" onAction="#handleUpdateAnimal" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
 </VBox>

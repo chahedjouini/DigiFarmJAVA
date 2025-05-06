@@ -14,26 +14,32 @@
     </padding>
 
     <Text style="-fx-font-size: 18; -fx-font-weight: bold;" text="Veterinaires List" />
-    <TextField fx:id="searchNomField" maxWidth="Infinity" promptText="Rechercher par Nom" />
+    <TextField fx:id="searchNomField" maxWidth="Infinity" promptText="Rechercher par Nom" stylesheets="@Css/Style.css" />
     <TableView fx:id="veterinaireTable" maxWidth="Infinity" prefHeight="400.0" stylesheets="@dashboardDesign.css" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
             <TableColumn fx:id="nomCol" prefWidth="100.0" text="Nom" />
             <TableColumn fx:id="numTelCol" prefWidth="150.0" text="Numéro de Téléphone" />
-            <TableColumn fx:id="emailCol" prefWidth="150.0" text="Email" />
-            <TableColumn fx:id="adresse_cabineCol" prefWidth="200.0" text="Adresse du Cabinet" />
+            <TableColumn fx:id="emailCol" prefWidth="200.0" text="Email" />
+            <TableColumn fx:id="adresse_cabineCol" prefWidth="150.0" text="Adresse du Cabinet" />
             <TableColumn fx:id="actionsCol" prefWidth="150.0" text="Actions" />
         </columns>
     </TableView>
-    <Button minHeight="35.0" onAction="#handleAddVeterinaire" prefWidth="210.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Add New Veterinaire" />
-    <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleOpenAnimaux" prefWidth="210.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher les Animaux">
+    <Button   mnemonicParsing="false" onAction="#handleAddVeterinaire" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Add New Veterinaire">
+        <VBox.margin>
+            <Insets top="10.0" />
+        </VBox.margin>
+      <VBox.margin>
+         <Insets right="550.0" />
+      </VBox.margin></Button>
+    <Button  mnemonicParsing="false" onAction="#handleOpenAnimaux" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher les Animaux">
         <VBox.margin>
             <Insets top="10.0" />
         </VBox.margin>
     </Button>
-    <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleOpenSuivi" prefWidth="210.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher le Suivi des Animaux">
+    <Button  mnemonicParsing="false" onAction="#handleOpenSuivi" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher le Suivi des Animaux">
         <VBox.margin>
-            <Insets top="10.0" />
+            <Insets />
         </VBox.margin>
     </Button>
 

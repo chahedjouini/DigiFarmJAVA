@@ -7,50 +7,54 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
 
-<VBox prefHeight="450.0" prefWidth="600.0" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalReadController">
+<VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="848.0" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.AnimalReadController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
+    <Text style="-fx-font-size: 18; -fx-font-weight: bold;" text="Animal List" />
+
     <children>
-        <HBox spacing="10.0">
+        <HBox spacing="30.0">
             <children>
-                <TextField fx:id="searchNomField" promptText="Rechercher par Nom" />
-                <TextField fx:id="searchTypeField" promptText="Rechercher par Type" />
-                <TextField fx:id="searchRaceField" promptText="Rechercher par Race" />
+                <TextField fx:id="searchNomField" maxWidth="Infinity" promptText="Rechercher par Nom" stylesheets="@Css/Style.css" />
+                <TextField fx:id="searchTypeField" maxWidth="Infinity"  promptText="Rechercher par Type" stylesheets="@Css/Style.css" />
+                <TextField fx:id="searchRaceField" maxWidth="Infinity"  promptText="Rechercher par Race" stylesheets="@Css/Style.css" />
             </children>
         </HBox>
-        <TableView fx:id="animalTable" prefHeight="300.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+        <TableView fx:id="animalTable" maxWidth="Infinity" prefHeight="400.0" stylesheets="@dashboardDesign.css"  VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="idCol" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="nomCol" prefWidth="75.0" text="Nom" />
-                <TableColumn fx:id="typeCol" prefWidth="75.0" text="Type" />
-                <TableColumn fx:id="raceCol" prefWidth="75.0" text="Race" />
-                <TableColumn fx:id="ageCol" prefWidth="75.0" text="Âge" />
-                <TableColumn fx:id="poidsCol" prefWidth="75.0" text="Poids" />
+                <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="nomCol" prefWidth="100.0" text="Nom" />
+                <TableColumn fx:id="typeCol" prefWidth="150.0" text="Type" />
+                <TableColumn fx:id="raceCol" prefWidth="150.0" text="Race" />
+                <TableColumn fx:id="ageCol" prefWidth="150.0" text="Âge" />
+                <TableColumn fx:id="poidsCol" prefWidth="150.0" text="Poids" />
                 <TableColumn fx:id="actionsCol" prefWidth="150.0" text="Actions" />
             </columns>
         </TableView>
         <HBox spacing="10.0">
             <children>
-                <Button fx:id="addAnimalButton" mnemonicParsing="false" onAction="#handleAddAnimal" text="Ajouter Animal" />
-                <Button mnemonicParsing="false" onAction="#handleOpenStatistiques" text="Afficher les Statistiques" />
-                <Button mnemonicParsing="false" onAction="#handleOpenVeterinaires" text="Afficher les Vétérinaires">
-                    <VBox.margin>
-                        <Insets top="5.0" />
-                    </VBox.margin>
-                </Button>
-                <Button mnemonicParsing="false" onAction="#handleOpenSuivi" text="Afficher le Suivi des Animaux">
-                    <VBox.margin>
-                        <Insets top="5.0" />
-                    </VBox.margin>
-                </Button>
-                <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleExportToExcel" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Exporter vers Excel" textAlignment="CENTER">
+                <Button fx:id="addAnimalButton" mnemonicParsing="false" onAction="#handleAddAnimal" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Ajouter Animal" />
+                <Button mnemonicParsing="false" onAction="#handleOpenStatistiques" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher les Statistiques" />
+                <Button  mnemonicParsing="false" onAction="#handleExportToExcel"  style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Exporter vers Excel" textAlignment="CENTER">
                     <VBox.margin>
                         <Insets top="10.0" />
                     </VBox.margin>
                 </Button>
-                <TextField fx:id="emailField" promptText="Destinataire Email" />
+                <Button mnemonicParsing="false" onAction="#handleOpenVeterinaires" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher les Vétérinaires">
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Button>
+
+                <Button mnemonicParsing="false" onAction="#handleOpenSuivi" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"  text="Afficher le Suivi des Animaux">
+                    <VBox.margin>
+                        <Insets top="5.0" />
+                    </VBox.margin>
+                </Button>
+
             </children>
             <VBox.margin>
                 <Insets top="10.0" />

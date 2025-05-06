@@ -10,7 +10,7 @@ module esprit.tn.demo {
     requires org.apache.httpcomponents.httpcore;
     requires org.apache.httpcomponents.httpclient;
     requires org.json;
-    requires java.mail;
+
 
 
     opens esprit.tn.demo to javafx.fxml;

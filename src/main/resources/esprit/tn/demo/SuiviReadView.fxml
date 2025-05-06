@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="543.0" prefWidth="848.0" style="-fx-border-color: #4CAF50;" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviReadController">
+<VBox alignment="TOP_CENTER"  prefHeight="543.0" prefWidth="848.0" style="-fx-border-color: #4CAF50;" stylesheets="@dashboardDesign.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="esprit.tn.demo.controllers.GestionAnimal.SuiviReadController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -24,31 +24,32 @@
                 <TableColumn fx:id="actionsColumn" prefWidth="100.0" text="Actions" />
             </columns>
         </TableView>
-        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleAddSuivi" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Ajouter un Suivi" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
+        <Button mnemonicParsing="false" onAction="#handleAddSuivi" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Ajouter un Suivi" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
         </Button>
-        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleOpenStatistiques" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Afficher les Statistiques" textAlignment="CENTER">
-            <VBox.margin>
-                <Insets top="5.0" />
-            </VBox.margin>
-        </Button>
-        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleOpenAnimaux" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Retour à la Liste des Animaux" textAlignment="CENTER">
+        <Button  mnemonicParsing="false" onAction="#handleOpenStatistiques" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher les Statistiques" textAlignment="CENTER">
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
         </Button>
-        <Button minHeight="35.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#handleOpenVeterinaires" prefWidth="210.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Retour à la Liste des Vétérinaires" textAlignment="CENTER">
-            <VBox.margin>
-                <Insets top="5.0" />
-            </VBox.margin>
-        </Button>
-        <Button minHeight="35.0" mnemonicParsing="false" onAction="#handleExportToExcel" prefWidth="230.0" style="-fx-background-color: #4CAF50;" stylesheets="@Css/animal_theme.css" text="Exporter vers Excel" textAlignment="CENTER">
+        <Button  mnemonicParsing="false" onAction="#handleExportToExcel" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Exporter vers Excel" textAlignment="CENTER">
             <VBox.margin>
                 <Insets top="10.0" />
             </VBox.margin>
         </Button>
+        <Button  mnemonicParsing="false" onAction="#handleOpenAnimaux" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Retour à la Liste des Animaux" textAlignment="CENTER">
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </Button>
+        <Button  mnemonicParsing="false" onAction="#handleOpenVeterinaires" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Retour à la Liste des Vétérinaires" textAlignment="CENTER">
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </Button>
+
 
     </children>
 </VBox>
