@@ -4,6 +4,9 @@ import esprit.tn.demo.entities.GestionVente.Commande;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -12,6 +15,7 @@ import javafx.stage.Stage;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -68,6 +72,7 @@ public class CommandeController {
         // Charger directement les données dans le graphique
         updateSalesChart(commandes);
     }
+
 
     @FXML
     private void handleFiltrer() {
@@ -130,9 +135,18 @@ public class CommandeController {
 
                 document.add(table);
                 document.close();
+
+                // ✅ Ouvrir le PDF dans le navigateur ou viewer par défaut
+                if (file.exists()) {
+                    java.awt.Desktop.getDesktop().browse(file.toURI());
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Erreur lors de l'exportation du PDF : " + e.getMessage()).showAndWait();
         }
     }
+
+
 }

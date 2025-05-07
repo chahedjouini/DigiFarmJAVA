@@ -1,28 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
-<VBox xmlns="http://javafx.com/javafx/17"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="esprit.tn.demo.controllers.GestionVente.ProduitController"
-      spacing="10">
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
 
-    <Label text="Gestion des Produits"/>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="esprit.tn.demo.controllers.GestionVente.ProduitController"
+            style="-fx-background-color: #f5f8fa;">
 
-    <TableView fx:id="produitTable" prefHeight="300">
-        <columns>
-            <TableColumn fx:id="nomColumn" text="Nom"/>
-            <TableColumn fx:id="typeColumn" text="Type"/>
-            <TableColumn fx:id="referenceColumn" text="Référence"/>
-            <TableColumn fx:id="prixColumn" text="Prix"/>
-            <TableColumn fx:id="stockColumn" text="Stock"/>
-        </columns>
-    </TableView>
-</VBox>
+    <!-- TOP -->
+    <top>
+        <Label text="📦 Gestion des Produits"
+               BorderPane.alignment="CENTER"
+               style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-padding: 20 0 10 0; -fx-text-fill: #2c3e50;" />
+    </top>
+
+    <!-- CENTER (Form + Table) -->
+    <center>
+        <HBox spacing="40" alignment="TOP_CENTER" style="-fx-padding: 20;">
+            <!-- Formulaire -->
+            <VBox spacing="10">
+                <GridPane hgap="12" vgap="6">
+                    <padding><Insets top="10" left="10" right="10" bottom="10"/></padding>
+
+                    <Label text="Nom :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                    <TextField fx:id="nomField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+                    <Label fx:id="nomErrorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                    <Label text="Référence :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="referenceField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                    <Label fx:id="referenceErrorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+
+                    <Label text="Type :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="typeField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                    <Label fx:id="typeErrorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
 
 
+                    <Label text="Description :" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                    <TextField fx:id="descriptionField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+                    <Label fx:id="descriptionErrorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+                    <Label text="Prix :" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+                    <TextField fx:id="prixField" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+                    <Label fx:id="prixErrorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+                    <Label text="Stock :" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+                    <TextField fx:id="stockField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+                    <Label fx:id="stockErrorLabel" style="-fx-text-fill: red;" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+                </GridPane>
+            </VBox>
+
+            <!-- Table Produits -->
+            <TableView fx:id="produitTable" prefHeight="400" prefWidth="700">
+                <columns>
+                    <TableColumn fx:id="nomColumn" text="Nom" prefWidth="140"/>
+                    <TableColumn fx:id="typeColumn" text="Type" prefWidth="120"/>
+                    <TableColumn fx:id="referenceColumn" text="Référence" prefWidth="140"/>
+                    <TableColumn fx:id="prixColumn" text="Prix" prefWidth="100"/>
+                    <TableColumn fx:id="stockColumn" text="Stock" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </HBox>
+    </center>
+
+    <!-- BOTTOM (Boutons) -->
+    <bottom>
+        <HBox spacing="30" alignment="CENTER" style="-fx-padding: 20;">
+            <Button fx:id="saveButton" text="Ajouter"
+                    onAction="#handleAddProduit"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 18;"/>
+
+            <Button fx:id="updateButton" text="Modifier"
+                    onAction="#updateProduit"
+                    style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 18;"/>
+
+            <Button fx:id="deleteButton" text="Supprimer"
+                    onAction="#deleteProduit"
+                    style="-fx-background-color: #c0392b; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 8 18;"/>
+        </HBox>
+    </bottom>
+</BorderPane>

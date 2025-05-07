@@ -1,5 +1,6 @@
 package esprit.tn.demo.tests;
 
+import esprit.tn.demo.services.GestionVente.StripeCallbackServer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +16,7 @@ public class testMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            StripeCallbackServer.start();
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/esprit/tn/demo/Dashboard.fxml"));
             Parent root = fxmlLoader.load();
             Scene scene = new Scene(root);

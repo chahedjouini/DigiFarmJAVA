@@ -10,18 +10,25 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 public class Commande {
-    private final IntegerProperty id;
-    private final StringProperty statut;
-    private final FloatProperty montantTotal;
-    private final StringProperty dateCommande;
-    private ObservableList<CommandeDetail> commandeDetails;
-    // Constructor
-    public Commande(int id, String statut, float montantTotal, String dateCommande) {
-        this.id = new SimpleIntegerProperty(id);
-        this.statut = new SimpleStringProperty(statut);
-        this.montantTotal = new SimpleFloatProperty(montantTotal);
-        this.dateCommande = new SimpleStringProperty(dateCommande);  // Format: "yyyy-MM-dd HH:mm:ss"
-    }
+
+        private IntegerProperty id;
+        private StringProperty statut;
+        private FloatProperty montantTotal;
+        private StringProperty dateCommande;
+
+        public Commande() {
+            this.id = new SimpleIntegerProperty();
+            this.statut = new SimpleStringProperty();
+            this.montantTotal = new SimpleFloatProperty();
+            this.dateCommande = new SimpleStringProperty();
+        }
+
+        public Commande(int id, String statut, float montantTotal, String dateCommande) {
+            this.id = new SimpleIntegerProperty(id);
+            this.statut = new SimpleStringProperty(statut);
+            this.montantTotal = new SimpleFloatProperty(montantTotal);
+            this.dateCommande = new SimpleStringProperty(dateCommande);
+        }
 
 
 

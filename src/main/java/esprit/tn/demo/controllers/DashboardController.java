@@ -48,7 +48,7 @@ public class DashboardController implements Initializable {
         put("Gestion Animaux", new String[]{"Animal", "Vétérinaire", "Etat"});
         put("Gestion Abonnement", new String[]{"Facture", "Abonnement"});
         put("Gestion Machine", new String[]{"Machine", "Technicien", "Maintenance"});
-        put("Gestion Stock", new String[]{"Produit", "Quantité"});
+        put("Gestion Stock", new String[]{"Produit", "Commande"});
     }};
 
     @Override

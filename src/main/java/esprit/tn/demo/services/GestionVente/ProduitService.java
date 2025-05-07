@@ -101,6 +101,7 @@ public class   ProduitService implements IProduitService<Produit> {
                         rs.getInt("stock")
 
                 );
+                produit.setImagePath(rs.getString("image"));
                 produits.add(produit);
             }
         } catch (SQLException e) {

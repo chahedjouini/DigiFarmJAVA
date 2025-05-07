@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="esprit.tn.demo.controllers.GestionVente.CartController">
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="🛒 Votre Panier" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <!-- Élément essentiel -->
+            <VBox fx:id="cartItemsBox" spacing="10" />
+
+            <HBox spacing="10">
+                <TextField fx:id="couponField" promptText="Entrez un code promo" />
+                <Button text="Appliquer" onAction="#applyCoupon" />
+            </HBox>
+
+            <Label fx:id="subtotalLabel" text="Subtotal: 0.00 USD" style="-fx-font-weight: bold;" />
+            <Button text="Valider la commande" onAction="#placeOrder" />
+        </VBox>
+
+    </center>
+
+</BorderPane>

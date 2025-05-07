@@ -63,6 +63,19 @@ public class CommandeService implements ICommandeService<Commande> {
         }
         return null;
     }
+    public void add(Commande commande) {
+        String sql = "INSERT INTO commande (statut, montant_total, date_commande) VALUES (?, ?, ?)";
+
+        try (PreparedStatement pst = cnx.prepareStatement(sql)) {
+            pst.setString(1, commande.getStatut());
+            pst.setFloat(2, commande.getMontantTotal());
+            pst.setString(3, commande.getDateCommande());
+            pst.executeUpdate();
+            System.out.println("✅ Commande ajoutée avec succès !");
+        } catch (SQLException e) {
+            System.err.println("❌ Erreur lors de l'ajout de la commande : " + e.getMessage());
+        }
+    }
 
 
 

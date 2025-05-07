@@ -3,15 +3,20 @@ module esprit.tn.demo {
     requires javafx.fxml;
     requires java.sql;
     requires itextpdf;
+    requires java.desktop;
+    requires stripe.java;
+    requires spark.core;
+    requires mysql.connector.j;
+    requires com.google.protobuf;
+    requires jakarta.mail;
+    requires jakarta.activation;
+
 
     opens esprit.tn.demo to javafx.fxml;
     exports esprit.tn.demo.tests;
     opens esprit.tn.demo.tests to javafx.fxml;
     opens esprit.tn.demo.controllers.GestionMachine to javafx.fxml;
     exports esprit.tn.demo.controllers.GestionMachine;
-
-
-
 
     exports esprit.tn.demo.controllers.GestionVente; // Pour que d'autres modules y accèdent
     opens esprit.tn.demo.controllers.GestionVente to javafx.fxml; // Pour que FXMLLoader accède aux annotations @FXML
