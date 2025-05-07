@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.GestionVente.ProduitClientController"
+      spacing="20"
+      style="-fx-background-color: #f9fbfc; -fx-padding: 25;">
+
+    <!-- En-tête avec barre de recherche + bouton commandes -->
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <TextField promptText="🔍 Rechercher un produit"
+                   prefWidth="300"
+                   style="-fx-background-radius: 5; -fx-padding: 8;" />
+        <Button text="Rechercher"
+                style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16;" />
+
+        <Pane HBox.hgrow="ALWAYS" />
+
+        <Button text="📋 Liste des Commandes"
+                onAction="#ouvrirCommandes"
+                style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16;" />
+    </HBox>
+
+    <Separator />
+
+    <HBox spacing="30" alignment="TOP_LEFT">
+        <!-- Filtres -->
+        <VBox spacing="12" prefWidth="220" style="-fx-padding: 10;">
+            <Label text="🗂 Catégories" style="-fx-font-weight: bold; -fx-font-size: 16;" />
+            <CheckBox text="Agriculture" />
+            <CheckBox text="Dairy Farm" />
+            <CheckBox text="Economy Solution" />
+            <CheckBox text="Harvest Innovations" />
+            <CheckBox text="Organic Food" />
+            <CheckBox text="Fresh Vegetables" />
+        </VBox>
+
+        <!-- Produits + navigation -->
+        <VBox spacing="15" VBox.vgrow="ALWAYS" style="-fx-padding: 10;">
+            <FlowPane fx:id="produitFlowPane"
+                      hgap="20"
+                      vgap="20"
+                      prefWrapLength="800"
+                      style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #dfe6e9; -fx-border-radius: 5;"/>
+
+            <Button text="🛒 Commander"
+                    onAction="#commander"
+                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14; -fx-padding: 10 18;" />
+
+            <Label fx:id="paginationLabel" text="Page 1"
+                   style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="⬅ Précédent" onAction="#pagePrecedente"
+                        style="-fx-background-color: #bdc3c7; -fx-text-fill: black;" />
+                <Button text="Suivant ➡" onAction="#pageSuivante"
+                        style="-fx-background-color: #bdc3c7; -fx-text-fill: black;" />
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjouterExpert"
+            prefWidth="600" prefHeight="720"
+            stylesheets="@form.css">
+
+   <VBox alignment="TOP_CENTER" spacing="15" layoutX="50" layoutY="30" prefWidth="400" styleClass="form-container">
+      <Label text="Ajouter un Expert" styleClass="form-title"/>
+
+      <!-- Nom -->
+      <TextField fx:id="nomField" promptText="Nom" styleClass="input-field"/>
+      <Label fx:id="nomErrorLabel" styleClass="error-label"/>
+
+      <!-- Prénom -->
+      <TextField fx:id="prenomField" promptText="Prénom" styleClass="input-field"/>
+      <Label fx:id="prenomErrorLabel" styleClass="error-label"/>
+
+      <!-- Téléphone -->
+      <TextField fx:id="telField" promptText="Téléphone (8 chiffres)" styleClass="input-field"/>
+      <Label fx:id="telErrorLabel" styleClass="error-label"/>
+
+      <!-- Email -->
+      <TextField fx:id="emailField" promptText="Email" styleClass="input-field"/>
+      <Label fx:id="emailErrorLabel" styleClass="error-label"/>
+
+      <!-- Zone géographique -->
+      <TextField fx:id="zoneField" promptText="Zone géographique" styleClass="input-field"/>
+      <Label fx:id="zoneErrorLabel" styleClass="error-label"/>
+
+      <!-- Disponibilité -->
+      <ComboBox fx:id="dispoCombo" promptText="Disponibilité" styleClass="input-field"/>
+      <Label fx:id="dispoErrorLabel" styleClass="error-label"/>
+
+      <!-- Bouton Ajouter -->
+      <Button fx:id="ajouterBtn" text="Ajouter" onAction="#onAjout" styleClass="submit-button"/>
+
+      <!-- Message global -->
+      <Label fx:id="messageLabel" styleClass="error-label"/>
+   </VBox>
+</AnchorPane>

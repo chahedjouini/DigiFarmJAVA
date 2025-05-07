@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+        <?import javafx.scene.layout.*?>
+        <?import javafx.scene.control.*?>
+        <?import javafx.scene.web.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.GestionMachine.TechnicianMapController"
+            prefHeight="600.0" prefWidth="800.0">
+    <WebView fx:id="webView" layoutX="0" layoutY="0" prefHeight="400.0" prefWidth="800.0"/>
+    <VBox layoutX="10" layoutY="410" spacing="10">
+        <Label fx:id="resultLabel" text="Select a location to find the nearest technician"/>
+        <Button fx:id="findNearestButton" text="Find Nearest Technician" onAction="#findNearestTechnician"/>
+        <Button fx:id="backButton" text="Back" onAction="#goBack"/>
+    </VBox>
+</AnchorPane>

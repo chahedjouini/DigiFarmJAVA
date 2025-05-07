@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="TOP_CENTER" prefHeight="543.0" prefWidth="848.0"  xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AnimalReadController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <Text style="-fx-font-size: 18; -fx-font-weight: bold;" text="Animal List" />
+
+    <children>
+        <HBox spacing="30.0">
+            <children>
+                <TextField fx:id="searchNomField" maxWidth="Infinity" promptText="Rechercher par Nom" />
+                <TextField fx:id="searchTypeField" maxWidth="Infinity"  promptText="Rechercher par Type"  />
+                <TextField fx:id="searchRaceField" maxWidth="Infinity"  promptText="Rechercher par Race"  />
+            </children>
+        </HBox>
+        <TableView fx:id="animalTable" maxWidth="Infinity" prefHeight="400.0"  VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
+                <TableColumn fx:id="nomCol" prefWidth="100.0" text="Nom" />
+                <TableColumn fx:id="typeCol" prefWidth="150.0" text="Type" />
+                <TableColumn fx:id="raceCol" prefWidth="150.0" text="Race" />
+                <TableColumn fx:id="ageCol" prefWidth="150.0" text="Âge" />
+                <TableColumn fx:id="poidsCol" prefWidth="150.0" text="Poids" />
+                <TableColumn fx:id="actionsCol" prefWidth="150.0" text="Actions" />
+            </columns>
+        </TableView>
+        <HBox spacing="10.0">
+            <children>
+                <Button fx:id="addAnimalButton" mnemonicParsing="false" onAction="#handleAddAnimal" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Ajouter Animal" />
+                <Button mnemonicParsing="false" onAction="#handleOpenStatistiques" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Afficher les Statistiques" />
+                <Button  mnemonicParsing="false" onAction="#handleExportToExcel"  style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Exporter vers Excel" textAlignment="CENTER">
+                    <VBox.margin>
+                        <Insets top="10.0" />
+                    </VBox.margin>
+                </Button>
+            </children>
+            <VBox.margin>
+                <Insets top="10.0" />
+            </VBox.margin>
+        </HBox>
+    </children>
+</VBox>

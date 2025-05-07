@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjouterCulture"
+            prefWidth="100" prefHeight="100"
+            stylesheets="@style.css">
+
+    <VBox spacing="15" alignment="TOP_CENTER" layoutX="50" layoutY="20" prefWidth="400" styleClass="form-container">
+
+        <Label text="Ajouter une Culture" styleClass="form-title"/>
+
+        <TextField fx:id="nomField" promptText="Nom" styleClass="input-field"/>
+        <TextField fx:id="surfaceField" promptText="Surface" styleClass="input-field"/>
+        <DatePicker fx:id="datePlantationPicker" promptText="Date Plantation" styleClass="input-field"/>
+        <DatePicker fx:id="dateRecoltePicker" promptText="Date Récolte" styleClass="input-field"/>
+        <TextField fx:id="regionField" promptText="Région" styleClass="input-field"/>
+        <TextField fx:id="typeCultureField" promptText="Type Culture" styleClass="input-field"/>
+        <TextField fx:id="densiteField" promptText="Densité Plantation" styleClass="input-field"/>
+        <TextField fx:id="eauField" promptText="Besoins Eau" styleClass="input-field"/>
+        <ComboBox fx:id="engraisCombo" promptText="Engrais" styleClass="input-field"/>
+        <TextField fx:id="rendementField" promptText="Rendement Moyen" styleClass="input-field"/>
+        <TextField fx:id="coutField" promptText="Coût Moyen" styleClass="input-field"/>
+        <TextField fx:id="userIdField" promptText="ID Utilisateur" styleClass="input-field"/>
+
+        <Label fx:id="messageLabel" styleClass="message-label"/>
+        <Button text="Ajouter" onAction="#onAjout" styleClass="submit-button"/>
+    </VBox>
+</AnchorPane>

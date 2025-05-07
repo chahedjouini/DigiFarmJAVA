@@ -1,0 +1,177 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technician Map - Tunis</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #map { height: 600px; width: 100%; }
+        .controls { margin: 10px; }
+        .error { color: red; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Technician Map - Tunis (36.8, 10.2)</h1>
+        <!-- Controls -->
+        <div class="controls bg-white p-4 rounded shadow mb-4">
+            <div class="mb-4">
+                <label for="expertise" class="block text-sm font-medium text-gray-700">Filter by Expertise:</label>
+                <select id="expertise" class="mt-1 block w-full p-2 border rounded">
+                    <option value="all">All</option>
+                    <option value="plumber">Plumber</option>
+                    <option value="electrician">Electrician</option>
+                    <option value="mechanic">Mechanic</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="radius" class="block text-sm font-medium text-gray-700">Search Radius (km): <span id="radiusValue">5</span></label>
+                <input type="range" id="radius" min="1" max="10" value="5" class="w-full">
+            </div>
+            <div class="mb-4">
+                <button id="searchBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Search</button>
+                <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 ml-2">Reset</button>
+            </div>
+            <div id="error" class="error hidden"></div>
+        </div>
+        <!-- Map Container -->
+        <div id="map"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map centered on Tunis (36.8, 10.2)
+        const map = L.map('map').setView([36.8, 10.2], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Central marker for Tunis
+        const tunisMarker = L.marker([36.8, 10.2]).addTo(map)
+            .bindPopup('<b>Tunis</b><br>Lat: 36.8, Lon: 10.2')
+            .openPopup();
+
+        // Simulated technician data (replace with MySQL data via API)
+        const technicians = [
+            { lat: 36.805, lon: 10.205, expertise: 'plumber', name: 'Ahmed' },
+            { lat: 36.795, lon: 10.195, expertise: 'electrician', name: 'Fatima' },
+            { lat: 36.810, lon: 10.210, expertise: 'mechanic', name: 'Mohamed' },
+            { lat: 36.790, lon: 10.190, expertise: 'plumber', name: 'Sana' },
+            { lat: 36.815, lon: 10.215, expertise: 'electrician', name: 'Karim' }
+        ];
+
+        // Store markers for filtering
+        let technicianMarkers = [];
+
+        // Function to calculate distance (Haversine formula)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Function to display markers
+        function displayMarkers(techs, radius) {
+            // Clear existing technician markers
+            technicianMarkers.forEach(marker => map.removeLayer(marker));
+            technicianMarkers = [];
+
+            // Add new markers
+            techs.forEach(tech => {
+                const distance = calculateDistance(36.8, 10.2, tech.lat, tech.lon);
+                if (distance <= radius) {
+                    const marker = L.marker([tech.lat, tech.lon]).addTo(map)
+                        .bindPopup(`<b>${tech.name}</b><br>Expertise: ${tech.expertise}<br>Distance: ${distance.toFixed(2)} km`);
+                    technicianMarkers.push(marker);
+                }
+            });
+        }
+
+        // Initial display of all technicians
+        displayMarkers(technicians, 5);
+
+        // Filter by expertise
+        document.getElementById('expertise').addEventListener('change', function() {
+            const expertise = this.value;
+            const radius = parseFloat(document.getElementById('radius').value);
+            const filteredTechs = expertise === 'all' ? technicians : technicians.filter(t => t.expertise === expertise);
+            displayMarkers(filteredTechs, radius);
+        });
+
+        // Update radius value display
+        document.getElementById('radius').addEventListener('input', function() {
+            document.getElementById('radiusValue').textContent = this.value;
+        });
+
+        // Search button
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const expertise = document.getElementById('expertise').value;
+            const radius = parseFloat(document.getElementById('radius').value);
+            const filteredTechs = expertise === 'all' ? technicians : technicians.filter(t => t.expertise === expertise);
+            displayMarkers(filteredTechs, radius);
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('error').textContent = '';
+        });
+
+        // Reset button
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.getElementById('expertise').value = 'all';
+            document.getElementById('radius').value = 5;
+            document.getElementById('radiusValue').textContent = '5';
+            map.setView([36.8, 10.2], 13);
+            displayMarkers(technicians, 5);
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('error').textContent = '';
+        });
+    </script>
+</body>
+</html>

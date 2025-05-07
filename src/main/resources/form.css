@@ -1,0 +1,53 @@
+.form-container {
+    -fx-background-color: #ffffff;
+    -fx-padding: 30px;
+    -fx-spacing: 18;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 15, 0, 0, 6);
+}
+
+.form-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+}
+
+.input-field {
+    -fx-pref-width: 350px;
+    -fx-padding: 10;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-border-color: #C8E6C9;
+    -fx-background-color: #f9f9f9;
+    -fx-font-size: 14px;
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.input-field:focused {
+    -fx-border-color: #4CAF50;
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(76,175,80,0.2), 4, 0, 0, 2);
+}
+
+.submit-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-font-size: 16px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 3);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.submit-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.error-label {
+    -fx-text-fill: red;
+    -fx-font-size: 13px;
+}

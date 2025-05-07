@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="CENTER" style="-fx-background-color: #f8f9fa;" xmlns:fx="http://javafx.com/fxml">
+    <padding>
+        <Insets top="50" bottom="50" left="30" right="30"/>
+    </padding>
+
+    <Label text="❌ Paiement échoué" style="-fx-font-size: 26px; -fx-text-fill: red;"/>
+    <Label text="Le paiement n’a pas pu être traité. Veuillez réessayer ou nous contacter pour obtenir de l’aide." wrapText="true" style="-fx-font-size: 16px;"/>
+    <Label text="Contact : contact@agrix.com" style="-fx-font-size: 14px;"/>
+</VBox>
+

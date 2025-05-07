@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" 
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.UserFormController"
+      spacing="15"
+      style="-fx-background-color: white;"
+      minWidth="400" minHeight="350">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label fx:id="titleLabel" text="Ajouter un utilisateur" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    
+    <GridPane hgap="15" vgap="15">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        
+        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nomField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        
+        <Label text="Prénom:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="prenomField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        
+        <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="emailField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        
+        <Label text="Mot de passe:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="passwordField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        
+        <Label text="Rôle:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="roleComboBox" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+    </GridPane>
+    
+    <Label fx:id="errorLabel" textFill="RED" alignment="CENTER"/>
+    
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" prefWidth="100"/>
+        <Button fx:id="saveButton" text="Enregistrer" onAction="#handleSave" 
+                style="-fx-background-color: #2196F3; -fx-text-fill: white;" prefWidth="100"/>
+    </HBox>
+</VBox> 

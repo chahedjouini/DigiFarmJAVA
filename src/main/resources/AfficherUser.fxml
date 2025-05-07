@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.UserController"
+      spacing="15"
+      style="-fx-background-color: white;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Gestion des Utilisateurs" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <!-- Section des statistiques -->
+    <VBox style="-fx-background-color: #f8f9fa; -fx-border-color: #e9ecef; -fx-border-radius: 5;" spacing="5">
+        <padding>
+            <Insets top="10" right="10" bottom="10" left="10"/>
+        </padding>
+        <Label text="Statistiques par rôle" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+        <HBox spacing="20" alignment="CENTER_LEFT">
+            <Label fx:id="adminStatsLabel" text="ADMIN: 0" style="-fx-text-fill: #0066cc;"/>
+            <Label fx:id="clientStatsLabel" text="CLIENT: 0" style="-fx-text-fill: #009933;"/>
+            <Label fx:id="agriculteurStatsLabel" text="AGRICULTEUR: 0" style="-fx-text-fill: #cc6600;"/>
+            <Separator orientation="VERTICAL" />
+            <Label fx:id="totalStatsLabel" text="Total: 0" style="-fx-font-weight: bold;"/>
+        </HBox>
+    </VBox>
+
+    <!-- Filtres, Recherche et Tri des utilisateurs -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <!-- Filtre par rôle -->
+        <Label text="Filtrer par rôle:" />
+        <ComboBox fx:id="roleFilterComboBox" prefWidth="150" onAction="#handleRoleFilter" />
+
+        <!-- Barre de recherche -->
+        <Separator orientation="VERTICAL" />
+        <Label text="Rechercher:" />
+        <TextField fx:id="searchField" promptText="Nom, prénom, email..." prefWidth="200" onKeyReleased="#handleSearch" />
+
+        <!-- Boutons de tri -->
+        <Separator orientation="VERTICAL" />
+        <Label text="Trier par:" />
+        <Button text="ID" onAction="#handleSortById" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+        <Button text="Nom" onAction="#handleSortByName" style="-fx-background-color: #FF9800; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- Tableau des utilisateurs -->
+    <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="nomColumn" text="Nom" prefWidth="120"/>
+            <TableColumn fx:id="prenomColumn" text="Prénom" prefWidth="120"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="180"/>
+            <TableColumn fx:id="roleColumn" text="Rôle" prefWidth="100"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+        </columns>
+    </TableView>
+
+    <!-- Boutons sous le tableau -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button fx:id="addButton" text="Ajouter un utilisateur" onAction="#handleAdd"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button fx:id="refreshButton" text="Actualiser" onAction="#handleRefresh"/>
+        <Button fx:id="exportPdfButton" text="Exporter en PDF" onAction="#handleExportPdf"
+                style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+        <Button fx:id="sendGreetingsButton" text="Envoyer Aid Idhha Mubarak" onAction="#handleSendGreetings"
+                style="-fx-background-color: #9C27B0; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- Message d'erreur ou de succès -->
+    <Label fx:id="messageLabel" textFill="RED" alignment="CENTER"/>
+
+</VBox>

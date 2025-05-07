@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GestionMachine.ReportsController">
+    <children>
+        <Label layoutX="14.0" layoutY="14.0" text="Maintenance Reports" textFill="#328652">
+            <font>
+                <Font name="Montserrat SemiBold" size="36.0" />
+            </font>
+        </Label>
+        <TabPane layoutX="14.0" layoutY="60.0" prefHeight="520.0" prefWidth="1070.0" stylesheets="@Css/machine-theme.css">
+            <!-- Maintenance Cost per Machine -->
+            <Tab text="Cost per Machine" closable="false">
+                <AnchorPane>
+                    <HBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                        <Button fx:id="costBarBtn" prefHeight="39.0" prefWidth="100.0" styleClass="btn-primary" text="Bar Chart" />
+                        <Button fx:id="costLineBtn" prefHeight="39.0" prefWidth="100.0" styleClass="btn-primary" text="Line Chart" />
+                        <Button fx:id="costPieBtn" prefHeight="39.0" prefWidth="100.0" styleClass="btn-primary" text="Pie Chart" />
+                    </HBox>
+                    <WebView fx:id="costChartView" layoutX="10.0" layoutY="60.0" prefHeight="400.0" prefWidth="1050.0" />
+                </AnchorPane>
+            </Tab>
+            <!-- Maintenance Cost Over Time -->
+            <Tab text="Cost Over Time" closable="false">
+                <AnchorPane>
+                    <HBox layoutX="10.0" layoutY="10.0" spacing="10.0">
+                        <Button fx:id="timeBarBtn" prefHeight="39.0" prefWidth="100.0" styleClass="btn-primary" text="Bar Chart" />
+                        <Button fx:id="timeLineBtn" prefHeight="39.0" prefWidth="100.0" styleClass="btn-primary" text="Line Chart" />
+                        <Button fx:id="timePieBtn" prefHeight="39.0" prefWidth="100.0" styleClass="btn-primary" text="Pie Chart" />
+                    </HBox>
+                    <WebView fx:id="timeChartView" layoutX="10.0" layoutY="60.0" prefHeight="400.0" prefWidth="1050.0" />
+                </AnchorPane>
+            </Tab>
+            <!-- Maintenance Frequency -->
+            <Tab text="Frequency" closable="false">
+                <AnchorPane>
+                    <ComboBox fx:id="frequencyChartType" layoutX="10.0" layoutY="10.0" prefWidth="150.0" promptText="Select Chart Type" />
+                    <WebView fx:id="frequencyChartView" layoutX="10.0" layoutY="60.0" prefHeight="400.0" prefWidth="1050.0" />
+                </AnchorPane>
+            </Tab>
+        </TabPane>
+    </children>
+</AnchorPane>

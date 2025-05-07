@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      xmlns="http://javafx.com/javafx/17"
+      fx:controller="controllers.GestionVente.CommandeController"
+      spacing="15" styleClass="card-container">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <Label text="Liste des Commandes" styleClass="header-label"/>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="periodeComboBox" promptText="Période" />
+        <DatePicker fx:id="startDatePicker" promptText="Date début" />
+        <DatePicker fx:id="endDatePicker" promptText="Date fin" />
+        <Button text="Filtrer" onAction="#handleFiltrer" />
+    </HBox>
+
+    <TableView fx:id="commandeTableView" prefHeight="250">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID"/>
+            <TableColumn fx:id="dateColumn" text="Date Commande"/>
+            <TableColumn fx:id="montantColumn" text="Montant Total"/>
+            <TableColumn fx:id="statutColumn" text="Statut"/>
+        </columns>
+    </TableView>
+
+    <Label text="Graphique des Ventes" styleClass="section-title"/>
+
+    <BarChart fx:id="salesChart" prefHeight="300">
+        <xAxis>
+            <CategoryAxis label="Date"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis label="Total en Dinars"/>
+        </yAxis>
+    </BarChart>
+
+    <Button fx:id="exportPdfButton" text="Exporter en PDF" onAction="#handleExportPDF" styleClass="primary-button"/>
+
+</VBox>
+

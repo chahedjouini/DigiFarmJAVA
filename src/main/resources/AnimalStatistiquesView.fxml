@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AnimalStatistiquesController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <children>
+        <Label styleClass="form-title" stylesheets="@form.css" text="Statistiques des Animaux">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <padding>
+                <Insets bottom="10.0" />
+            </padding>
+        </Label>
+        <Label fx:id="totalAnimauxLabel" styleClass="card-title" text="Nombre total d'animaux : ">
+         <stylesheets>
+            <URL value="@form.css" />
+            <URL value="@style.css" />
+         </stylesheets></Label>
+        <Label fx:id="moyenneAgeLabel" styleClass="card-title" stylesheets="@style.css" text="Moyenne d'âge : " />
+        <Label text="Distribution des animaux par type">
+            <padding>
+                <Insets bottom="5.0" top="10.0" />
+            </padding>
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <PieChart fx:id="animauxParTypePieChart" />
+        <Label text="Distribution des animaux par race">
+            <padding>
+                <Insets bottom="5.0" top="10.0" />
+            </padding>
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <PieChart fx:id="raceDistributionPieChart" />
+    </children>
+</VBox>

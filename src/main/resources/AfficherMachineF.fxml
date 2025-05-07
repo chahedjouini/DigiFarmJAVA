@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.GestionMachine.AfficherMachineF"
+            stylesheets="@style.css">
+
+    <top>
+        <HBox spacing="10" alignment="CENTER_LEFT" styleClass="header">
+            <Label text="Liste des Machines" styleClass="header-label"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <TextField fx:id="searchField" promptText="Rechercher..." styleClass="search-box"/>
+            <ComboBox fx:id="sortComboBox" promptText="Trier par..." styleClass="sort-box"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <GridPane fx:id="machineGrid" styleClass="card-grid" hgap="15" vgap="15">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300" maxWidth="400"/>
+                </columnConstraints>
+            </GridPane>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="Ajouter" onAction="#onAjouter" styleClass="secondary-button"/>
+            <Button text="Modifier" onAction="#onModifier" styleClass="secondary-button"/>
+            <Button text="Supprimer" onAction="#onSupprimer" styleClass="secondary-button"/>
+            <Button text="Rafraîchir" onAction="#onRefresh" styleClass="secondary-button"/>
+        </HBox>
+    </bottom>
+</BorderPane>
