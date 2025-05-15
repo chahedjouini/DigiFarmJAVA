@@ -3,19 +3,26 @@ An integrated solution for modern agricultural management, combining sustainabil
 
 Project Overview
 DigiFarm is a comprehensive agricultural management platform available as both a web application and Java desktop application. Developed to address key challenges in farming operations, it offers integrated solutions for equipment maintenance, financial management, livestock monitoring, and more.
+-
 Features
+
 The platform includes six core modules:
 
 User Management: Authentication, role management, and access control
+
 Machine Maintenance: Equipment tracking, performance monitoring, and predictive maintenance
+
 Sales Management: Revenue tracking, expense management, and financial reporting
+
 Livestock Management: Animal health monitoring and automated health alerts
+
 Agricultural Studies: Data collection, analysis, and detailed reporting
+
 Subscription Management: Service access control and subscription lifecycle management
 
 Sustainability Goals
 DigiFarm actively contributes to the following UN Sustainable Development Goals:
-
+---
 SDG 2: Zero Hunger
 SDG 6: Clean Water and Sanitation
 SDG 12: Responsible Consumption and Production
@@ -23,6 +30,7 @@ SDG 13: Climate Action
 SDG 15: Life on Land
 
 Technical Stack
+--
 
 Web Application: Symfony 6.4, PHP 8.1
 Desktop Application: Java with JavaFX 17
@@ -30,6 +38,7 @@ Database: MySQL/PostgreSQL
 Authentication: JWT/OAuth2
 
 Team Members
+------
 
 Ahmed Ayari: User Management Module
 Yassine Laabidi: Agricultural Studies Module
@@ -38,8 +47,11 @@ Chahd Jouini: Machine Maintenance Module
 Nour Kooli: Product Management Module
 Oumaima Gafsi: Livestock Management Module
 
+
+
 Getting Started
 Prerequisites
+---
 
 PHP 8.1 or higher
 Composer
